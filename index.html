@@ -294,6 +294,22 @@
     // Inicializar Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    // Función para probar envío de datos a Firebase
+async function probarConexion() {
+  try {
+    const docRef = await addDoc(collection(db, "servicios_prueba"), {
+      nombre: "Solicitud de prueba",
+      barrio: "Palermo",
+      fecha: new Date().toLocaleString()
+    });
+    console.log("¡Conexión exitosa! Registro guardado con ID:", docRef.id);
+  } catch (error) {
+    console.error("Error al conectar con Firebase:", error);
+  }
+}
+
+// Ejecutar la prueba al cargar la página
+probarConexion();
   </script>
 
 </body>
