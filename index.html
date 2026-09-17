@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siempre Cerca Tuyo</title>
+  <style>
+    :root {
+      --bg-color: #e3f2fd;
+      --header-bg: #ffffff;
+      --primary: #4a7c59;
+      --primary-hover: #3b6346;
+      --accent: #2e5b3e;
+      --card-bg: #8eb69b;
+      --card-light: #a3c9a8;
+      --text-dark: #222222;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #d8ece0; color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* Header */
+    header { background: var(--header-bg); padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #ccc; }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: bold; color: var(--accent); }
+    .logo-icon { font-size: 28px; }
+
+    /* Nav Bar Search & Actions */
+    .top-bar { background: #30523f; color: white; padding: 10px 30px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+    .search-box { flex: 1; max-width: 500px; display: flex; }
+    .search-box input { width: 100%; padding: 8px 12px; border: none; border-radius: 4px; font-size: 14px; }
+    .nav-links { display: flex; gap: 15px; }
+    .nav-links button { background: transparent; border: none; color: white; cursor: pointer; font-weight: 600; padding: 5px 10px; border-radius: 4px; }
+    .nav-links button:hover { background: rgba(255,255,255,0.2); }
+
+    /* View Switcher Bar */
+    .view-nav { background: var(--card-bg); padding: 10px 30px; display: flex; gap: 10px; }
+    .view-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+    .view-btn.active { background: var(--accent); border: 2px solid white; }
+
+    /* Container Views */
+    .container { padding: 20px 30px; flex: 1; }
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* --- VISTA 1: INICIO --- */
+    .hero { background: #c5e3cf; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .hero h2 { color: var(--accent); margin-bottom: 8px; }
+    .btn-action { background: var(--primary); color: white; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    
+    .section-title { font-size: 16px; font-weight: bold; margin: 15px 0 10px 0; text-transform: uppercase; color: #222; }
+    .grid-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .card-action { background: var(--card-bg); color: white; padding: 20px; border-radius: 8px; text-align: center; font-weight: bold; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .card-action:hover { background: var(--primary); }
+
+    /* --- VISTA 2: PRODUCTO --- */
+    .product-layout { display: grid; grid-template-columns: 1fr 1.2fr 300px; gap: 20px; background: white; padding: 20px; border-radius: 8px; }
+    .prod-main-img { width: 100%; height: 260px; object-fit: cover; border-radius: 6px; }
+    .prod-thumbs { display: flex; gap: 8px; margin-top: 10px; }
+    .thumb { width: 20%; height: 50px; background: #ddd; border-radius: 4px; cursor: pointer; object-fit: cover; }
+    
+    .tabs { display: flex; gap: 5px; margin-bottom: 10px; }
+    .tab-btn { background: var(--card-bg); border: none; padding: 8px 12px; cursor: pointer; color: white; font-weight: bold; border-radius: 4px 4px 0 0; }
+    .tab-btn.active { background: var(--primary); }
+    .tab-content { background: #f4f9f5; padding: 15px; border-radius: 0 4px 4px 4px; border: 1px solid #dae7dd; min-height: 180px; }
+
+    .purchase-box { background: #f0f4f1; padding: 15px; border-radius: 6px; display: flex; flex-direction: column; gap: 12px; }
+    .price { font-size: 24px; font-weight: bold; color: var(--accent); }
+    .select-field select { width: 100%; padding: 8px; margin-top: 4px; }
+
+    /* --- VISTA 3: PERSONAL / COLABORADORES --- */
+    .personal-layout { display: grid; grid-template-columns: 1fr 1.5fr 280px; gap: 20px; background: white; padding: 20px; border-radius: 8px; }
+    .colab-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+    .colab-card { background: #e8f3ec; border: 2px solid #b2d8c0; border-radius: 6px; padding: 10px; text-align: center; cursor: pointer; }
+    .colab-card.selected { border-color: var(--primary); background: #c5e3cf; }
+    .avatar { width: 60px; height: 60px; border-radius: 50%; background: #ccc; margin: 0 auto 5px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+
+    /* Footer */
+    footer { background: var(--accent); color: white; text-align: center; padding: 15px; margin-top: auto; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado -->
+  <header>
+    <div class="logo">
+      <span class="logo-icon">🩵</span> SIEMPRE CERCA TUYO
+    </div>
+  </header>
+
+  <!-- Barra de búsqueda y acciones de usuario -->
+  <div class="top-bar">
+    <div class="search-box">
+      <input type="text" placeholder="Buscar productos, trámites o servicios...">
+    </div>
+    <div class="nav-links">
+      <button>Favoritos</button>
+      <button>Carrito 🛒</button>
+      <button>Mi Cuenta</button>
+    </div>
+  </div>
+
+  <!-- Barra para cambiar de Vista (Navegación Interactiva) -->
+  <div class="view-nav">
+    <button class="view-btn active" onclick="switchView('inicio')">Inicio / Servicios</button>
+    <button class="view-btn" onclick="switchView('producto')">Vista Producto</button>
+    <button class="view-btn" onclick="switchView('personal')">Gestión de Personal</button>
+  </div>
+
+  <div class="container">
+
+    <!-- 1. VISTA INICIO -->
+    <section id="inicio" class="view active">
+      <div class="hero">
+        <div>
+          <h2>¡Bienvenido a Siempre Cerca Tuyo!</h2>
+          <p>Tu plataforma de compras, servicios y trámites en un solo lugar. Rápido, seguro y siempre disponible.</p>
+        </div>
+        <button class="btn-action">EXPLORAR SERVICIOS</button>
+      </div>
+
+      <div class="section-title">Acciones Rápidas</div>
+      <div class="grid-actions">
+        <div class="card-action" onclick="switchView('producto')">🛒 COMPRAR</div>
+        <div class="card-action">📄 TRÁMITES</div>
+        <div class="card-action">🔑 PEDIR AYUDA (24/7)</div>
+      </div>
+
+      <div class="section-title">Servicios Destacados</div>
+      <div class="grid-actions">
+        <div class="card-action">📢 DENUNCIAS</div>
+        <div class="card-action">⚕️ SALUD</div>
+        <div class="card-action">☀️ JUBILACIÓN</div>
+        <div class="card-action" onclick="switchView('personal')">🪪 RENOVAR DNI / PERSONAL</div>
+      </div>
+    </section>
+
+    <!-- 2. VISTA PRODUCTO -->
+    <section id="producto" class="view">
+      <div class="product-layout">
+        <!-- Galería de fotos -->
+        <div>
+          <img id="main-prod-img" class="prod-main-img" src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=500" alt="Producto">
+          <div class="prod-thumbs">
+            <img class="thumb" src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=100" onclick="changeImage(this.src)">
+            <img class="thumb" src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=100" onclick="changeImage(this.src)">
+            <img class="thumb" src="https://images.unsplash.com/photo-1518843875459-f738682238a6?w=100" onclick="changeImage(this.src)">
+          </div>
+        </div>
+
+        <!-- Información con Pestañas -->
+        <div>
+          <h2>Canasta Verde Fresca</h2>
+          <p style="color: green; font-weight: bold; margin: 5px 0;">✓ S.C.T. CHECK - Vendedor Confiable</p>
+          
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('desc')">Descripción</button>
+            <button class="tab-btn" onclick="switchTab('envio')">Envío</button>
+            <button class="tab-btn" onclick="switchTab('opinions')">Opiniones</button>
+          </div>
+
+          <div id="tab-desc" class="tab-content">
+            <p><strong>Perfil del Colaborador:</strong> Vendedor Colab. 3</p>
+            <p><strong>Especialidad:</strong> Productos Frescos y Orgánicos.</p>
+            <p><strong>Calificación:</strong> ⭐⭐⭐⭐☆ (4.8/5.0)</p>
+            <p style="margin-top: 10px; font-size: 13px; color: #555;">Productos seleccionados del mercado local, entregados el mismo día con garantía de calidad S.C.T.</p>
+          </div>
+          <div id="tab-envio" class="tab-content" style="display:none;">
+            <p>🚚 <strong>Envíos a Domicilio:</strong> Cobertura en CABA y GBA.</p>
+            <p>⏱️ <strong>Tiempo estimado:</strong> 24 a 48 horas hábiles.</p>
+          </div>
+          <div id="tab-opinions" class="tab-content" style="display:none;">
+            <p>💬 <i>"Excelente calidad y muy fresca la verdura."</i> - María L.</p>
+            <p>💬 <i>"Llegó a tiempo, súper recomendado."</i> - Juan P.</p>
+          </div>
+        </div>
+
+        <!-- Caja de Compra -->
+        <div class="purchase-box">
+          <div class="price">$12.500</div>
+          <div>⭐⭐⭐⭐☆</div>
+          <div class="select-field">
+            <label>Talle / Tamaño:</label>
+            <select><option>Grande (Familia)</option><option>Mediano</option></select>
+          </div>
+          <div class="select-field">
+            <label>Cantidad:</label>
+
+            <select><option>1</option><option>2</option><option>3</option></select>
+          </div>
+          <button class="btn-action" style="margin-top: 10px;">COMPRAR 🛒</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. VISTA GESTIÓN DE PERSONAL -->
+    <section id="personal" class="view">
+      <div class="personal-layout">
+        <!-- Lista de Colaboradores -->
+        <div>
+          <h3>Gestión de Colaboradores</h3>
+          <div class="colab-grid">
+            <div class="colab-card selected" onclick="selectColab('Juan Pérez', 'Plomería', '4.8', 'Activo')">
+              <div class="avatar">👨‍🔧</div>
+              <small>Colab. 1</small>
+            </div>
+            <div class="colab-card" onclick="selectColab('María Gómez', 'Gasista', '4.9', 'Activo')">
+              <div class="avatar">👩‍🔧</div>
+              <small>Colab. 2</small>
+            </div>
+            <div class="colab-card" onclick="selectColab('Carlos Ruiz', 'Electricista', '4.6', 'Inactivo')">
+              <div class="avatar">👨‍💻</div>
+              <small>Colab. 3</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Perfil Detallado -->
+        <div>
+          <h3>Perfil Detallado del Colaborador</h3>
+          <div style="background: #f4f9f5; padding: 15px; border-radius: 6px; border: 1px solid #ccc; margin-top: 10px;">
+            <p><strong>Nombre:</strong> <span id="colab-name">Juan Pérez</span></p>
+            <p><strong>DNI:</strong> 22.XXX.XXX</p>
+            <p><strong>Teléfono:</strong> +54 9 11 5XXX-XXXX</p>
+            <p><strong>Especialidad:</strong> <span id="colab-spec">Plomería</span></p>
+            <p><strong>Calificación:</strong> ⭐ <span id="colab-rating">4.8</span> / 5.0</p>
+            <p><strong>Estado:</strong> <span id="colab-status">Activo</span></p>
+            <p><strong>Zonas de Cobertura:</strong> Recoleta, Palermo, Buenos Aires</p>
+          </div>
+        </div>
+
+        <!-- Estado / Acciones -->
+        <div style="background: #e8f3ec; padding: 15px; border-radius: 6px;">
+          <h4>Información de Estado</h4>
+          <p style="color: green; font-weight: bold; margin: 10px 0;">● En Línea</p>
+          <button class="btn-action" style="width: 100%; margin-top: 15px;">VER / EDITAR PERFIL</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    &copy; 2026 Siempre Cerca Tuyo - Todos los derechos reservados
+  </footer>
+
+  <script>
+    // Cambio entre Secciones / Vistas Principales
+    function switchView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById(viewId).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // Cambio de Imagen en Vista Producto
+    function changeImage(src) {
+      document.getElementById('main-prod-img').src = src;
+    }
+
+    // Cambio de Pestañas en Vista Producto
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById('tab-' + tabId).style.display = 'block';
+      event.target.classList.add('active');
+    }
+
+    // Selección de Colaborador en Vista Personal
+    function selectColab(name, spec, rating, status) {
+      document.getElementById('colab-name').innerText = name;
+      document.getElementById('colab-spec').innerText = spec;
+      document.getElementById('colab-rating').innerText = rating;
+      document.getElementById('colab-status').innerText = status;
+    }
+  </script>
+</body>
+</html>
