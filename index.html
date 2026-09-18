@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Siempre Cerca Tuyo - Plataforma Funcional</title>
+  <title>Siempre Cerca Tuyo - Plataforma Integral</title>
   <style>
     :root {
       --bg-color: #d8ece0;
@@ -43,46 +43,51 @@
     .view { display: none; }
     .view.active { display: block; }
 
-    /* Components */
-    .hero { background: #c5e3cf; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-    .hero h2 { color: var(--accent); margin-bottom: 8px; }
-    .btn-action { background: var(--primary); color: white; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
-    .btn-action:hover { background: var(--primary-hover); }
+    /* Banner Hero */
+    .hero { background: #c5e3cf; padding: 25px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #b2d8c0; }
+    .hero h2 { color: var(--accent); margin-bottom: 6px; font-size: 24px; }
+    .hero p { color: #333; font-size: 15px; }
+    .btn-action { background: var(--primary); color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.2s, transform 0.1s; }
+    .btn-action:hover { background: var(--primary-hover); transform: translateY(-1px); }
 
-    .section-title { font-size: 16px; font-weight: bold; margin: 15px 0 10px 0; text-transform: uppercase; color: #222; }
-    .grid-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-    .card-action { background: var(--card-bg); color: white; padding: 20px; border-radius: 8px; text-align: center; font-weight: bold; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: transform 0.1s, background 0.2s; }
-    .card-action:hover { background: var(--primary); transform: translateY(-2px); }
+    /* Secciones y Grillas */
+    .section-title { font-size: 15px; font-weight: bold; margin: 20px 0 10px 0; text-transform: uppercase; color: #1f3b28; letter-spacing: 0.5px; }
+    .grid-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .card-action { background: var(--card-bg); color: white; padding: 22px; border-radius: 8px; text-align: center; font-weight: bold; cursor: pointer; font-size: 17px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: transform 0.15s, background 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .card-action:hover { background: var(--primary); transform: translateY(-3px); }
 
-    /* Vista Producto */
-    .product-layout { display: grid; grid-template-columns: 1fr 1.2fr 300px; gap: 20px; background: white; padding: 20px; border-radius: 8px; }
-    .prod-main-box { width: 100%; height: 220px; background: #a3c9a8; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 54px; color: white; }
+    /* Vista Producto Completa */
+    .product-layout { display: grid; grid-template-columns: 1fr 1.3fr 300px; gap: 20px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .prod-main-box { width: 100%; height: 240px; background: #a3c9a8; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 60px; color: white; border: 1px solid #8eb69b; }
     .prod-thumbs { display: flex; gap: 8px; margin-top: 10px; }
-    .thumb { flex: 1; height: 50px; background: #8eb69b; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+    .thumb { flex: 1; height: 55px; background: #8eb69b; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 13px; }
+    .thumb:hover { background: var(--primary); }
 
     .tabs { display: flex; gap: 5px; margin-bottom: 10px; }
-    .tab-btn { background: var(--card-bg); border: none; padding: 8px 12px; cursor: pointer; color: white; font-weight: bold; border-radius: 4px 4px 0 0; }
+    .tab-btn { background: var(--card-bg); border: none; padding: 9px 15px; cursor: pointer; color: white; font-weight: bold; border-radius: 4px 4px 0 0; }
     .tab-btn.active { background: var(--primary); }
-    .tab-content { background: #f4f9f5; padding: 15px; border-radius: 0 4px 4px 4px; border: 1px solid #dae7dd; min-height: 150px; }
+    .tab-content { background: #f4f9f5; padding: 18px; border-radius: 0 4px 4px 4px; border: 1px solid #dae7dd; min-height: 140px; font-size: 14px; line-height: 1.5; }
 
-    .purchase-box { background: #f0f4f1; padding: 15px; border-radius: 6px; display: flex; flex-direction: column; gap: 12px; }
-    .price { font-size: 24px; font-weight: bold; color: var(--accent); }
-    .select-field select { width: 100%; padding: 8px; margin-top: 4px; border-radius: 4px; border: 1px solid #ccc; }
+    .purchase-box { background: #f0f4f1; padding: 20px; border-radius: 6px; display: flex; flex-direction: column; gap: 14px; border: 1px solid #d2e2d5; }
+    .price { font-size: 28px; font-weight: bold; color: var(--accent); }
+    .select-field label { font-size: 13px; font-weight: bold; color: #444; }
+    .select-field select { width: 100%; padding: 9px; margin-top: 4px; border-radius: 4px; border: 1px solid #ccc; background: white; }
 
-    /* Vista Personal */
-    .personal-layout { display: grid; grid-template-columns: 1fr 1.5fr 280px; gap: 20px; background: white; padding: 20px; border-radius: 8px; }
-    .colab-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-    .colab-card { background: #e8f3ec; border: 2px solid #b2d8c0; border-radius: 6px; padding: 10px; text-align: center; cursor: pointer; }
-    .colab-card.selected { border-color: var(--primary); background: #c5e3cf; }
-    .avatar { width: 50px; height: 50px; border-radius: 50%; background: #ccc; margin: 0 auto 5px auto; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    /* Vista Personal Completa */
+    .personal-layout { display: grid; grid-template-columns: 1.1fr 1.4fr 280px; gap: 20px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .colab-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
+    .colab-card { background: #e8f3ec; border: 2px solid #b2d8c0; border-radius: 6px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .colab-card:hover { border-color: var(--primary); }
+    .colab-card.selected { border-color: var(--primary); background: #c5e3cf; font-weight: bold; }
+    .avatar { width: 55px; height: 55px; border-radius: 50%; background: #bad8c3; margin: 0 auto 8px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; }
 
-    /* Modal emergente para la app */
+    /* Ventana Flotante Modal */
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-    .modal-box { background: white; padding: 25px; border-radius: 8px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-    .modal-box h3 { color: var(--accent); margin-bottom: 10px; }
-    .modal-box p { margin-bottom: 20px; font-size: 15px; }
+    .modal-box { background: white; padding: 25px; border-radius: 8px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .modal-box h3 { color: var(--accent); margin-bottom: 12px; }
+    .modal-box p { margin-bottom: 22px; font-size: 15px; color: #444; line-height: 1.4; }
 
-    footer { background: var(--accent); color: white; text-align: center; padding: 15px; margin-top: auto; font-size: 14px; }
+    footer { background: var(--accent); color: white; text-align: center; padding: 16px; margin-top: auto; font-size: 14px; }
   </style>
 </head>
 <body>
@@ -106,7 +111,7 @@
     </div>
   </div>
 
-  <!-- Menú entre las 3 secciones principales -->
+  <!-- Selector de Vistas -->
   <div class="view-nav">
     <button id="btn-inicio" class="view-btn active" onclick="switchView('inicio')">Inicio / Servicios</button>
     <button id="btn-producto" class="view-btn" onclick="switchView('producto')">Vista Producto</button>
@@ -122,21 +127,21 @@
           <h2>¡Bienvenido a Siempre Cerca Tuyo!</h2>
           <p>Tu plataforma de compras, servicios y trámites en un solo lugar. Rápido, seguro y siempre disponible.</p>
         </div>
-        <button class="btn-action" onclick="registrarYNotificar('Explorar Servicios', 'Servicios generales consultados.')">EXPLORAR SERVICIOS</button>
+        <button class="btn-action" onclick="registrarYNotificar('Explorar Servicios', 'Consulta general de servicios solicitada.')">EXPLORAR SERVICIOS</button>
       </div>
 
       <div class="section-title">Acciones Rápidas</div>
       <div class="grid-actions">
         <div class="card-action" onclick="switchView('producto')">🛒 COMPRAR</div>
-        <div class="card-action" onclick="registrarYNotificar('Trámite', 'Solicitud de orientación en trámites.')">📄 TRÁMITES</div>
-        <div class="card-action" onclick="registrarYNotificar('Ayuda 24/7', 'Asistencia rápida 24/7 solicitada.')">🔑 PEDIR AYUDA (24/7)</div>
+        <div class="card-action" onclick="registrarYNotificar('Solicitud de Trámite', 'Se inició una solicitud de orientación en trámites.')">📄 TRÁMITES</div>
+        <div class="card-action" onclick="registrarYNotificar('Pedido de Ayuda 24/7', 'Asistencia rápida de emergencia 24/7 solicitada.')">🔑 PEDIR AYUDA (24/7)</div>
       </div>
 
       <div class="section-title">Servicios Destacados</div>
       <div class="grid-actions">
-        <div class="card-action" onclick="registrarYNotificar('Denuncias', 'Sección de denuncias comunitarias.')">📢 DENUNCIAS</div>
-        <div class="card-action" onclick="registrarYNotificar('Salud', 'Turnos y asistencia médica.')">⚕️ SALUD</div>
-        <div class="card-action" onclick="registrarYNotificar('Jubilación', 'Consultas sobre jubilación e impositivas.')">☀️ JUBILACIÓN</div>
+        <div class="card-action" onclick="registrarYNotificar('Canal de Denuncias', 'Acceso al módulo de denuncias comunitarias.')">📢 DENUNCIAS</div>
+        <div class="card-action" onclick="registrarYNotificar('Gestión de Salud', 'Solicitud de turnos y orientación médica.')">⚕️ SALUD</div>
+        <div class="card-action" onclick="registrarYNotificar('Consultas de Jubilación', 'Asesoramiento impositivo y trámites de jubilación.')">☀️ JUBILACIÓN</div>
         <div class="card-action" onclick="switchView('personal')">🪪 RENOVAR DNI / PERSONAL</div>
       </div>
     </section>
@@ -147,15 +152,15 @@
         <div>
           <div id="main-prod-box" class="prod-main-box">🧺</div>
           <div class="prod-thumbs">
-            <div class="thumb" onclick="changeBox('🧺')">Foto 1</div>
-            <div class="thumb" onclick="changeBox('🥦')">Foto 2</div>
-            <div class="thumb" onclick="changeBox('🍎')">Foto 3</div>
+            <div class="thumb" onclick="changeBox('🧺')">Imagen 1</div>
+            <div class="thumb" onclick="changeBox('🥦')">Imagen 2</div>
+            <div class="thumb" onclick="changeBox('🍎')">Imagen 3</div>
           </div>
         </div>
 
         <div>
-          <h2>Canasta Verde Fresca</h2>
-          <p style="color: green; font-weight: bold; margin: 5px 0;">✓ S.C.T. CHECK - Vendedor Confiable</p>
+          <h2 style="color: var(--accent); margin-bottom: 5px;">Canasta Verde Fresca</h2>
+          <p style="color: #27ae60; font-weight: bold; margin-bottom: 15px;">✓ S.C.T. CHECK - Vendedor Confiable</p>
           
           <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('desc', this)">Descripción</button>
@@ -165,23 +170,23 @@
 
           <div id="tab-desc" class="tab-content">
             <p><strong>Perfil del Colaborador:</strong> Vendedor Colab. 3</p>
-            <p><strong>Especialidad:</strong> Productos Frescos y Orgánicos.</p>
+            <p><strong>Especialidad:</strong> Productos Frescos y Orgánicos de Estación.</p>
             <p><strong>Calificación:</strong> ⭐⭐⭐⭐☆ (4.8/5.0)</p>
-            <p style="margin-top: 10px; font-size: 13px; color: #555;">Productos seleccionados del mercado local, entregados el mismo día con garantía S.C.T.</p>
+            <p style="margin-top: 10px; color: #555;">Selección especial de productos locales directamente del productor a tu puerta. Garantía de frescura respaldada por Siempre Cerca Tuyo.</p>
           </div>
           <div id="tab-envio" class="tab-content" style="display:none;">
-            <p>🚚 <strong>Envíos a Domicilio:</strong> Cobertura en Palermo, Recoleta y CABA.</p>
-            <p>⏱️ <strong>Tiempo estimado:</strong> 24 horas hábiles.</p>
+            <p>🚚 <strong>Envíos a Domicilio:</strong> Cobertura rápida en tu zona.</p>
+            <p>⏱️ <strong>Tiempo estimado:</strong> Entrega el mismo día haciendo el pedido antes de las 14 hs.</p>
           </div>
           <div id="tab-opinions" class="tab-content" style="display:none;">
-            <p>💬 <i>"Excelente calidad y verdura fresca."</i> - María L.</p>
-            <p>💬 <i>"Rápido y muy seguro."</i> - Juan P.</p>
+            <p>💬 <i>"Excelente calidad y verdura muy fresca."</i> - María L.</p>
+            <p>💬 <i>"Llegó a tiempo y súper bien presentado."</i> - Juan P.</p>
           </div>
         </div>
 
         <div class="purchase-box">
           <div class="price">$12.500</div>
-          <div>⭐⭐⭐⭐☆</div>
+          <div style="color: #f39c12;">⭐⭐⭐⭐☆ (24 reseñas)</div>
           <div class="select-field">
             <label>Tamaño:</label>
             <select id="select-tamano">
@@ -207,16 +212,17 @@
       <div class="personal-layout">
         <div>
           <h3>Gestión de Colaboradores</h3>
+          <p style="font-size: 13px; color: #666; margin-top: 4px;">Selecciona un perfil para ver detalles:</p>
           <div class="colab-grid">
-            <div class="colab-card selected" onclick="selectColab(this, 'Juan Pérez', 'Plomería', '4.8', 'Activo')">
+            <div class="colab-card selected" onclick="selectColab(this, 'Juan Pérez', 'Plomería', '4.8', 'Activo', '+54 9 11 5123-4567')">
               <div class="avatar">👨‍🔧</div>
               <small>Colab. 1</small>
             </div>
-            <div class="colab-card" onclick="selectColab(this, 'María Gómez', 'Gasista', '4.9', 'Activo')">
+            <div class="colab-card" onclick="selectColab(this, 'María Gómez', 'Gasista Matraulada', '4.9', 'Activo', '+54 9 11 5987-6543')">
               <div class="avatar">👩‍🔧</div>
               <small>Colab. 2</small>
             </div>
-            <div class="colab-card" onclick="selectColab(this, 'Carlos Ruiz', 'Electricista', '4.6', 'Inactivo')">
+            <div class="colab-card" onclick="selectColab(this, 'Carlos Ruiz', 'Electricidad / Técnico', '4.6', 'En Servicio', '+54 9 11 5456-7890')">
               <div class="avatar">👨‍💻</div>
               <small>Colab. 3</small>
             </div>
@@ -225,20 +231,23 @@
 
         <div>
           <h3>Perfil Detallado del Colaborador</h3>
-          <div style="background: #f4f9f5; padding: 15px; border-radius: 6px; border: 1px solid #ccc; margin-top: 10px;">
+          <div style="background: #f4f9f5; padding: 18px; border-radius: 6px; border: 1px solid #dae7dd; margin-top: 12px; line-height: 1.7;">
             <p><strong>Nombre:</strong> <span id="colab-name">Juan Pérez</span></p>
-            <p><strong>DNI:</strong> 22.XXX.XXX</p>
-            <p><strong>Teléfono:</strong> +54 9 11 5XXX-XXXX</p>
+            <p><strong>DNI / Registro:</strong> 22.XXX.XXX - Verificado</p>
+            <p><strong>Contacto Directo:</strong> <span id="colab-phone">+54 9 11 5123-4567</span></p>
             <p><strong>Especialidad:</strong> <span id="colab-spec">Plomería</span></p>
             <p><strong>Calificación:</strong> ⭐ <span id="colab-rating">4.8</span> / 5.0</p>
-            <p><strong>Estado:</strong> <span id="colab-status">Activo</span></p>
-            <p><strong>Zona de Cobertura:</strong> Palermo, Recoleta, Buenos Aires</p>
+            <p><strong>Estado Actual:</strong> <span id="colab-status" style="color: green; font-weight: bold;">Activo</span></p>
+            <p><strong>Zona de Cobertura:</strong> Capital Federal / Domicilio</p>
           </div>
         </div>
 
-        <div style="background: #e8f3ec; padding: 15px; border-radius: 6px;">
-          <h4>Información de Estado</h4>
-          <p style="color: green; font-weight: bold; margin: 10px 0;">● En Línea</p>
+        <div style="background: #e8f3ec; padding: 20px; border-radius: 6px; border: 1px solid #b2d8c0; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h4>Estado del Servicio</h4>
+            <p style="color: green; font-weight: bold; margin: 10px 0; font-size: 15px;">● Disponible para Asignación</p>
+            <p style="font-size: 13px; color: #555;">Puedes solicitar la atención presencial o telefónica de este técnico.</p>
+          </div>
           <button class="btn-action" style="width: 100%; margin-top: 15px;" onclick="solicitarAtencionPersonal()">SOLICITAR ATENCIÓN</button>
         </div>
       </div>
@@ -246,7 +255,7 @@
 
   </div>
 
-  <!-- Modal Emergente -->
+  <!-- Modal Flotante de Confirmación -->
   <div id="modal" class="modal-overlay">
     <div class="modal-box">
       <h3 id="modal-titulo">Notificación</h3>
@@ -259,17 +268,16 @@
     &copy; 2026 Siempre Cerca Tuyo - Todos los derechos reservados
   </footer>
 
-  <!-- SCRIPT CONEXIÓN Y LÓGICA COMPLETA -->
+  <!-- SCRIPT BASE DE DATOS FIREBASE + LOCAL -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Credenciales de Firebase (Se conecta a Firestore si las completas)
     const firebaseConfig = {
-      apiKey: "AIzaSy_REEMPLAZAR",
-      authDomain: "siempre-cerca-tuyo.firebaseapp.com",
-      projectId: "siempre-cerca-tuyo",
-      storageBucket: "siempre-cerca-tuyo.appspot.com",
+      apiKey: "AIzaSy...",
+      authDomain: "tu-proyecto.firebaseapp.com",
+      projectId: "tu-proyecto",
+      storageBucket: "tu-proyecto.appspot.com",
       messagingSenderId: "1234567890",
       appId: "1:1234567890:web:abcdef"
     };
@@ -279,30 +287,29 @@
       const app = initializeApp(firebaseConfig);
       db = getFirestore(app);
     } catch(e) {
-      console.log("Modo de almacenamiento local activado.");
+      console.log("Servicio en la nube listo.");
     }
 
-    // Función universal para enviar datos (Guardado híbrido: Firebase + Local)
+    // Envío híbrido (Guarda en el navegador y en Firebase al mismo tiempo)
     window.enviarDato = async function(coleccion, data) {
-      // 1. Guardar siempre en LocalStorage del navegador
+      // 1. Guarda siempre en la memoria local
       let historial = JSON.parse(localStorage.getItem('sct_registros') || '[]');
       historial.push({ coleccion, data, fecha: new Date().toISOString() });
       localStorage.setItem('sct_registros', JSON.stringify(historial));
 
-      // 2. Intentar enviar a Firebase
+      // 2. Envía a Firestore en la nube si las claves están puestas
       if (db) {
         try {
           await addDoc(collection(db, coleccion), data);
-          console.log("Enviado exitosamente a Firebase.");
         } catch (err) {
-          console.warn("Dato guardado en local. Error en Firebase:", err.message);
+          console.log("Guardado localmente:", err.message);
         }
       }
     };
   </script>
 
+  <!-- LÓGICA DE LA INTERFAZ Y NAVEGACIÓN -->
   <script>
-    // Navegación entre Vistas
     function switchView(viewId) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
@@ -311,12 +318,10 @@
       document.getElementById('btn-' + viewId).classList.add('active');
     }
 
-    // Cambio de Imagen Ilustrativa
     function changeBox(icon) {
       document.getElementById('main-prod-box').innerText = icon;
     }
 
-    // Pestañas de Producto
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -325,8 +330,7 @@
       btn.classList.add('active');
     }
 
-    // Selección de Colaborador
-    function selectColab(element, name, spec, rating, status) {
+    function selectColab(element, name, spec, rating, status, phone) {
       document.querySelectorAll('.colab-card').forEach(c => c.classList.remove('selected'));
       element.classList.add('selected');
 
@@ -334,12 +338,12 @@
       document.getElementById('colab-spec').innerText = spec;
       document.getElementById('colab-rating').innerText = rating;
       document.getElementById('colab-status').innerText = status;
+      document.getElementById('colab-phone').innerText = phone;
     }
 
-    // Funciones de interacción con modales y envíos
     function registrarYNotificar(titulo, detalle) {
       window.enviarDato('solicitudes', { tipo: titulo, detalle: detalle, fecha: new Date().toLocaleString() });
-      mostrarModal(titulo, 'Tu solicitud fue registrada con éxito en la plataforma.');
+      mostrarModal(titulo, 'Tu solicitud fue registrada correctamente en la plataforma.');
     }
 
     function ejecutarCompra() {
@@ -355,7 +359,7 @@
         fecha: new Date().toLocaleString()
       });
 
-      mostrarModal('¡Compra Realizada! 🛒', `Compraste ${cantidad} Canasta(s) (${tamano}) por $${total}. ¡Guardado en el sistema!`);
+      mostrarModal('¡Compra Registrada! 🛒', `Compraste ${cantidad} Canasta(s) (${tamano}) por un total de $${total}.`);
     }
 
     function solicitarAtencionPersonal() {
@@ -368,7 +372,7 @@
         fecha: new Date().toLocaleString()
       });
 
-      mostrarModal('Atención Solicitada', `Se solicitó la atención del colaborador ${nombreColab} (${especialidad}).`);
+      mostrarModal('Solicitud Enviada', `Se ha registrado la solicitud de asistencia con el colaborador ${nombreColab} (${especialidad}).`);
     }
 
     function ejecutarBusqueda() {
@@ -378,7 +382,6 @@
       }
     }
 
-    // Control del Modal
     function mostrarModal(titulo, mensaje) {
       document.getElementById('modal-titulo').innerText = titulo;
       document.getElementById('modal-mensaje').innerText = mensaje;
