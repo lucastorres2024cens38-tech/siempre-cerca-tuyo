@@ -90,6 +90,36 @@
     .modal-box p { margin-bottom: 22px; font-size: 15px; color: #444; line-height: 1.4; }
 
     footer { background: var(--accent); color: white; text-align: center; padding: 16px; margin-top: auto; font-size: 14px; }
+    /* ... otros estilos anteriores ... */
+
+    footer { background: var(--accent); color: white; text-align: center; padding: 16px; margin-top: auto; font-size: 14px; }
+
+    /* PÉGALO AQUÍ, JUSTO ANTES DE CERRAR EL STYLE */
+    .wsp-float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25d366;
+      color: #fff;
+      border-radius: 50px;
+      text-align: center;
+      font-size: 30px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .wsp-float:hover {
+      background-color: #1da851;
+      transform: scale(1.1);
+    }
+  </style>
   </style>
 </head>
 <body>
@@ -393,5 +423,12 @@
       document.getElementById('modal').style.display = 'none';
     }
   </script>
+  <!-- ... funciones javascript anteriores ... -->
+
+  <!-- PÉGALO AQUÍ, JUSTO ANTES DE CERRAR EL BODY -->
+  <a href="https://wa.me/5493764156321?text=Hola,%20quisiera%20hacer%20una%20consulta" class="wsp-float" target="_blank" rel="noopener noreferrer">
+    📱
+  </a>
+
 </body>
 </html>
