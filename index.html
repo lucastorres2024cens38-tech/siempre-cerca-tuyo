@@ -21,9 +21,11 @@
     body { background-color: var(--bg-color); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
 
     /* Header */
-    header { background: var(--header-bg); padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #ccc; }
-    .logo { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: bold; color: var(--accent); cursor: pointer; }
-    .logo-icon { font-size: 28px; }
+    header { background: var(--header-bg); padding: 12px 30px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #ccc; }
+    .logo { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: bold; color: var(--accent); cursor: pointer; }
+    
+    /* Estilo personalizado para el Logo */
+    .logo-img { height: 45px; width: auto; object-fit: contain; border-radius: 4px; }
 
     /* Top Bar & Search */
     .top-bar { background: #30523f; color: white; padding: 10px 30px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
@@ -92,10 +94,12 @@
 </head>
 <body>
 
-  <!-- Encabezado -->
+  <!-- Encabezado con Logo Incorporado -->
   <header>
     <div class="logo" onclick="switchView('inicio')">
-      <span class="logo-icon">🩵</span> SIEMPRE CERCA TUYO
+      <!-- Reemplaza "logo.png" por el nombre de tu archivo de imagen subido a GitHub -->
+      <img src="logo.png" alt="Logo Siempre Cerca Tuyo" class="logo-img">
+      SIEMPRE CERCA TUYO
     </div>
   </header>
 
@@ -290,14 +294,11 @@
       console.log("Servicio en la nube listo.");
     }
 
-    // Envío híbrido (Guarda en el navegador y en Firebase al mismo tiempo)
     window.enviarDato = async function(coleccion, data) {
-      // 1. Guarda siempre en la memoria local
       let historial = JSON.parse(localStorage.getItem('sct_registros') || '[]');
       historial.push({ coleccion, data, fecha: new Date().toISOString() });
       localStorage.setItem('sct_registros', JSON.stringify(historial));
 
-      // 2. Envía a Firestore en la nube si las claves están puestas
       if (db) {
         try {
           await addDoc(collection(db, coleccion), data);
@@ -308,7 +309,7 @@
     };
   </script>
 
-  <!-- LÓGICA DE LA INTERFAZ Y NAVEGACIÓN -->
+  <!-- LÓGICA DE INTERFAZ -->
   <script>
     function switchView(viewId) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
