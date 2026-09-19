@@ -370,9 +370,15 @@ header { background: var(--header-bg); padding: 15px 30px; display: flex; align-
       document.getElementById('btn-' + viewId).classList.add('active');
     }
 
-    function changeBox(icon) {
-      document.getElementById('main-prod-box').innerText = icon;
-    }
+    function changeBox(icon, precio, titulo) {
+  document.getElementById('main-prod-box').innerText = icon;
+  if (precio) {
+    document.getElementById('prod-price').innerText = precio;
+  }
+  if (titulo) {
+    document.querySelector('#producto h2').innerText = titulo;
+  }
+}
 
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
