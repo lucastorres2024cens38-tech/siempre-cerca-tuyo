@@ -21,11 +21,26 @@
     body { background-color: var(--bg-color); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
 
     /* Header */
+/* Header */
 header { background: var(--header-bg); padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #ccc; }
-.LOGOsct, .logo { display: flex; align-items: center; gap: 15px; font-size: 32px; font-weight: 800; color: #1e6d78; cursor: pointer; }
 
-/* Estilo personalizado para el Logo */
-.logo-img { height: 60px; width: auto; object-fit: contain; border-radius: 4px; }
+/* Aplica el estilo sin importar cómo se llame la clase en el HTML */
+.LOGOsct, .logo, header div { 
+  display: flex !important; 
+  align-items: center !important; 
+  gap: 15px !important; 
+  font-size: 32px !important; 
+  font-weight: 800 !important; 
+  color: #1e6d78 !important; 
+  cursor: pointer !important; 
+}
+
+/* Estilo para ajustar el tamaño del logo */
+.logo-img { 
+  height: 60px !important; 
+  width: auto !important; 
+  object-fit: contain !important; 
+}
 
     /* Top Bar & Search */
     .top-bar { background: #30523f; color: white; padding: 10px 30px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
