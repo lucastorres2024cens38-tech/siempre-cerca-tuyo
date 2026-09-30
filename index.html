@@ -199,12 +199,12 @@ header { background: var(--header-bg); padding: 15px 30px; display: flex; align-
     <section id="producto" class="view">
       <div class="product-layout">
         <div>
-      <div id="main-prod-box" class="prod-main-box"><img src="img/verduras.jpg" style="width: 100%; height: 100%; object-fit: contain;"></div>
+       <div id="main-prod-box" class="prod-main-box">🥗</div>
       <div class="prod-thumbs">
-        <div class="thumb" onclick="changeBox('img/verduras.jpg', '$12.500', 'Canasta Verde Fresca')">Verduras</div>
-        <div class="thumb" onclick="changeBox('img/remera.jpg', '$18.000', 'Remera Algodón')">Remera</div>
-        <div class="thumb" onclick="changeBox('img/zapatillas.jpg', '$45.000', 'Zapatillas Urbanas')">Zapatillas</div>
-      </div>
+  <div class="thumb" onclick="changeBox('🥗', '$12.500', 'Canasta Verde Fresca')">Verduras</div>
+  <div class="thumb" onclick="changeBox('👕', '$18.000', 'Remera Algodón')">Remera</div>
+  <div class="thumb" onclick="changeBox('👟', '$45.000', 'Zapatillas Urbanas')">Zapatillas</div>
+</div>
       </div>
         </div>
 
@@ -385,8 +385,8 @@ header { background: var(--header-bg); padding: 15px 30px; display: flex; align-
       document.getElementById('btn-' + viewId).classList.add('active');
     }
 
-  function changeBox(rutaImagen, precio, titulo) {
-  document.getElementById('main-prod-box').innerHTML = '<img src="' + rutaImagen + '" style="width: 100%; height: 100%; object-fit: contain;">';
+    function changeBox(icon, precio, titulo) {
+  document.getElementById('main-prod-box').innerText = icon;
   if (precio) {
     document.getElementById('prod-price').innerText = precio;
   }
@@ -471,41 +471,6 @@ header { background: var(--header-bg); padding: 15px 30px; display: flex; align-
   <a href="https://wa.me/5493764156321?text=Hola,%20quisiera%20hacer%20una%20consulta" class="wsp-float" target="_blank" rel="noopener noreferrer">
     📱
   </a>
-<!-- Modal de Instrucciones de Registro / Bienvenido -->
-<div id="welcome-modal" class="modal-overlay">
-  <div class="modal-card">
-    <button class="close-btn" onclick="closeWelcomeModal()">&times;</button>
-    <h2>¡Bienvenido a Siempre Cerca Tuyo! 💚</h2>
-    <p class="modal-subtitle">Tu bienestar es nuestra prioridad. Sigue estos simples pasos para sumarte a la comunidad:</p>
 
-    <div class="steps-list">
-      <div class="step-item">
-        <span class="step-num">1</span>
-        <div>
-          <strong>Explora los productos</strong>
-          <p>Selecciona las categorías disponibles (Verduras, Indumentaria, Calzado).</p>
-        </div>
-      </div>
-
-      <div class="step-item">
-        <span class="step-num">2</span>
-        <div>
-          <strong>Elige a tu colaborador local</strong>
-          <p>Conoce la calificación y los detalles del emprendedor de tu zona.</p>
-        </div>
-      </div>
-
-      <div class="step-item">
-        <span class="step-num">3</span>
-        <div>
-          <strong>Completa tu pedido y registro</strong>
-          <p>Ingresa tus datos de entrega y contacto al confirmar tu solicitud.</p>
-        </div>
-      </div>
-    </div>
-
-    <button class="primary-modal-btn" onclick="closeWelcomeModal()">¡Entendido, comenzar!</button>
-  </div>
-</div>
 </body>
 </html>
