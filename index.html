@@ -500,26 +500,31 @@
       document.getElementById('modal-registro').style.display = 'none';
     }
 
-    function guardarRegistroInicial(event) {
-      event.preventDefault();
-      const nombre = document.getElementById('reg-nombre').value;
-      const contacto = document.getElementById('reg-contacto').value;
-      const zona = document.getElementById('reg-zona').value;
+  async function guardarRegistroInicial(event) {
+  event.preventDefault();
+  const nombre = document.getElementById('reg-nombre').value;
+  const contacto = document.getElementById('reg-contacto').value;
+  const zona = document.getElementById('reg-zona').value;
 
-      window.enviarDato('usuarios_registrados', {
-        nombre: nombre,
-        contacto: contacto,
-        zona: zona,
-        fecha: new Date().toLocaleString()
-      });
+  try {
+    // Guarda directamente en Cloud Firestore
+    await addDoc(collection(db, "usuarios_registrados"), {
+      nombre: nombre,
+      contacto: contacto,
+      zona: zona,
+      fecha: new Date().toLocaleString()
+    });
 
-      usuarioActual = nombre;
-      localStorage.setItem('sct_usuario', nombre);
-      actualizarBotonCuenta();
-
-      cerrarRegistro();
-      mostrarModal('¡Bienvenido/a ' + nombre + '!', 'Te has registrado correctamente. Ya podés realizar tus compras y solicitudes.');
-    }
+    usuarioActual = nombre;
+    localStorage.setItem('sct_usuario', nombre);
+    actualizarBotonCuenta();
+    cerrarRegistro();
+    mostrarModal('¡Bienvenido/a ' + nombre + '!', 'Tus datos se guardaron con éxito.');
+  } catch (error) {
+    console.error("Error al guardar en Firestore: ", error);
+    mostrarModal('Error', 'No se pudieron guardar los datos. Revisa la consola o las reglas de Firebase.');
+  }
+}
   </script>
 
 </body>
