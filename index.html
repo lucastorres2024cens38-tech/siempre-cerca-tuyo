@@ -291,23 +291,133 @@
     </div>
 
     <!-- SECTION: TRÁMITES -->
-    <div id="sec-tramites" class="hidden space-y-6">
+    <div id="sec-tramites" class="hidden space-y-8">
       <div class="border-b border-forest-200 pb-4">
         <h2 class="text-3xl font-extrabold text-navy-800">Guía de Trámites e Interactivas</h2>
-        <p class="text-sm text-gray-600">Checklist para verificar la documentación requerida antes de acudir a las oficinas.</p>
+        <p class="text-sm text-gray-600">Checklists y requisitos para verificar antes de iniciar o acudir presencialmente a tus gestiones.</p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- 1. ANSES -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-forest-700">
           <div class="flex items-center gap-3 text-forest-700">
-            <i class="fa-solid fa-clipboard-check text-2xl"></i>
-            <h3 class="text-xl font-bold">Trámite de Acreditación ANSES</h3>
+            <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Acreditación y Datos ANSES</h3>
           </div>
-          <div class="space-y-2 text-sm text-gray-700">
-            <label class="flex items-center gap-3 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-5 h-5 text-forest-700 rounded"> DNI Argentino Vigente</label>
-            <label class="flex items-center gap-3 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-5 h-5 text-forest-700 rounded"> Constancia de CUIL actualizada</label>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI Argentino Vigente (original y copia)</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Constancia de CUIL emitida</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento / Matrimonio</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Clave de la Seguridad Social creada</label>
           </div>
-          <button onclick="alert('Guardado')" class="w-full py-2.5 bg-forest-700 text-white font-bold rounded-xl text-xs">Confirmar Requisitos</button>
+          <button onclick="alert('Requisitos verificados para ANSES.')" class="w-full py-2.5 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition">Confirmar Requisitos ANSES</button>
         </div>
+
+        <!-- 2. PAMI Y MEDICAMENTOS -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-emerald-600">
+          <div class="flex items-center gap-3 text-emerald-800">
+            <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-hospital-user"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Afiliación PAMI & Medicamentos</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Credencial PAMI física o digital</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Receta médica electrónica vigente</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI y comprobante de cobro</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Formulario de Subsidio por Razones Sociales</label>
+          </div>
+          <button onclick="alert('Requisitos PAMI confirmados.')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition">Confirmar Requisitos PAMI</button>
+        </div>
+
+        <!-- 3. RENOVAR DNI Y PASAPORTE -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-sky-600">
+          <div class="flex items-center gap-3 text-sky-700">
+            <div class="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-id-card"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Renovación de DNI / Pasaporte</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI anterior o denuncia de robo/extravío</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Turno presencial asignado (Mi Argentina)</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Comprobante de pago de tasa del trámite</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento actualizada (si aplica)</label>
+          </div>
+          <button onclick="openDniModal()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl text-xs transition">Solicitar Turno DNI</button>
+        </div>
+
+        <!-- 4. HERENCIAS Y SUCESIONES -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-amber-600">
+          <div class="flex items-center gap-3 text-amber-800">
+            <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Herencias y Sucesiones</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Defunción legalizada del causante</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partidas acreditantes de vínculo heredero</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Títulos de propiedad de bienes inmuebles / rodados</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Patrocinio jurídico letrado asignado</label>
+          </div>
+          <button onclick="alert('Documentación para trámite sucesorio guardada.')" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition">Verificar Documentos Sucesión</button>
+        </div>
+
+        <!-- 5. PAGO DE IMPUESTOS Y SERVICIOS -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-teal-600">
+          <div class="flex items-center gap-3 text-teal-800">
+            <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-file-invoice-dollar"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Pago de Impuestos y Servicios</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Código de pago electrónico de la boleta</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Clave Fiscal / Cuenta bancaria asociada</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Adhesión a débito automático / Tarjeta de débito</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Comprobante del último periodo abonado</label>
+          </div>
+          <button onclick="alert('Recordatorio de vencimiento de impuestos configurado.')" class="w-full py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl text-xs transition">Confirmar Pago de Impuestos</button>
+        </div>
+
+        <!-- 6. JUBILACIÓN Y PENSIONES -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-indigo-600">
+          <div class="flex items-center gap-3 text-indigo-700">
+            <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-piggy-bank"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Jubilación y Pensiones</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Historia laboral acreditada (30 años de aportes)</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Formulario PS 6.18 de Solicitud de Prestaciones</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Certificación de servicios expedida por empleador</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI del beneficiario y CBU para cobro</label>
+          </div>
+          <button onclick="openPensionModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition">Simular Haber Previsional</button>
+        </div>
+
+        <!-- 7. SALUD Y CUD (DISCAPACIDAD) -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-rose-600">
+          <div class="flex items-center gap-3 text-rose-700">
+            <div class="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-wheelchair"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Certificado Único de Discapacidad (CUD)</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Planilla médica firmada y completada por especialista</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Estudios complementarios no mayores a 6 meses</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI original y fotocopia del solicitante</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Carnet de obra social o cobertura médica</label>
+          </div>
+          <button onclick="alert('Información para evaluación CUD lista.')" class="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs transition">Verificar CUD / Discapacidad</button>
+        </div>
+
       </div>
     </div>
 
