@@ -57,7 +57,17 @@
       background-color: rgba(15, 23, 42, 0.6);
       backdrop-filter: blur(4px);
     }
+    /* Estilos para el efecto 3D interactivo en tarjetas */
+    .card-container {
+      perspective: 1000px;
+    }
+    .card-3d {
+      transform-style: preserve-3d;
+      transition: box-shadow 0.3s ease;
+    }
   </style>
+  <!-- Enlace al manifest para convertirlo en App -->
+  <link rel="manifest" href="manifest.json">
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
@@ -152,25 +162,27 @@
     <!-- SECTION: INICIO -->
     <div id="sec-inicio" class="space-y-10">
       
-      <!-- HERO BANNER -->
-      <section class="bg-gradient-to-r from-forest-800 to-forest-700 text-white rounded-3xl p-8 sm:p-12 custom-shadow relative overflow-hidden">
-        <div class="max-w-2xl z-10 relative space-y-4">
-          <span class="bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full inline-block">Plataforma CENS 38</span>
-          <h2 class="text-3xl sm:text-5xl font-black leading-tight">¡Bienvenido a Siempre Cerca Tuyo!</h2>
-          <p class="text-sage-100 text-base sm:text-lg leading-relaxed font-normal">
-            Tu plataforma integral de compras, servicios de apoyo y trámites gubernamentales en un solo lugar. Rápido, seguro, accesible y siempre disponible.
-          </p>
-          <div class="pt-4 flex flex-wrap gap-4">
-            <button onclick="showSection('productos')" class="bg-emerald-500 hover:bg-emerald-400 text-forest-900 font-extrabold px-8 py-3.5 rounded-2xl shadow-lg hover:shadow-xl transition flex items-center gap-3">
-              <span>EXPLORAR SERVICIOS Y TIENDA</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </button>
-            <button onclick="openHelpModal()" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold px-6 py-3.5 rounded-2xl transition flex items-center gap-2">
-              <i class="fa-solid fa-phone-volume text-red-400"></i> Pedir Asistencia
-            </button>
+      <!-- HERO BANNER CON EFECTO 3D -->
+      <div class="card-container w-full">
+        <section class="card-3d bg-gradient-to-r from-forest-800 to-forest-700 text-white rounded-3xl p-8 sm:p-12 custom-shadow relative overflow-hidden">
+          <div class="max-w-2xl z-10 relative space-y-4">
+            <span class="bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full inline-block">Plataforma CENS 38</span>
+            <h2 class="text-3xl sm:text-5xl font-black leading-tight">¡Bienvenido a Siempre Cerca Tuyo!</h2>
+            <p class="text-sage-100 text-base sm:text-lg leading-relaxed font-normal">
+              Tu plataforma integral de compras, servicios de apoyo y trámites gubernamentales en un solo lugar. Rápido, seguro, accesible y siempre disponible.
+            </p>
+            <div class="pt-4 flex flex-wrap gap-4">
+              <button onclick="showSection('productos')" class="bg-emerald-500 hover:bg-emerald-400 text-forest-900 font-extrabold px-8 py-3.5 rounded-2xl shadow-lg hover:shadow-xl transition flex items-center gap-3">
+                <span>EXPLORAR SERVICIOS Y TIENDA</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+              <button onclick="openHelpModal()" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold px-6 py-3.5 rounded-2xl transition flex items-center gap-2">
+                <i class="fa-solid fa-phone-volume text-red-400"></i> Pedir Asistencia
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       <!-- ACCIONES RÁPIDAS -->
       <section class="space-y-4">
@@ -649,6 +661,9 @@
     </div>
   </footer>
 
+  <!-- LIBRERÍA VANILLA-TILT.JS PARA EL EFECTO 3D EN LAS TARJETAS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
   <!-- JAVASCRIPT -->
   <script>
     const state = {
@@ -656,12 +671,12 @@
       cart: [],
       favorites: [],
       products: [
-        { id: 1, name: 'Tensiómetro Digital de Brazo', price: 24500, category: 'salud', icon: 'fa-heart-pulse' },
-        { id: 2, name: 'Organizador Semanal de Remedios', price: 3200, category: 'salud', icon: 'fa-capsules' },
-        { id: 3, name: 'Luz Nocturna LED con Sensor', price: 5800, category: 'hogar', icon: 'fa-lightbulb' },
-        { id: 4, name: 'Bastón Regulable Ergonómico', price: 12900, category: 'salud', icon: 'fa-person-walking-with-cane' },
-        { id: 5, name: 'Teléfono Fijo Botones Gigantes', price: 18500, category: 'hogar', icon: 'fa-phone' },
-        { id: 6, name: 'Almohada Cervical Viscoelástica', price: 14200, category: 'hogar', icon: 'fa-bed' }
+        { id: 1, name: 'Tensiómetro Digital de Brazo', price: 24500, category: 'salud', icon: 'fa-heart-pulse', image: 'tensiometro.jpg' },
+        { id: 2, name: 'Organizador Semanal de Remedios', price: 3200, category: 'salud', icon: 'fa-capsules', image: 'organizador.jpg' },
+        { id: 3, name: 'Luz Nocturna LED con Sensor', price: 5800, category: 'hogar', icon: 'fa-lightbulb', image: 'luz.jpg' },
+        { id: 4, name: 'Bastón Regulable Ergonómico', price: 12900, category: 'salud', icon: 'fa-person-walking-with-cane', image: 'baston.jpg' },
+        { id: 5, name: 'Teléfono Fijo Botones Gigantes', price: 18500, category: 'hogar', icon: 'fa-phone', image: 'telefono.jpg' },
+        { id: 6, name: 'Almohada Cervical Viscoelástica', price: 14200, category: 'hogar', icon: 'fa-bed', image: 'almohada.jpg' }
       ],
       staff: [
         { name: 'Lic. María González', role: 'Coordinadora de Salud', phone: '11-4589-2231' },
@@ -772,24 +787,39 @@
       if (!container) return;
       container.innerHTML = list.map(p => {
         const isFav = state.favorites.includes(p.id);
+        
+        // Verificamos si tiene imagen o usamos el icono por defecto
+        let visualContent = p.image 
+          ? `<img src="${p.image}" alt="${p.name}" class="w-full h-40 object-cover rounded-xl mb-3 shadow-sm">`
+          : `<div class="w-12 h-12 bg-sage-100 text-forest-700 rounded-xl flex items-center justify-center text-xl mb-3"><i class="fa-solid ${p.icon}"></i></div>`;
+
         return `
-          <div class="bg-white p-6 rounded-2xl custom-shadow flex flex-col justify-between space-y-4">
-            <div>
-              <div class="flex justify-between items-start">
-                <div class="w-12 h-12 bg-sage-100 text-forest-700 rounded-xl flex items-center justify-center text-xl">
-                  <i class="fa-solid ${p.icon}"></i>
+          <div class="card-container w-full">
+            <div class="card-3d bg-white p-6 rounded-2xl custom-shadow flex flex-col justify-between space-y-4">
+              <div>
+                <div class="flex justify-between items-start mb-2">
+                  <span class="bg-sage-100 text-forest-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase">${p.category}</span>
+                  <button onclick="toggleFav(${p.id})" class="text-xl ${isFav ? 'text-red-500' : 'text-gray-300'}">
+                    <i class="fa-solid fa-heart"></i>
+                  </button>
                 </div>
-                <button onclick="toggleFav(${p.id})" class="text-xl ${isFav ? 'text-red-500' : 'text-gray-300'}">
-                  <i class="fa-solid fa-heart"></i>
-                </button>
+                ${visualContent}
+                <h4 class="text-base font-bold text-navy-800 mt-2">${p.name}</h4>
+                <p class="text-xl font-black text-forest-700 mt-1">$${p.price.toLocaleString()}</p>
               </div>
-              <h4 class="text-base font-bold text-navy-800 mt-3">${p.name}</h4>
-              <p class="text-xl font-black text-forest-700 mt-1">$${p.price.toLocaleString()}</p>
+              <button onclick="addToCart(${p.id})" class="w-full py-2.5 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition">Agregar al Carrito</button>
             </div>
-            <button onclick="addToCart(${p.id})" class="w-full py-2.5 bg-forest-700 text-white font-bold rounded-xl text-xs">Agregar al Carrito</button>
           </div>
         `;
       }).join('');
+
+      // Inicializamos el efecto 3D en las tarjetas renderizadas
+      VanillaTilt.init(document.querySelectorAll(".card-3d"), {
+        max: 10,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.2
+      });
     }
 
     function filterProducts(cat) {
@@ -925,6 +955,25 @@
       state.staff.push({ name, role, phone });
       renderStaff();
       closeStaffModal();
+    }
+
+    // Inicializamos el efecto 3D general al cargar la página
+    document.addEventListener("DOMContentLoaded", function() {
+      VanillaTilt.init(document.querySelectorAll(".card-3d"), {
+        max: 10,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.2
+      });
+    });
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker registrado con éxito', reg))
+          .catch(err => console.warn('Error al registrar Service Worker', err));
+      });
     }
   </script>
 </body>
