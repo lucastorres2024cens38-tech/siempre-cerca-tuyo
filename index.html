@@ -57,7 +57,6 @@
       background-color: rgba(15, 23, 42, 0.6);
       backdrop-filter: blur(4px);
     }
-    /* Estilos para el efecto 3D interactivo en tarjetas */
     .card-container {
       perspective: 1000px;
     }
@@ -66,16 +65,12 @@
       transition: box-shadow 0.3s ease;
     }
   </style>
-  <!-- Enlace al manifest para convertirlo en App -->
   <link rel="manifest" href="manifest.json">
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- ========================================== -->
-  <!-- 1. HEADER & NAVIGATION                     -->
-  <!-- ========================================== -->
+  <!-- HEADER & NAVIGATION -->
   <header class="bg-forest-700 text-white sticky top-0 z-40 shadow-lg">
-    <!-- Top info bar con enlace rápido al 107 -->
     <div class="bg-forest-900 text-sage-200 text-xs py-1.5 px-4 text-center sm:text-left flex justify-between items-center max-w-7xl mx-auto">
       <span><i class="fa-solid fa-heart-pulse text-red-400 mr-2"></i>Proyecto CENS 38 - Atención Digital Integral</span>
       <div class="flex items-center gap-4">
@@ -86,9 +81,7 @@
       </div>
     </div>
 
-    <!-- Main Header -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
-      <!-- Brand & Logo -->
       <div class="flex items-center gap-3 cursor-pointer" onclick="showSection('inicio')">
         <img src="logo.png" alt="Logo Siempre Cerca Tuyo" class="w-12 h-12 object-contain bg-white rounded-2xl p-1 shadow-md">
         <div>
@@ -97,14 +90,12 @@
         </div>
       </div>
 
-      <!-- Search Bar -->
       <div class="w-full md:w-96 relative">
         <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Buscar productos, trámites o servicios..." 
           class="w-full pl-10 pr-4 py-2.5 rounded-full text-sm text-navy-800 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-inner">
         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
       </div>
 
-      <!-- Action Nav Buttons -->
       <div class="flex items-center gap-3 sm:gap-4">
         <div id="userHeaderWidget">
           <button onclick="openLoginModal()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-xl transition text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow">
@@ -132,7 +123,6 @@
       </div>
     </div>
 
-    <!-- Navigation Bar -->
     <nav class="bg-forest-800 border-t border-forest-600/40">
       <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto gap-2 py-2 text-sm font-semibold scrollbar-none">
         <button onclick="showSection('inicio')" class="px-4 py-1.5 rounded-lg text-sage-100 hover:bg-forest-700 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
@@ -154,15 +144,11 @@
     </nav>
   </header>
 
-  <!-- ========================================== -->
-  <!-- MAIN CONTENT CONTAINER                     -->
-  <!-- ========================================== -->
+  <!-- MAIN CONTENT -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
 
     <!-- SECTION: INICIO -->
     <div id="sec-inicio" class="space-y-10">
-      
-      <!-- HERO BANNER CON EFECTO 3D -->
       <div class="card-container w-full">
         <section class="card-3d bg-gradient-to-r from-forest-800 to-forest-700 text-white rounded-3xl p-8 sm:p-12 custom-shadow relative overflow-hidden">
           <div class="max-w-2xl z-10 relative space-y-4">
@@ -315,8 +301,7 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <!-- 1. ANSES -->
+        <!-- ANSES -->
         <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-forest-700">
           <div class="flex items-center gap-3 text-forest-700">
             <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl">
@@ -333,7 +318,7 @@
           <button onclick="alert('Requisitos verificados para ANSES.')" class="w-full py-2.5 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition">Confirmar Requisitos ANSES</button>
         </div>
 
-        <!-- 2. PAMI Y MEDICAMENTOS -->
+        <!-- PAMI Y MEDICAMENTOS -->
         <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-emerald-600">
           <div class="flex items-center gap-3 text-emerald-800">
             <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-xl">
@@ -350,7 +335,7 @@
           <button onclick="alert('Requisitos PAMI confirmados.')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition">Confirmar Requisitos PAMI</button>
         </div>
 
-        <!-- 3. RENOVAR DNI Y PASAPORTE -->
+        <!-- RENOVAR DNI Y PASAPORTE -->
         <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-sky-600">
           <div class="flex items-center gap-3 text-sky-700">
             <div class="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center text-xl">
@@ -367,7 +352,7 @@
           <button onclick="openDniModal()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl text-xs transition">Solicitar Turno DNI</button>
         </div>
 
-        <!-- 4. HERENCIAS Y SUCESIONES -->
+        <!-- HERENCIAS Y SUCESIONES -->
         <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-amber-600">
           <div class="flex items-center gap-3 text-amber-800">
             <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">
@@ -384,7 +369,7 @@
           <button onclick="alert('Documentación para trámite sucesorio guardada.')" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition">Verificar Documentos Sucesión</button>
         </div>
 
-        <!-- 5. PAGO DE IMPUESTOS Y SERVICIOS -->
+        <!-- PAGO DE IMPUESTOS Y SERVICIOS -->
         <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-teal-600">
           <div class="flex items-center gap-3 text-teal-800">
             <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-xl">
@@ -401,7 +386,7 @@
           <button onclick="alert('Recordatorio de vencimiento de impuestos configurado.')" class="w-full py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl text-xs transition">Confirmar Pago de Impuestos</button>
         </div>
 
-        <!-- 6. JUBILACIÓN Y PENSIONES -->
+        <!-- JUBILACIÓN Y PENSIONES -->
         <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-indigo-600">
           <div class="flex items-center gap-3 text-indigo-700">
             <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-xl">
@@ -418,7 +403,7 @@
           <button onclick="openPensionModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition">Simular Haber Previsional</button>
         </div>
 
-        <!-- 7. SALUD Y CUD (DISCAPACIDAD) -->
+        <!-- SALUD Y CUD (DISCAPACIDAD) -->
         <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-rose-600">
           <div class="flex items-center gap-3 text-rose-700">
             <div class="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center text-xl">
@@ -434,7 +419,6 @@
           </div>
           <button onclick="alert('Información para evaluación CUD lista.')" class="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs transition">Verificar CUD / Discapacidad</button>
         </div>
-
       </div>
     </div>
 
@@ -451,11 +435,7 @@
     </div>
   </main>
 
-  <!-- ========================================== -->
-  <!-- MODALS SYSTEM                              -->
-  <!-- ========================================== -->
-
-  <!-- LOGIN MODAL -->
+  <!-- MODALS SYSTEM -->
   <div id="loginModal" class="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-lg rounded-3xl p-6 sm:p-8 space-y-5 shadow-2xl border-2 border-forest-600 relative overflow-hidden">
       <div class="bg-forest-700 -mx-6 -mt-6 sm:-mx-8 sm:-mt-8 p-6 text-white text-center">
@@ -511,7 +491,6 @@
     </div>
   </div>
 
-  <!-- PROFILE MODAL -->
   <div id="profileModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-5 shadow-2xl border border-forest-200">
       <div class="flex justify-between items-center border-b pb-3">
@@ -525,7 +504,6 @@
     </div>
   </div>
 
-  <!-- CART MODAL -->
   <div id="cartModal" class="fixed inset-0 z-50 hidden modal-backdrop flex justify-end">
     <div class="w-full max-w-md bg-white h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto">
       <div>
@@ -542,7 +520,6 @@
     </div>
   </div>
 
-  <!-- FAVORITES MODAL -->
   <div id="favModal" class="fixed inset-0 z-50 hidden modal-backdrop flex justify-end">
     <div class="w-full max-w-md bg-white h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-4 mb-4">
@@ -553,11 +530,8 @@
     </div>
   </div>
 
-  <!-- HELP & SOS MODAL (CON LLAMADA AL 107 DESTACADA) -->
   <div id="helpModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-5 shadow-2xl border-4 border-red-500 relative overflow-hidden">
-      
-      <!-- Modal Header -->
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
         <div class="flex items-center gap-2 text-red-600">
           <i class="fa-solid fa-headset text-2xl"></i>
@@ -572,13 +546,11 @@
         Presione el botón para realizar una llamada de emergencia médica o emita una alerta prioritaria a la central de atención:
       </p>
 
-      <!-- BOTÓN PRINCIPAL LLAMAR AL 107 -->
       <a href="tel:107" class="w-full py-4 bg-red-600 hover:bg-red-700 text-white font-black text-lg rounded-2xl shadow-xl hover:shadow-2xl transition flex items-center justify-center gap-3">
         <i class="fa-solid fa-phone-volume text-2xl animate-bounce"></i>
         <span>LLAMAR AL SAME (107)</span>
       </a>
 
-      <!-- Botón Secundario Alerta SOS -->
       <button onclick="triggerEmergencySignal()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-sm rounded-2xl shadow transition flex items-center justify-center gap-2">
         <i class="fa-solid fa-triangle-exclamation"></i>
         <span>Enviar Alerta SOS a Contactos</span>
@@ -589,7 +561,6 @@
         <span>Enviando señal de emergencia...</span>
       </div>
 
-      <!-- Números de Apoyo Directo -->
       <div class="grid grid-cols-2 gap-3 pt-2">
         <a href="tel:911" class="p-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-2xl text-center transition flex flex-col items-center justify-center gap-1">
           <i class="fa-solid fa-shield-halved text-blue-600 text-xl"></i>
@@ -602,7 +573,6 @@
         </a>
       </div>
 
-      <!-- Botón Inferior Cerrar -->
       <div class="pt-2 border-t border-gray-100">
         <button onclick="closeHelpModal()" class="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition">
           Cerrar ventana
@@ -611,7 +581,6 @@
     </div>
   </div>
 
-  <!-- COMPLAINT MODAL -->
   <div id="complaintModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-xl">
       <h3 class="text-xl font-bold text-navy-800">Registro de Reclamo</h3>
@@ -621,7 +590,6 @@
     </div>
   </div>
 
-  <!-- HEALTH MODAL -->
   <div id="healthModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-lg rounded-2xl p-6 space-y-4 shadow-xl">
       <h3 class="text-xl font-bold text-navy-800">Salud & Medicamentos</h3>
@@ -629,7 +597,6 @@
     </div>
   </div>
 
-  <!-- PENSION MODAL -->
   <div id="pensionModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-xl">
       <h3 class="text-xl font-bold text-navy-800">Simulador Previsional</h3>
@@ -640,7 +607,6 @@
     </div>
   </div>
 
-  <!-- STAFF MODAL -->
   <div id="staffModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-xl">
       <h3 class="text-xl font-bold text-navy-800">Registrar Asistente</h3>
@@ -661,7 +627,7 @@
     </div>
   </footer>
 
-  <!-- LIBRERÍA VANILLA-TILT.JS PARA EL EFECTO 3D EN LAS TARJETAS -->
+  <!-- LIBRERÍA VANILLA-TILT.JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
 
   <!-- JAVASCRIPT -->
@@ -671,12 +637,12 @@
       cart: [],
       favorites: [],
       products: [
-        { id: 1, name: 'Tensiómetro Digital de Brazo', price: 24500, category: 'salud', icon: 'fa-heart-pulse', image: 'tensiometro.jpg' },
+        { id: 1, name: 'Tensiómetro Digital de Brazo', price: 24500, category: 'salud', icon: 'fa-heart-pulse', image: 'tensiometro web.jpg' },
         { id: 2, name: 'Organizador Semanal de Remedios', price: 3200, category: 'salud', icon: 'fa-capsules', image: 'organizador.jpg' },
-        { id: 3, name: 'Luz Nocturna LED con Sensor', price: 5800, category: 'hogar', icon: 'fa-lightbulb', image: 'luz.jpg' },
-        { id: 4, name: 'Bastón Regulable Ergonómico', price: 12900, category: 'salud', icon: 'fa-person-walking-with-cane', image: 'baston.jpg' },
-        { id: 5, name: 'Teléfono Fijo Botones Gigantes', price: 18500, category: 'hogar', icon: 'fa-phone', image: 'telefono.jpg' },
-        { id: 6, name: 'Almohada Cervical Viscoelástica', price: 14200, category: 'hogar', icon: 'fa-bed', image: 'almohada.jpg' }
+        { id: 3, name: 'Luz Nocturna LED con Sensor', price: 5800, category: 'hogar', icon: 'fa-lightbulb', image: 'luz nocturna web.jpg' },
+        { id: 4, name: 'Bastón Regulable Ergonómico', price: 12900, category: 'salud', icon: 'fa-person-walking-with-cane', image: 'baston regulable.jpg' },
+        { id: 5, name: 'Teléfono Fijo Botones Gigantes', price: 18500, category: 'hogar', icon: 'fa-phone', image: 'telefono fijo.jpg' },
+        { id: 6, name: 'Almohada Cervical Viscoelástica', price: 14200, category: 'hogar', icon: 'fa-bed', image: 'almohada cervical.jpg' }
       ],
       staff: [
         { name: 'Lic. María González', role: 'Coordinadora de Salud', phone: '11-4589-2231' },
@@ -788,7 +754,6 @@
       container.innerHTML = list.map(p => {
         const isFav = state.favorites.includes(p.id);
         
-        // Verificamos si tiene imagen o usamos el icono por defecto
         let visualContent = p.image 
           ? `<img src="${p.image}" alt="${p.name}" class="w-full h-40 object-cover rounded-xl mb-3 shadow-sm">`
           : `<div class="w-12 h-12 bg-sage-100 text-forest-700 rounded-xl flex items-center justify-center text-xl mb-3"><i class="fa-solid ${p.icon}"></i></div>`;
@@ -813,7 +778,6 @@
         `;
       }).join('');
 
-      // Inicializamos el efecto 3D en las tarjetas renderizadas
       VanillaTilt.init(document.querySelectorAll(".card-3d"), {
         max: 10,
         speed: 400,
@@ -957,7 +921,6 @@
       closeStaffModal();
     }
 
-    // Inicializamos el efecto 3D general al cargar la página
     document.addEventListener("DOMContentLoaded", function() {
       VanillaTilt.init(document.querySelectorAll(".card-3d"), {
         max: 10,
