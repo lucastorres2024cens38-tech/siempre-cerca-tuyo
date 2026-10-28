@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siempre Cerca Tuyo - CENS 38 Digital</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sage: {
+              50: '#f4f9f6',
+              100: '#e8f3ee',
+              200: '#d1e7dc',
+              300: '#a3d0b9',
+            },
+            forest: {
+              600: '#2d6a4f',
+              700: '#1b4d3e',
+              800: '#143a2f',
+              900: '#0d2720',
+            },
+            navy: {
+              800: '#1a2530',
+              900: '#0f172a',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #e8f3ee;
+      color: #1a2530;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .custom-shadow {
+      box-shadow: 0 10px 25px -5px rgba(27, 77, 62, 0.08), 0 8px 10px -6px rgba(27, 77, 62, 0.04);
+    }
+    .modal-backdrop {
+      background-color: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+    }
+    .card-container {
+      perspective: 1000px;
+    }
+    .card-3d {
+      transform-style: preserve-3d;
+      transition: box-shadow 0.3s ease;
+    }
+  </style>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <!-- HEADER & NAVIGATION -->
+  <header class="bg-forest-700 text-white sticky top-0 z-40 shadow-lg">
+    <div class="bg-forest-900 text-sage-200 text-xs py-1.5 px-4 text-center sm:text-left flex justify-between items-center max-w-7xl mx-auto">
+      <span><i class="fa-solid fa-heart-pulse text-red-400 mr-2"></i>Proyecto CENS 38 - Atención Digital Integral</span>
+      <div class="flex items-center gap-4">
+        <a href="tel:107" class="bg-red-600 hover:bg-red-500 text-white font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow">
+          <i class="fa-solid fa-phone-flip text-xs"></i> SAME: 107
+        </a>
+        <span class="hidden sm:inline"><i class="fa-solid fa-phone mr-1"></i> Línea Gratuita: 0800-CENS-38</span>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="showSection('inicio')">
+        <img src="logo.png" alt="Logo Siempre Cerca Tuyo" class="w-12 h-12 object-contain bg-white rounded-2xl p-1 shadow-md">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white leading-none">Siempre Cerca Tuyo</h1>
+          <p class="text-xs text-sage-200 font-medium mt-1">Tu bienestar es nuestra prioridad</p>
+        </div>
+      </div>
+
+      <div class="w-full md:w-96 relative">
+        <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Buscar productos, trámites o servicios..." 
+          class="w-full pl-10 pr-4 py-2.5 rounded-full text-sm text-navy-800 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-inner">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
+      </div>
+
+      <div class="flex items-center gap-3 sm:gap-4">
+        <div id="userHeaderWidget">
+          <button onclick="openLoginModal()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-xl transition text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span class="hidden sm:inline">Iniciar Sesión</span>
+          </button>
+        </div>
+
+        <button onclick="toggleFavoritesModal()" class="relative p-2.5 bg-forest-800 hover:bg-forest-600 rounded-xl transition text-white flex items-center gap-2 text-sm font-semibold">
+          <i class="fa-solid fa-heart text-red-400"></i>
+          <span class="hidden lg:inline">Favoritos</span>
+          <span id="favCount" class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+        </button>
+
+        <button onclick="toggleCartModal()" class="relative p-2.5 bg-emerald-600 hover:bg-emerald-500 rounded-xl transition text-white flex items-center gap-2 text-sm font-semibold shadow-md">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="hidden lg:inline">Carrito</span>
+          <span id="cartCount" class="bg-white text-forest-800 text-xs font-extrabold px-2 py-0.5 rounded-full">0</span>
+        </button>
+
+        <button onclick="showSection('personal')" class="p-2.5 bg-forest-800 hover:bg-forest-600 rounded-xl transition text-white text-sm font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-user-gear"></i>
+          <span class="hidden lg:inline">Mi Cuenta</span>
+        </button>
+      </div>
+    </div>
+
+    <nav class="bg-forest-800 border-t border-forest-600/40">
+      <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto gap-2 py-2 text-sm font-semibold scrollbar-none">
+        <button onclick="showSection('inicio')" class="px-4 py-1.5 rounded-lg text-sage-100 hover:bg-forest-700 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-solid fa-house"></i> Inicio
+        </button>
+        <button onclick="showSection('productos')" class="px-4 py-1.5 rounded-lg text-sage-100 hover:bg-forest-700 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-solid fa-bag-shopping"></i> Productos & Tienda
+        </button>
+        <button onclick="showSection('tramites')" class="px-4 py-1.5 rounded-lg text-sage-100 hover:bg-forest-700 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-solid fa-file-signature"></i> Trámites
+        </button>
+        <button onclick="showSection('personal')" class="px-4 py-1.5 rounded-lg text-sage-100 hover:bg-forest-700 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-solid fa-users-gear"></i> Gestión de Personal
+        </button>
+        <button onclick="openHelpModal()" class="px-4 py-1.5 rounded-lg bg-red-600/90 text-white hover:bg-red-600 transition flex items-center gap-2 whitespace-nowrap ml-auto font-bold animate-pulse">
+          <i class="fa-solid fa-triangle-exclamation"></i> Ayuda 24/7
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+    <!-- SECTION: INICIO -->
+    <div id="sec-inicio" class="space-y-10">
+      <div class="card-container w-full">
+        <section class="card-3d bg-gradient-to-r from-forest-800 to-forest-700 text-white rounded-3xl p-8 sm:p-12 custom-shadow relative overflow-hidden">
+          <div class="max-w-2xl z-10 relative space-y-4">
+            <span class="bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full inline-block">Plataforma CENS 38</span>
+            <h2 class="text-3xl sm:text-5xl font-black leading-tight">¡Bienvenido a Siempre Cerca Tuyo!</h2>
+            <p class="text-sage-100 text-base sm:text-lg leading-relaxed font-normal">
+              Tu plataforma integral de compras, servicios de apoyo y trámites gubernamentales en un solo lugar. Rápido, seguro, accesible y siempre disponible.
+            </p>
+            <div class="pt-4 flex flex-wrap gap-4">
+              <button onclick="showSection('productos')" class="bg-emerald-500 hover:bg-emerald-400 text-forest-900 font-extrabold px-8 py-3.5 rounded-2xl shadow-lg hover:shadow-xl transition flex items-center gap-3">
+                <span>EXPLORAR SERVICIOS Y TIENDA</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+              <button onclick="openHelpModal()" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold px-6 py-3.5 rounded-2xl transition flex items-center gap-2">
+                <i class="fa-solid fa-phone-volume text-red-400"></i> Pedir Asistencia
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ACCIONES RÁPIDAS -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-2xl font-extrabold text-navy-800 flex items-center gap-2">
+            <i class="fa-solid fa-bolt text-amber-500"></i> Acciones Rápidas
+          </h3>
+          <span class="text-xs font-semibold text-forest-700">Acceso prioritario</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div onclick="showSection('productos')" class="bg-white p-6 rounded-2xl custom-shadow border-2 border-transparent hover:border-emerald-500 transition cursor-pointer group flex items-start gap-5">
+            <div class="p-4 bg-emerald-100 text-emerald-800 rounded-2xl group-hover:scale-110 transition duration-300">
+              <i class="fa-solid fa-cart-shopping text-3xl"></i>
+            </div>
+            <div>
+              <h4 class="text-xl font-bold text-navy-800 mb-1">🛒 COMPRAR</h4>
+              <p class="text-sm text-gray-600">Catálogo adaptado de medicamentos, productos para el hogar y alimentos.</p>
+              <span class="mt-3 inline-flex items-center text-xs font-bold text-forest-700 group-hover:translate-x-1 transition">Ver tienda &rarr;</span>
+            </div>
+          </div>
+
+          <div onclick="showSection('tramites')" class="bg-white p-6 rounded-2xl custom-shadow border-2 border-transparent hover:border-emerald-500 transition cursor-pointer group flex items-start gap-5">
+            <div class="p-4 bg-blue-100 text-blue-800 rounded-2xl group-hover:scale-110 transition duration-300">
+              <i class="fa-solid fa-file-lines text-3xl"></i>
+            </div>
+            <div>
+              <h4 class="text-xl font-bold text-navy-800 mb-1">📄 TRÁMITES</h4>
+              <p class="text-sm text-gray-600">Guía interactiva paso a paso para ANSES, PAMI, DNI y Jubilaciones.</p>
+              <span class="mt-3 inline-flex items-center text-xs font-bold text-forest-700 group-hover:translate-x-1 transition">Iniciar trámite &rarr;</span>
+            </div>
+          </div>
+
+          <div onclick="openHelpModal()" class="bg-white p-6 rounded-2xl custom-shadow border-2 border-red-200 hover:border-red-500 transition cursor-pointer group flex items-start gap-5">
+            <div class="p-4 bg-red-100 text-red-700 rounded-2xl group-hover:scale-110 transition duration-300 animate-bounce">
+              <i class="fa-solid fa-headset text-3xl"></i>
+            </div>
+            <div>
+              <h4 class="text-xl font-bold text-red-700 mb-1">🔑 PEDIR AYUDA (24/7)</h4>
+              <p class="text-sm text-gray-600">Llamada directa al SAME (107), alerta SOS y solicitud de acompañante.</p>
+              <span class="mt-3 inline-flex items-center text-xs font-bold text-red-600 group-hover:translate-x-1 transition">Activar SOS &rarr;</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVICIOS DESTACADOS -->
+      <section class="space-y-6">
+        <h3 class="text-2xl font-extrabold text-navy-800 flex items-center gap-2">
+          <i class="fa-solid fa-star text-amber-500"></i> Servicios Destacados
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-white rounded-2xl p-6 custom-shadow flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-xl flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-bullhorn"></i>
+              </div>
+              <h4 class="text-lg font-bold text-navy-800 mb-2">📢 DENUNCIAS</h4>
+              <p class="text-xs text-gray-600 leading-relaxed mb-4">Registro simple de reclamos comunitarios, problemas de alumbrado o barreras de accesibilidad.</p>
+            </div>
+            <button onclick="openComplaintModal()" class="w-full py-2.5 bg-sage-100 hover:bg-forest-700 hover:text-white text-forest-800 font-bold text-xs rounded-xl transition">
+              Registrar Reclamo
+            </button>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 custom-shadow flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 bg-emerald-100 text-forest-700 rounded-xl flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-notes-medical"></i>
+              </div>
+              <h4 class="text-lg font-bold text-navy-800 mb-2">⚕️ SALUD Y MEDICINAS</h4>
+              <p class="text-xs text-gray-600 leading-relaxed mb-4">Turnos médicos, mapa de farmacias de turno y recordatorio inteligente de remedios.</p>
+            </div>
+            <button onclick="openHealthModal()" class="w-full py-2.5 bg-sage-100 hover:bg-forest-700 hover:text-white text-forest-800 font-bold text-xs rounded-xl transition">
+              Ver Gestión de Salud
+            </button>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 custom-shadow flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-piggy-bank"></i>
+              </div>
+              <h4 class="text-lg font-bold text-navy-800 mb-2">☀️ JUBILACIÓN</h4>
+              <p class="text-xs text-gray-600 leading-relaxed mb-4">Consulta del estado de expedientes previsionales y simulador de cobro estimado.</p>
+            </div>
+            <button onclick="openPensionModal()" class="w-full py-2.5 bg-sage-100 hover:bg-forest-700 hover:text-white text-forest-800 font-bold text-xs rounded-xl transition">
+              Simulador de Cobro
+            </button>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 custom-shadow flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 bg-sky-100 text-sky-700 rounded-xl flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-id-card"></i>
+              </div>
+              <h4 class="text-lg font-bold text-navy-800 mb-2">🪪 RENOVAR DNI</h4>
+              <p class="text-xs text-gray-600 leading-relaxed mb-4">Guía paso a paso para renovación de documento nacional, pasaporte o acreditación personal.</p>
+            </div>
+            <button onclick="openDniModal()" class="w-full py-2.5 bg-sage-100 hover:bg-forest-700 hover:text-white text-forest-800 font-bold text-xs rounded-xl transition">
+              Solicitar Turno DNI
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- SECTION: PRODUCTOS -->
+    <div id="sec-productos" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-forest-200 pb-4">
+        <div>
+          <h2 class="text-3xl font-extrabold text-navy-800">Tienda y Productos Adaptados</h2>
+          <p class="text-sm text-gray-600">Artículos esenciales, medicamentos de venta libre y equipamiento para el hogar.</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="filterProducts('todos')" class="px-3 py-1.5 bg-forest-700 text-white rounded-lg text-xs font-bold">Todos</button>
+          <button onclick="filterProducts('salud')" class="px-3 py-1.5 bg-white text-forest-800 border rounded-lg text-xs font-bold">Salud</button>
+          <button onclick="filterProducts('hogar')" class="px-3 py-1.5 bg-white text-forest-800 border rounded-lg text-xs font-bold">Hogar</button>
+        </div>
+      </div>
+      <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
+
+    <!-- SECTION: TRÁMITES -->
+    <div id="sec-tramites" class="hidden space-y-8">
+      <div class="border-b border-forest-200 pb-4">
+        <h2 class="text-3xl font-extrabold text-navy-800">Guía de Trámites e Interactivas</h2>
+        <p class="text-sm text-gray-600">Checklists y requisitos para verificar antes de iniciar o acudir presencialmente a tus gestiones.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- ANSES -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-forest-700">
+          <div class="flex items-center gap-3 text-forest-700">
+            <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Acreditación y Datos ANSES</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI Argentino Vigente (original y copia)</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Constancia de CUIL emitida</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento / Matrimonio</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Clave de la Seguridad Social creada</label>
+          </div>
+          <button onclick="alert('Requisitos verificados para ANSES.')" class="w-full py-2.5 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition">Confirmar Requisitos ANSES</button>
+        </div>
+
+        <!-- PAMI Y MEDICAMENTOS -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-emerald-600">
+          <div class="flex items-center gap-3 text-emerald-800">
+            <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-hospital-user"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Afiliación PAMI & Medicamentos</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Credencial PAMI física o digital</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Receta médica electrónica vigente</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI y comprobante de cobro</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Formulario de Subsidio por Razones Sociales</label>
+          </div>
+          <button onclick="alert('Requisitos PAMI confirmados.')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition">Confirmar Requisitos PAMI</button>
+        </div>
+
+        <!-- RENOVAR DNI Y PASAPORTE -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-sky-600">
+          <div class="flex items-center gap-3 text-sky-700">
+            <div class="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-id-card"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Renovación de DNI / Pasaporte</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI anterior o denuncia de robo/extravío</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Turno presencial asignado (Mi Argentina)</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Comprobante de pago de tasa del trámite</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento actualizada (si aplica)</label>
+          </div>
+          <button onclick="openDniModal()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl text-xs transition">Solicitar Turno DNI</button>
+        </div>
+
+        <!-- HERENCIAS Y SUCESIONES -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-amber-600">
+          <div class="flex items-center gap-3 text-amber-800">
+            <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Herencias y Sucesiones</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Defunción legalizada del causante</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partidas acreditantes de vínculo heredero</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Títulos de propiedad de bienes inmuebles / rodados</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Patrocinio jurídico letrado asignado</label>
+          </div>
+          <button onclick="alert('Documentación para trámite sucesorio guardada.')" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition">Verificar Documentos Sucesión</button>
+        </div>
+
+        <!-- PAGO DE IMPUESTOS Y SERVICIOS -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-teal-600">
+          <div class="flex items-center gap-3 text-teal-800">
+            <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-file-invoice-dollar"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Pago de Impuestos y Servicios</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Código de pago electrónico de la boleta</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Clave Fiscal / Cuenta bancaria asociada</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Adhesión a débito automático / Tarjeta de débito</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Comprobante del último periodo abonado</label>
+          </div>
+          <button onclick="alert('Recordatorio de vencimiento de impuestos configurado.')" class="w-full py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl text-xs transition">Confirmar Pago de Impuestos</button>
+        </div>
+
+        <!-- JUBILACIÓN Y PENSIONES -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-indigo-600">
+          <div class="flex items-center gap-3 text-indigo-700">
+            <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-piggy-bank"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Jubilación y Pensiones</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Historia laboral acreditada (30 años de aportes)</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Formulario PS 6.18 de Solicitud de Prestaciones</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Certificación de servicios expedida por empleador</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI del beneficiario y CBU para cobro</label>
+          </div>
+          <button onclick="openPensionModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition">Simular Haber Previsional</button>
+        </div>
+
+        <!-- SALUD Y CUD (DISCAPACIDAD) -->
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-rose-600">
+          <div class="flex items-center gap-3 text-rose-700">
+            <div class="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center text-xl">
+              <i class="fa-solid fa-wheelchair"></i>
+            </div>
+            <h3 class="text-lg font-bold text-navy-800">Certificado Único de Discapacidad (CUD)</h3>
+          </div>
+          <div class="space-y-2 text-xs text-gray-700">
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Planilla médica firmada y completada por especialista</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Estudios complementarios no mayores a 6 meses</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI original y fotocopia del solicitante</label>
+            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Carnet de obra social o cobertura médica</label>
+          </div>
+          <button onclick="alert('Información para evaluación CUD lista.')" class="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs transition">Verificar CUD / Discapacidad</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: PERSONAL -->
+    <div id="sec-personal" class="hidden space-y-6">
+      <div class="border-b border-forest-200 pb-4 flex justify-between items-center flex-wrap gap-4">
+        <div>
+          <h2 class="text-3xl font-extrabold text-navy-800">Gestión de Personal y Contactos</h2>
+          <p class="text-sm text-gray-600">Acompañantes asignados y red de asistencia.</p>
+        </div>
+        <button onclick="openAddStaffModal()" class="px-4 py-2 bg-forest-700 text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow"><i class="fa-solid fa-plus"></i> Registrar</button>
+      </div>
+      <div id="staffGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
+  </main>
+
+  <!-- MODALS SYSTEM -->
+  <div id="loginModal" class="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-6 sm:p-8 space-y-5 shadow-2xl border-2 border-forest-600 relative overflow-hidden">
+      <div class="bg-forest-700 -mx-6 -mt-6 sm:-mx-8 sm:-mt-8 p-6 text-white text-center">
+        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-2 shadow-md p-1.5">
+          <img src="logo.png" alt="Logo Siempre Cerca Tuyo" class="w-full h-full object-contain">
+        </div>
+        <h3 class="text-2xl font-black">Iniciar Sesión en CENS 38</h3>
+        <p class="text-xs text-sage-200 mt-1">Ingrese sus datos para atención personalizada</p>
+      </div>
+
+      <form onsubmit="handleLoginSubmit(event)" class="space-y-4 pt-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-navy-800 mb-1">DNI (Documento)</label>
+            <input type="text" id="loginDni" required placeholder="Ej. 25489632" class="w-full p-2.5 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-navy-800 mb-1">Teléfono de Contacto</label>
+            <input type="tel" id="loginPhone" required placeholder="Ej. 11-4589-2211" class="w-full p-2.5 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-navy-800 mb-1">Nombre</label>
+            <input type="text" id="loginNombre" required placeholder="Ej. Juan" class="w-full p-2.5 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-navy-800 mb-1">Apellido</label>
+            <input type="text" id="loginApellido" required placeholder="Ej. Pérez" class="w-full p-2.5 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-navy-800 mb-1">Dirección / Domicilio</label>
+          <input type="text" id="loginAddress" required placeholder="Ej. Av. Rivadavia 4520" class="w-full p-2.5 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-navy-800 mb-1">Enfermedades / Afecciones Médicas Previas</label>
+          <textarea id="loginHealthConditions" rows="2" placeholder="Ej. Hipertensión..." class="w-full p-2.5 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none"></textarea>
+        </div>
+
+        <div class="space-y-2 pt-2">
+          <button type="submit" class="w-full py-3.5 bg-forest-700 hover:bg-forest-600 text-white font-extrabold text-sm rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-right-to-bracket"></i> INGRESAR MIS DATOS
+          </button>
+          <button type="button" onclick="closeLoginModal()" class="w-full py-2 text-xs font-bold text-gray-500 hover:text-navy-800 transition">
+            Continuar como visitante
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="profileModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-5 shadow-2xl border border-forest-200">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-lg font-bold text-navy-800">Perfil de Usuario</h3>
+        <button onclick="closeProfileModal()" class="text-gray-400 text-xl font-bold">&times;</button>
+      </div>
+      <div id="profileDetailsContainer" class="space-y-3 text-xs text-navy-800"></div>
+      <div class="border-t pt-4 space-y-2">
+        <button onclick="handleLogout()" class="w-full py-3 bg-red-600 text-white font-bold rounded-2xl text-xs">CERRAR SESIÓN</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cartModal" class="fixed inset-0 z-50 hidden modal-backdrop flex justify-end">
+    <div class="w-full max-w-md bg-white h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto">
+      <div>
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
+          <h3 class="text-xl font-extrabold text-navy-800">Mi Carrito</h3>
+          <button onclick="toggleCartModal()" class="text-gray-400 text-xl font-bold">&times;</button>
+        </div>
+        <div id="cartItemsList" class="space-y-4"></div>
+      </div>
+      <div class="border-t pt-4 space-y-4">
+        <div class="flex justify-between text-lg font-bold text-navy-800"><span>Total:</span><span id="cartTotal">$0</span></div>
+        <button onclick="processCheckout()" class="w-full py-3 bg-emerald-600 text-white font-extrabold rounded-2xl">FINALIZAR COMPRA</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="favModal" class="fixed inset-0 z-50 hidden modal-backdrop flex justify-end">
+    <div class="w-full max-w-md bg-white h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto">
+      <div class="flex justify-between items-center border-b pb-4 mb-4">
+        <h3 class="text-xl font-extrabold text-navy-800">Favoritos</h3>
+        <button onclick="toggleFavoritesModal()" class="text-gray-400 text-xl font-bold">&times;</button>
+      </div>
+      <div id="favItemsList" class="space-y-4"></div>
+    </div>
+  </div>
+
+  <div id="helpModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-5 shadow-2xl border-4 border-red-500 relative overflow-hidden">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <div class="flex items-center gap-2 text-red-600">
+          <i class="fa-solid fa-headset text-2xl"></i>
+          <h3 class="text-xl font-black text-navy-800">Asistencia y Alerta 24/7</h3>
+        </div>
+        <button onclick="closeHelpModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-lg transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-gray-600 leading-relaxed">
+        Presione el botón para realizar una llamada de emergencia médica o emita una alerta prioritaria a la central de atención:
+      </p>
+
+      <a href="tel:107" class="w-full py-4 bg-red-600 hover:bg-red-700 text-white font-black text-lg rounded-2xl shadow-xl hover:shadow-2xl transition flex items-center justify-center gap-3">
+        <i class="fa-solid fa-phone-volume text-2xl animate-bounce"></i>
+        <span>LLAMAR AL SAME (107)</span>
+      </a>
+
+      <button onclick="triggerEmergencySignal()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-sm rounded-2xl shadow transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>Enviar Alerta SOS a Contactos</span>
+      </button>
+
+      <div id="emergencyStatus" class="hidden p-3 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-xl text-center flex items-center justify-center gap-2">
+        <i class="fa-solid fa-spinner animate-spin"></i>
+        <span>Enviando señal de emergencia...</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 pt-2">
+        <a href="tel:911" class="p-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-2xl text-center transition flex flex-col items-center justify-center gap-1">
+          <i class="fa-solid fa-shield-halved text-blue-600 text-xl"></i>
+          <span class="text-xs font-extrabold text-blue-800">Policía (911)</span>
+        </a>
+
+        <a href="tel:100" class="p-3 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-2xl text-center transition flex flex-col items-center justify-center gap-1">
+          <i class="fa-solid fa-fire-extinguisher text-orange-600 text-xl"></i>
+          <span class="text-xs font-extrabold text-orange-800">Bomberos (100)</span>
+        </a>
+      </div>
+
+      <div class="pt-2 border-t border-gray-100">
+        <button onclick="closeHelpModal()" class="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-xl transition">
+          Cerrar ventana
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="complaintModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-xl">
+      <h3 class="text-xl font-bold text-navy-800">Registro de Reclamo</h3>
+      <input type="text" id="compTitle" placeholder="Motivo" class="w-full p-3 border rounded-xl text-sm">
+      <textarea id="compDesc" placeholder="Detalle..." class="w-full p-3 border rounded-xl text-sm h-24"></textarea>
+      <button onclick="submitComplaint()" class="w-full py-2 bg-forest-700 text-white font-bold rounded-xl">Enviar</button>
+    </div>
+  </div>
+
+  <div id="healthModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-2xl p-6 space-y-4 shadow-xl">
+      <h3 class="text-xl font-bold text-navy-800">Salud & Medicamentos</h3>
+      <button onclick="closeHealthModal()" class="w-full py-2 bg-gray-200 rounded-xl">Cerrar</button>
+    </div>
+  </div>
+
+  <div id="pensionModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-xl">
+      <h3 class="text-xl font-bold text-navy-800">Simulador Previsional</h3>
+      <input type="number" id="pensionYears" placeholder="Años de aportes" class="w-full p-3 border rounded-xl text-sm">
+      <button onclick="calculatePension()" class="w-full py-2 bg-indigo-600 text-white rounded-xl">Simular</button>
+      <div id="pensionResult" class="hidden p-3 bg-indigo-50 text-indigo-900 rounded-xl text-center"></div>
+      <button onclick="closePensionModal()" class="w-full text-xs text-gray-500">Cerrar</button>
+    </div>
+  </div>
+
+  <div id="staffModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-xl">
+      <h3 class="text-xl font-bold text-navy-800">Registrar Asistente</h3>
+      <input type="text" id="staffName" placeholder="Nombre" class="w-full p-3 border rounded-xl text-sm">
+      <input type="text" id="staffRole" placeholder="Rol" class="w-full p-3 border rounded-xl text-sm">
+      <input type="text" id="staffPhone" placeholder="Teléfono" class="w-full p-3 border rounded-xl text-sm">
+      <button onclick="saveNewStaff()" class="w-full py-2 bg-forest-700 text-white rounded-xl">Guardar</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-forest-900 text-sage-200 mt-16 border-t border-forest-800">
+    <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-center md:text-left">
+      <div>
+        <p class="font-bold text-white text-sm">Siempre Cerca Tuyo - Proyecto CENS 38</p>
+      </div>
+      <p class="text-sage-400">© 2026 CENS 38. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- LIBRERÍA VANILLA-TILT.JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    const state = {
+      currentUser: null,
+      cart: [],
+      favorites: [],
+      products: [
+        { id: 1, name: 'Tensiómetro Digital de Brazo', price: 24500, category: 'salud', icon: 'fa-heart-pulse', image: 'tensiometro web.jpg' },
+        { id: 2, name: 'Organizador Semanal de Remedios', price: 3200, category: 'salud', icon: 'fa-capsules', image: 'organizador.jpg' },
+        { id: 3, name: 'Luz Nocturna LED con Sensor', price: 5800, category: 'hogar', icon: 'fa-lightbulb', image: 'luz nocturna web.jpg' },
+        { id: 4, name: 'Bastón Regulable Ergonómico', price: 12900, category: 'salud', icon: 'fa-person-walking-with-cane', image: 'baston regulable.jpg' },
+        { id: 5, name: 'Teléfono Fijo Botones Gigantes', price: 18500, category: 'hogar', icon: 'fa-phone', image: 'telefono fijo.jpg' },
+        { id: 6, name: 'Almohada Cervical Viscoelástica', price: 14200, category: 'hogar', icon: 'fa-bed', image: 'almohada cervical.jpg' }
+      ],
+      staff: [
+        { name: 'Lic. María González', role: 'Coordinadora de Salud', phone: '11-4589-2231' },
+        { name: 'Carlos Benítez', role: 'Acompañante de Trámites', phone: '11-6632-9011' }
+      ]
+    };
+
+    window.onload = () => {
+      loadStoredUserSession();
+      renderProducts(state.products);
+      renderStaff();
+      updateBadges();
+    };
+
+    function loadStoredUserSession() {
+      const stored = localStorage.getItem('cens38_user');
+      if (stored) {
+        try {
+          state.currentUser = JSON.parse(stored);
+          updateHeaderUserWidget();
+          closeLoginModal();
+        } catch(e) { openLoginModal(); }
+      } else { openLoginModal(); }
+    }
+
+    function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
+    function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+
+    function handleLoginSubmit(event) {
+      event.preventDefault();
+      const userData = {
+        dni: document.getElementById('loginDni').value.trim(),
+        nombre: document.getElementById('loginNombre').value.trim(),
+        apellido: document.getElementById('loginApellido').value.trim(),
+        direccion: document.getElementById('loginAddress').value.trim(),
+        telefono: document.getElementById('loginPhone').value.trim(),
+        enfermedades: document.getElementById('loginHealthConditions').value.trim() || 'Sin afecciones'
+      };
+      state.currentUser = userData;
+      localStorage.setItem('cens38_user', JSON.stringify(userData));
+      updateHeaderUserWidget();
+      closeLoginModal();
+      alert(`¡Bienvenido/a ${userData.nombre}!`);
+    }
+
+    function updateHeaderUserWidget() {
+      const widget = document.getElementById('userHeaderWidget');
+      if (!widget) return;
+      if (state.currentUser) {
+        widget.innerHTML = `
+          <button onclick="openProfileModal()" class="px-3 py-2 bg-forest-800 hover:bg-forest-600 rounded-xl transition text-white text-xs sm:text-sm font-bold flex items-center gap-2 border border-emerald-400/40 shadow">
+            <i class="fa-solid fa-circle-user text-emerald-400 text-lg"></i>
+            <span class="max-w-[120px] truncate">Hola, ${state.currentUser.nombre}</span>
+          </button>
+        `;
+      } else {
+        widget.innerHTML = `
+          <button onclick="openLoginModal()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-xl transition text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span class="hidden sm:inline">Iniciar Sesión</span>
+          </button>
+        `;
+      }
+    }
+
+    function openProfileModal() {
+      if (!state.currentUser) return openLoginModal();
+      const u = state.currentUser;
+      const container = document.getElementById('profileDetailsContainer');
+      container.innerHTML = `
+        <div class="p-3 bg-sage-50 rounded-xl space-y-1.5">
+          <p><span class="font-bold text-forest-800">Nombre:</span> ${u.nombre} ${u.apellido}</p>
+          <p><span class="font-bold text-forest-800">DNI:</span> ${u.dni}</p>
+          <p><span class="font-bold text-forest-800">Teléfono:</span> ${u.telefono}</p>
+          <p><span class="font-bold text-forest-800">Dirección:</span> ${u.direccion}</p>
+        </div>
+        <div class="p-3 bg-red-50 rounded-xl space-y-1">
+          <p class="font-bold text-red-800">Afecciones:</p>
+          <p class="text-gray-700 italic">${u.enfermedades}</p>
+        </div>
+      `;
+      document.getElementById('profileModal').classList.remove('hidden');
+    }
+
+    function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); }
+    function handleLogout() {
+      state.currentUser = null;
+      localStorage.removeItem('cens38_user');
+      updateHeaderUserWidget();
+      closeProfileModal();
+      openLoginModal();
+    }
+
+    function showSection(sectionId) {
+      document.getElementById('sec-inicio').classList.add('hidden');
+      document.getElementById('sec-productos').classList.add('hidden');
+      document.getElementById('sec-tramites').classList.add('hidden');
+      document.getElementById('sec-personal').classList.add('hidden');
+      const target = document.getElementById(`sec-${sectionId}`);
+      if (target) {
+        target.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function renderProducts(list) {
+      const container = document.getElementById('productsGrid');
+      if (!container) return;
+      container.innerHTML = list.map(p => {
+        const isFav = state.favorites.includes(p.id);
+        
+        let visualContent = p.image 
+          ? `<img src="${p.image}" alt="${p.name}" class="w-full h-40 object-cover rounded-xl mb-3 shadow-sm">`
+          : `<div class="w-12 h-12 bg-sage-100 text-forest-700 rounded-xl flex items-center justify-center text-xl mb-3"><i class="fa-solid ${p.icon}"></i></div>`;
+
+        return `
+          <div class="card-container w-full">
+            <div class="card-3d bg-white p-6 rounded-2xl custom-shadow flex flex-col justify-between space-y-4">
+              <div>
+                <div class="flex justify-between items-start mb-2">
+                  <span class="bg-sage-100 text-forest-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase">${p.category}</span>
+                  <button onclick="toggleFav(${p.id})" class="text-xl ${isFav ? 'text-red-500' : 'text-gray-300'}">
+                    <i class="fa-solid fa-heart"></i>
+                  </button>
+                </div>
+                ${visualContent}
+                <h4 class="text-base font-bold text-navy-800 mt-2">${p.name}</h4>
+                <p class="text-xl font-black text-forest-700 mt-1">$${p.price.toLocaleString()}</p>
+              </div>
+              <button onclick="addToCart(${p.id})" class="w-full py-2.5 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition">Agregar al Carrito</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      VanillaTilt.init(document.querySelectorAll(".card-3d"), {
+        max: 10,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.2
+      });
+    }
+
+    function filterProducts(cat) {
+      if (cat === 'todos') renderProducts(state.products);
+      else renderProducts(state.products.filter(p => p.category === cat));
+    }
+
+    function addToCart(id) {
+      const prod = state.products.find(p => p.id === id);
+      if (prod) {
+        state.cart.push(prod);
+        updateBadges();
+        renderCartItems();
+      }
+    }
+
+    function toggleFav(id) {
+      const idx = state.favorites.indexOf(id);
+      if (idx > -1) state.favorites.splice(idx, 1);
+      else state.favorites.push(id);
+      updateBadges();
+      renderProducts(state.products);
+      renderFavItems();
+    }
+
+    function updateBadges() {
+      document.getElementById('cartCount').innerText = state.cart.length;
+      document.getElementById('favCount').innerText = state.favorites.length;
+    }
+
+    function renderCartItems() {
+      const container = document.getElementById('cartItemsList');
+      const totalEl = document.getElementById('cartTotal');
+      if (state.cart.length === 0) {
+        container.innerHTML = '<p class="text-sm text-gray-500 text-center py-8">Carrito vacío.</p>';
+        totalEl.innerText = '$0';
+        return;
+      }
+      let total = 0;
+      container.innerHTML = state.cart.map((item, index) => {
+        total += item.price;
+        return `
+          <div class="flex justify-between items-center bg-sage-50 p-3 rounded-xl">
+            <div><p class="font-bold text-sm">${item.name}</p><p class="text-xs text-forest-700 font-bold">$${item.price.toLocaleString()}</p></div>
+            <button onclick="removeFromCart(${index})" class="text-red-500 text-xs font-bold">Quitar</button>
+          </div>
+        `;
+      }).join('');
+      totalEl.innerText = `$${total.toLocaleString()}`;
+    }
+
+    function removeFromCart(index) {
+      state.cart.splice(index, 1);
+      updateBadges();
+      renderCartItems();
+    }
+
+    function renderFavItems() {
+      const container = document.getElementById('favItemsList');
+      const favProducts = state.products.filter(p => state.favorites.includes(p.id));
+      if (favProducts.length === 0) {
+        container.innerHTML = '<p class="text-sm text-gray-500 text-center py-8">Sin favoritos.</p>';
+        return;
+      }
+      container.innerHTML = favProducts.map(item => `
+        <div class="flex justify-between items-center bg-sage-50 p-3 rounded-xl">
+          <div><p class="font-bold text-sm">${item.name}</p><p class="text-xs text-forest-700 font-bold">$${item.price.toLocaleString()}</p></div>
+          <button onclick="addToCart(${item.id})" class="px-3 py-1 bg-emerald-600 text-white text-xs font-bold rounded-lg">Comprar</button>
+        </div>
+      `).join('');
+    }
+
+    function toggleCartModal() { renderCartItems(); document.getElementById('cartModal').classList.toggle('hidden'); }
+    function toggleFavoritesModal() { renderFavItems(); document.getElementById('favModal').classList.toggle('hidden'); }
+    function processCheckout() {
+      if (state.cart.length === 0) return alert('Vacío');
+      alert('¡Pedido registrado con éxito!');
+      state.cart = [];
+      updateBadges();
+      toggleCartModal();
+    }
+
+    function handleSearch() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      if (!query) { renderProducts(state.products); return; }
+      showSection('productos');
+      renderProducts(state.products.filter(p => p.name.toLowerCase().includes(query)));
+    }
+
+    function openHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); }
+    function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); document.getElementById('emergencyStatus').classList.add('hidden'); }
+    function triggerEmergencySignal() {
+      document.getElementById('emergencyStatus').classList.remove('hidden');
+      setTimeout(() => alert('¡Alerta enviada a la central de ayuda y a tus contactos de emergencia!'), 1500);
+    }
+
+    function openComplaintModal() { document.getElementById('complaintModal').classList.remove('hidden'); }
+    function closeComplaintModal() { document.getElementById('complaintModal').classList.add('hidden'); }
+    function submitComplaint() { alert('Reclamo registrado'); closeComplaintModal(); }
+
+    function openHealthModal() { document.getElementById('healthModal').classList.remove('hidden'); }
+    function closeHealthModal() { document.getElementById('healthModal').classList.add('hidden'); }
+
+    function openPensionModal() { document.getElementById('pensionModal').classList.remove('hidden'); }
+    function closePensionModal() { document.getElementById('pensionModal').classList.add('hidden'); }
+    function calculatePension() {
+      const yrs = document.getElementById('pensionYears').value;
+      const res = document.getElementById('pensionResult');
+      res.classList.remove('hidden');
+      res.innerText = `Estimado para ${yrs} años de aporte: Categoría Estándar`;
+    }
+
+    function openDniModal() { alert('Turno DNI solicitado'); }
+
+    function renderStaff() {
+      const grid = document.getElementById('staffGrid');
+      if (!grid) return;
+      grid.innerHTML = state.staff.map(s => `
+        <div class="bg-white p-6 rounded-2xl custom-shadow flex items-start gap-4">
+          <div class="w-12 h-12 bg-forest-700 text-white rounded-xl flex items-center justify-center font-bold text-lg">${s.name.charAt(0)}</div>
+          <div><h4 class="font-bold text-navy-800 text-base">${s.name}</h4><p class="text-xs text-forest-700 font-semibold">${s.role}</p><p class="text-xs text-gray-500 mt-2">${s.phone}</p></div>
+        </div>
+      `).join('');
+    }
+
+    function openAddStaffModal() { document.getElementById('staffModal').classList.remove('hidden'); }
+    function closeStaffModal() { document.getElementById('staffModal').classList.add('hidden'); }
+    function saveNewStaff() {
+      const name = document.getElementById('staffName').value;
+      const role = document.getElementById('staffRole').value;
+      const phone = document.getElementById('staffPhone').value;
+      if (!name) return;
+      state.staff.push({ name, role, phone });
+      renderStaff();
+      closeStaffModal();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      VanillaTilt.init(document.querySelectorAll(".card-3d"), {
+        max: 10,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.2
+      });
+    });
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker registrado con éxito', reg))
+          .catch(err => console.warn('Error al registrar Service Worker', err));
+      });
+    }
+  </script>
+</body>
+</html>
