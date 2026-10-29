@@ -69,8 +69,8 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- HEADER & NAVIGATION -->
-  <header class="bg-forest-700 text-white sticky top-0 z-40 shadow-lg">
+  <!-- HEADER FIJO ARRIBA (Pasa por encima al hacer scroll) -->
+  <header class="bg-forest-700 text-white fixed top-0 left-0 right-0 z-40 shadow-lg">
     <div class="bg-forest-900 text-sage-200 text-xs py-1.5 px-4 text-center sm:text-left flex justify-between items-center max-w-7xl mx-auto">
       <span><i class="fa-solid fa-heart-pulse text-red-400 mr-2"></i>Proyecto CENS 38 - Atención Digital Integral</span>
       <div class="flex items-center gap-4">
@@ -144,8 +144,8 @@
     </nav>
   </header>
 
-  <!-- MAIN CONTENT -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+  <!-- MAIN CONTENT (Se le agrega un padding superior 'pt-44 sm:pt-36' para que el contenido pase por debajo del menú fijo sin taparse) -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-44 sm:pt-36 pb-8 flex-grow w-full">
 
     <!-- SECTION: INICIO -->
     <div id="sec-inicio" class="space-y-10">
@@ -922,22 +922,13 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-      VanillaTilt.init(document.querySelectorAll(".card-3d"), {
+      VanillaTilt.init(querySelectorAll(".card-3d"), {
         max: 10,
         speed: 400,
         glare: true,
         "max-glare": 0.2
       });
     });
-  </script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('Service Worker registrado con éxito', reg))
-          .catch(err => console.warn('Error al registrar Service Worker', err));
-      });
-    }
   </script>
 </body>
 </html>
