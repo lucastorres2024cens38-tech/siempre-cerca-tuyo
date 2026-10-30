@@ -69,8 +69,8 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- HEADER NATURAL (Sin fijarse arriba, se mueve al hacer scroll) -->
-  <header class="bg-forest-700 text-white w-full shadow-lg">
+  <!-- HEADER NATURAL (Se desplaza hacia arriba al hacer scroll) -->
+  <header class="bg-forest-700 text-white relative z-40 shadow-lg">
     <div class="bg-forest-900 text-sage-200 text-xs py-1.5 px-4 text-center sm:text-left flex justify-between items-center max-w-7xl mx-auto">
       <span><i class="fa-solid fa-heart-pulse text-red-400 mr-2"></i>Proyecto CENS 38 - Atención Digital Integral</span>
       <div class="flex items-center gap-4">
@@ -284,10 +284,10 @@
           <h2 class="text-3xl font-extrabold text-navy-800">Tienda y Productos Adaptados</h2>
           <p class="text-sm text-gray-600">Artículos esenciales, medicamentos de venta libre y equipamiento para el hogar.</p>
         </div>
-        <div class="flex gap-2">
-          <button onclick="filterProducts('todos')" class="px-3 py-1.5 bg-forest-700 text-white rounded-lg text-xs font-bold">Todos</button>
-          <button onclick="filterProducts('salud')" class="px-3 py-1.5 bg-white text-forest-800 border rounded-lg text-xs font-bold">Salud</button>
-          <button onclick="filterProducts('hogar')" class="px-3 py-1.5 bg-white text-forest-800 border rounded-lg text-xs font-bold">Hogar</button>
+        <div class="flex gap-2" id="filterButtonsContainer">
+          <button id="btn-filter-todos" onclick="filterProducts('todos')" class="filter-btn px-3 py-1.5 bg-forest-700 text-white rounded-lg text-xs font-bold transition">Todos</button>
+          <button id="btn-filter-salud" onclick="filterProducts('salud')" class="filter-btn px-3 py-1.5 bg-white text-forest-800 border rounded-lg text-xs font-bold transition">Salud</button>
+          <button id="btn-filter-hogar" onclick="filterProducts('hogar')" class="filter-btn px-3 py-1.5 bg-white text-forest-800 border rounded-lg text-xs font-bold transition">Hogar</button>
         </div>
       </div>
       <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -787,8 +787,23 @@
     }
 
     function filterProducts(cat) {
-      if (cat === 'todos') renderProducts(state.products);
-      else renderProducts(state.products.filter(p => p.category === cat));
+      if (cat === 'todos') {
+        renderProducts(state.products);
+      } else {
+        renderProducts(state.products.filter(p => p.category === cat));
+      }
+
+      const categories = ['todos', 'salud', 'hogar'];
+      categories.forEach(c => {
+        const btn = document.getElementById(`btn-filter-${c}`);
+        if (btn) {
+          if (c === cat) {
+            btn.className = 'filter-btn px-3 py-1.5 bg-forest-700 text-white rounded-lg text-xs font-bold transition';
+          } else {
+            btn.className = 'filter-btn px-3 py-1.5 bg-white text-forest-800 border rounded-lg text-xs font-bold transition';
+          }
+        }
+      });
     }
 
     function addToCart(id) {
