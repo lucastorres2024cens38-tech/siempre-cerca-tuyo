@@ -69,7 +69,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- HEADER NATURAL (Se desplaza hacia arriba al hacer scroll) -->
+  <!-- HEADER NATURAL -->
   <header class="bg-forest-700 text-white relative z-40 shadow-lg">
     <div class="bg-forest-900 text-sage-200 text-xs py-1.5 px-4 text-center sm:text-left flex justify-between items-center max-w-7xl mx-auto">
       <span><i class="fa-solid fa-heart-pulse text-red-400 mr-2"></i>Proyecto CENS 38 - Atención Digital Integral</span>
@@ -170,7 +170,7 @@
         </section>
       </div>
 
-      <!-- ACCIONES RÁPIDAS -->
+      <!-- ACCIONES RÁPIDAS (Incluyendo la tarjeta del Asistente por Voz) -->
       <section class="space-y-4">
         <div class="flex items-center justify-between">
           <h3 class="text-2xl font-extrabold text-navy-800 flex items-center gap-2">
@@ -202,14 +202,14 @@
             </div>
           </div>
 
-          <div onclick="openHelpModal()" class="bg-white p-6 rounded-2xl custom-shadow border-2 border-red-200 hover:border-red-500 transition cursor-pointer group flex items-start gap-5">
-            <div class="p-4 bg-red-100 text-red-700 rounded-2xl group-hover:scale-110 transition duration-300 animate-bounce">
-              <i class="fa-solid fa-headset text-3xl"></i>
+          <div onclick="startVoiceAssistant()" class="bg-white p-6 rounded-2xl custom-shadow border-2 border-emerald-300 hover:border-emerald-500 transition cursor-pointer group flex items-start gap-5">
+            <div class="p-4 bg-emerald-100 text-emerald-700 rounded-2xl group-hover:scale-110 transition duration-300">
+              <i class="fa-solid fa-microphone-lines text-3xl"></i>
             </div>
             <div>
-              <h4 class="text-xl font-bold text-red-700 mb-1">🔑 PEDIR AYUDA (24/7)</h4>
-              <p class="text-sm text-gray-600">Llamada directa al SAME (107), alerta SOS y solicitud de acompañante.</p>
-              <span class="mt-3 inline-flex items-center text-xs font-bold text-red-600 group-hover:translate-x-1 transition">Activar SOS &rarr;</span>
+              <h4 class="text-xl font-bold text-emerald-800 mb-1">🗣️ ASISTENTE POR VOZ</h4>
+              <p class="text-sm text-gray-600">Integración de pedidos y navegación mediante comandos de voz.</p>
+              <span class="mt-3 inline-flex items-center text-xs font-bold text-emerald-700 group-hover:translate-x-1 transition">Probar voz &rarr;</span>
             </div>
           </div>
         </div>
@@ -434,6 +434,30 @@
       <div id="staffGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
   </main>
+
+  <!-- BOTÓN FLOTANTE DE ASISTENTE POR VOZ -->
+  <div class="fixed bottom-6 left-6 z-40">
+    <button onclick="startVoiceAssistant()" class="bg-emerald-600 hover:bg-emerald-500 text-white p-4 rounded-full shadow-2xl flex items-center justify-center gap-3 transition transform hover:scale-105 border-2 border-white">
+      <i class="fa-solid fa-microphone text-xl animate-pulse"></i>
+      <span class="text-xs font-bold hidden sm:inline">Asistente por Voz</span>
+    </button>
+  </div>
+
+  <!-- MODAL DE ASISTENTE POR VOZ ACTIVO -->
+  <div id="voiceModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-5 text-center shadow-2xl border-4 border-emerald-500">
+      <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-3xl animate-bounce">
+        <i class="fa-solid fa-microphone"></i>
+      </div>
+      <div>
+        <h3 class="text-xl font-black text-navy-800">Escuchando comando...</h3>
+        <p id="voiceTranscript" class="text-xs text-gray-500 mt-2 italic">Diga: "productos", "trámites", "inicio", "ayuda" o el nombre de un artículo...</p>
+      </div>
+      <button onclick="stopVoiceAssistant()" class="w-full py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl text-xs transition">
+        Cancelar
+      </button>
+    </div>
+  </div>
 
   <!-- MODALS SYSTEM -->
   <div id="loginModal" class="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
@@ -886,6 +910,73 @@
       if (!query) { renderProducts(state.products); return; }
       showSection('productos');
       renderProducts(state.products.filter(p => p.name.toLowerCase().includes(query)));
+    }
+
+    // --- LÓGICA DEL ASISTENTE POR VOZ ---
+    let recognition = null;
+
+    function startVoiceAssistant() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert("Tu navegador no soporta el asistente por voz. Prueba usando Google Chrome.");
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.lang = 'es-AR';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      const modal = document.getElementById('voiceModal');
+      const transcriptEl = document.getElementById('voiceTranscript');
+      modal.classList.remove('hidden');
+      transcriptEl.innerText = "Escuchando... Di un comando (ej: 'productos', 'ayuda', 'trámites')";
+
+      recognition.onresult = (event) => {
+        const speechToText = event.results[0][0].transcript.toLowerCase();
+        transcriptEl.innerText = `Dijiste: "${speechToText}"`;
+        
+        setTimeout(() => {
+          modal.classList.add('hidden');
+          processVoiceCommand(speechToText);
+        }, 1000);
+      };
+
+      recognition.onerror = (event) => {
+        transcriptEl.innerText = "No se pudo reconocer la voz. Inténtalo de nuevo.";
+        setTimeout(() => modal.classList.add('hidden'), 2000);
+      };
+
+      recognition.onend = () => {
+        // Cierra modal si termina
+      };
+
+      recognition.start();
+    }
+
+    function stopVoiceAssistant() {
+      if (recognition) {
+        recognition.stop();
+      }
+      document.getElementById('voiceModal').classList.add('hidden');
+    }
+
+    function processVoiceCommand(command) {
+      if (command.includes('producto') || command.includes('tienda') || command.includes('comprar')) {
+        showSection('productos');
+      } else if (command.includes('trámite') || command.includes('tramite') || command.includes('anses') || command.includes('pami')) {
+        showSection('tramites');
+      } else if (command.includes('inicio') || command.includes('home')) {
+        showSection('inicio');
+      } else if (command.includes('personal') || command.includes('cuenta') || command.includes('asistente')) {
+        showSection('personal');
+      } else if (command.includes('ayuda') || command.includes('emergencia') || command.includes('same')) {
+        openHelpModal();
+      } else {
+        // Si dice otra cosa, lo usa para buscar en la tienda
+        document.getElementById('searchInput').value = command;
+        handleSearch();
+      }
     }
 
     function openHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); }
