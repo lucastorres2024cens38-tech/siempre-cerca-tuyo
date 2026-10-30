@@ -170,7 +170,7 @@
         </section>
       </div>
 
-      <!-- ACCIONES RÁPIDAS (Incluyendo la tarjeta del Asistente por Voz) -->
+      <!-- ACCIONES RÁPIDAS -->
       <section class="space-y-4">
         <div class="flex items-center justify-between">
           <h3 class="text-2xl font-extrabold text-navy-800 flex items-center gap-2">
@@ -435,11 +435,63 @@
     </div>
   </main>
 
-  <!-- BOTÓN FLOTANTE DE ASISTENTE POR VOZ -->
+  <!-- BOTÓN FLOTANTE DE ASISTENTE POR VOZ (Abajo Izquierda) -->
   <div class="fixed bottom-6 left-6 z-40">
     <button onclick="startVoiceAssistant()" class="bg-emerald-600 hover:bg-emerald-500 text-white p-4 rounded-full shadow-2xl flex items-center justify-center gap-3 transition transform hover:scale-105 border-2 border-white">
       <i class="fa-solid fa-microphone text-xl animate-pulse"></i>
       <span class="text-xs font-bold hidden sm:inline">Asistente por Voz</span>
+    </button>
+  </div>
+
+  <!-- CHATBOT FLOTANTE DE ASISTENCIA (Abajo Derecha) -->
+  <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end">
+    <!-- Ventana del Chat (oculta por defecto) -->
+    <div id="chatWidgetContainer" class="hidden w-80 sm:w-96 bg-white rounded-3xl shadow-2xl border-2 border-forest-700 flex flex-col overflow-hidden mb-3 transition-all duration-300">
+      <div class="bg-forest-700 text-white p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-forest-700 font-bold p-1">
+              <i class="fa-solid fa-robot text-xl"></i>
+            </div>
+            <span class="w-3 h-3 bg-emerald-400 border-2 border-white rounded-full absolute bottom-0 right-0"></span>
+          </div>
+          <div>
+            <h4 class="font-bold text-sm">Asistente CENS 38</h4>
+            <p class="text-[10px] text-sage-200">En línea • Respuestas rápidas</p>
+          </div>
+        </div>
+        <button onclick="toggleChatWidget()" class="text-white hover:text-sage-200 font-bold text-xl">&times;</button>
+      </div>
+
+      <!-- Mensajes del Chat -->
+      <div id="chatMessages" class="p-4 h-72 overflow-y-auto space-y-3 bg-sage-50 text-xs">
+        <div class="flex items-start gap-2">
+          <div class="bg-forest-700 text-white p-2.5 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm">
+            ¡Hola! 👋 Soy el asistente virtual de <b>Siempre Cerca Tuyo</b>. ¿En qué puedo ayudarte hoy?
+          </div>
+        </div>
+      </div>
+
+      <!-- Sugerencias de Preguntas Rápida -->
+      <div class="p-2 bg-white border-t border-gray-100 flex gap-1.5 overflow-x-auto scrollbar-none text-[11px]">
+        <button onclick="sendQuickQuestion('tramites')" class="px-2.5 py-1 bg-sage-100 text-forest-800 rounded-full font-semibold hover:bg-forest-700 hover:text-white whitespace-nowrap transition">📄 Trámites</button>
+        <button onclick="sendQuickQuestion('productos')" class="px-2.5 py-1 bg-sage-100 text-forest-800 rounded-full font-semibold hover:bg-forest-700 hover:text-white whitespace-nowrap transition">🛒 Comprar</button>
+        <button onclick="sendQuickQuestion('ayuda')" class="px-2.5 py-1 bg-sage-100 text-forest-800 rounded-full font-semibold hover:bg-forest-700 hover:text-white whitespace-nowrap transition">🚨 Emergencias</button>
+      </div>
+
+      <!-- Input de Texto -->
+      <form onsubmit="handleChatSubmit(event)" class="p-2 bg-white border-t border-gray-200 flex gap-2">
+        <input type="text" id="chatInput" placeholder="Escribe tu consulta aquí..." class="flex-grow p-2.5 text-xs border rounded-xl focus:outline-none focus:ring-2 focus:ring-forest-700">
+        <button type="submit" class="bg-forest-700 hover:bg-forest-600 text-white px-3.5 py-2.5 rounded-xl transition">
+          <i class="fa-solid fa-paper-plane text-xs"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- Botón Gatillo del Chat -->
+    <button onclick="toggleChatWidget()" class="bg-forest-700 hover:bg-forest-600 text-white p-4 rounded-full shadow-2xl flex items-center justify-center gap-3 transition transform hover:scale-105 border-2 border-white">
+      <i class="fa-solid fa-comments text-2xl"></i>
+      <span class="text-xs font-bold hidden sm:inline">Consultas en vivo</span>
     </button>
   </div>
 
@@ -912,6 +964,79 @@
       renderProducts(state.products.filter(p => p.name.toLowerCase().includes(query)));
     }
 
+    // --- LÓGICA DEL CHATBOT VIRTUAL ---
+    function toggleChatWidget() {
+      document.getElementById('chatWidgetContainer').classList.toggle('hidden');
+    }
+
+    function sendQuickQuestion(type) {
+      if (type === 'tramites') {
+        addChatMessage('¿Cómo hago mis trámites?', 'user');
+        setTimeout(() => {
+          addChatMessage('Puedes ver la lista interactiva de trámites (ANSES, PAMI, DNI) haciendo clic en la sección "Trámites". Te llevaré allí.', 'bot');
+          showSection('tramites');
+        }, 600);
+      } else if (type === 'productos') {
+        addChatMessage('Quiero ver productos para comprar', 'user');
+        setTimeout(() => {
+          addChatMessage('¡Genial! En la sección "Productos & Tienda" tienes nuestro catálogo de productos adaptados. Te redirijo...', 'bot');
+          showSection('productos');
+        }, 600);
+      } else if (type === 'ayuda') {
+        addChatMessage('Necesito asistencia de emergencia', 'user');
+        setTimeout(() => {
+          addChatMessage('Si tienes una emergencia, haz clic en el botón rojo "Ayuda 24/7" arriba o llama directamente al SAME (107).', 'bot');
+          openHelpModal();
+        }, 600);
+      }
+    }
+
+    function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      addChatMessage(text, 'user');
+      input.value = '';
+
+      // Respuesta inteligente simulada
+      setTimeout(() => {
+        const lower = text.toLowerCase();
+        let reply = "No entendí muy bien tu consulta. ¿Buscas comprar productos, ayuda con trámites o asistencia de emergencia?";
+
+        if (lower.includes('hola') || lower.includes('buenas')) {
+          reply = "¡Hola! ¿En qué te puedo ayudar hoy?";
+        } else if (lower.includes('pami') || lower.includes('anses') || lower.includes('dni') || lower.includes('tramite') || lower.includes('trámite')) {
+          reply = "Tenemos guías paso a paso para trámites de ANSES, PAMI y DNI en la sección 'Trámites'. ¡Te llevo ahí!";
+          showSection('tramites');
+        } else if (lower.includes('comprar') || lower.includes('precio') || lower.includes('producto') || lower.includes('baston') || lower.includes('remedio')) {
+          reply = "Puedes revisar nuestro catálogo de medicamentos y productos adaptados en la pestaña 'Productos & Tienda'.";
+          showSection('productos');
+        } else if (lower.includes('emergencia') || lower.includes('same') || lower.includes('medico') || lower.includes('médico') || lower.includes('ayuda')) {
+          reply = "Para urgencias médicas o alertas SOS, abre nuestro centro de asistencia de emergencia.",
+          openHelpModal();
+        }
+
+        addChatMessage(reply, 'bot');
+      }, 700);
+    }
+
+    function addChatMessage(text, sender) {
+      const container = document.getElementById('chatMessages');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `flex items-start gap-2 ${sender === 'user' ? 'justify-end' : ''}`;
+
+      if (sender === 'user') {
+        msgDiv.innerHTML = `<div class="bg-emerald-600 text-white p-2.5 rounded-2xl rounded-tr-none max-w-[85%] shadow-sm">${text}</div>`;
+      } else {
+        msgDiv.innerHTML = `<div class="bg-forest-700 text-white p-2.5 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm">${text}</div>`;
+      }
+
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+    }
+
     // --- LÓGICA DEL ASISTENTE POR VOZ ---
     let recognition = null;
 
@@ -947,10 +1072,6 @@
         setTimeout(() => modal.classList.add('hidden'), 2000);
       };
 
-      recognition.onend = () => {
-        // Cierra modal si termina
-      };
-
       recognition.start();
     }
 
@@ -973,7 +1094,6 @@
       } else if (command.includes('ayuda') || command.includes('emergencia') || command.includes('same')) {
         openHelpModal();
       } else {
-        // Si dice otra cosa, lo usa para buscar en la tienda
         document.getElementById('searchInput').value = command;
         handleSearch();
       }
