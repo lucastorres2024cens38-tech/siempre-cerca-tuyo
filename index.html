@@ -631,13 +631,22 @@
     </div>
   </div>
 
+  <!-- MODAL REGISTRAR ASISTENTE CON BOTÓN CANCELAR Y GUARDAR -->
   <div id="staffModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-xl">
-      <h3 class="text-xl font-bold text-navy-800">Registrar Asistente</h3>
-      <input type="text" id="staffName" placeholder="Nombre" class="w-full p-3 border rounded-xl text-sm">
-      <input type="text" id="staffRole" placeholder="Rol" class="w-full p-3 border rounded-xl text-sm">
-      <input type="text" id="staffPhone" placeholder="Teléfono" class="w-full p-3 border rounded-xl text-sm">
-      <button onclick="saveNewStaff()" class="w-full py-2 bg-forest-700 text-white rounded-xl">Guardar</button>
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-forest-600">
+      <h3 class="text-xl font-extrabold text-navy-800 mb-2">Registrar Asistente</h3>
+      <input type="text" id="staffName" placeholder="Nombre" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <input type="text" id="staffRole" placeholder="Rol" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <input type="text" id="staffPhone" placeholder="Teléfono" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      
+      <div class="grid grid-cols-2 gap-3 pt-2">
+        <button type="button" onclick="closeStaffModal()" class="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl text-xs transition">
+          Cancelar
+        </button>
+        <button type="button" onclick="saveNewStaff()" class="w-full py-3 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition shadow">
+          Guardar
+        </button>
+      </div>
     </div>
   </div>
 
@@ -658,19 +667,28 @@
   <script src="https://cdn.botpress.cloud/webchat/v5.0/inject.js"></script>
   <script src="https://files.bpcontent.cloud/2026/10/30/23/20261030230748-K8WWZNOG.js" defer></script>
 
-  <!-- JAVASCRIPT -->
+  <!-- JAVASCRIPT PRINCIPAL -->
   <script>
+    // Registro del Service Worker para PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registrado con éxito:', reg.scope))
+          .catch(err => console.log('Error al registrar el Service Worker:', err));
+      });
+    }
+
     const state = {
       currentUser: null,
       cart: [],
       favorites: [],
       products: [
-        { id: 1, name: 'Tensiómetro Digital de Brazo', price: 24500, category: 'salud', icon: 'fa-heart-pulse', image: 'tensiometro web.jpg' },
-        { id: 2, name: 'Organizador Semanal de Remedios', price: 3200, category: 'salud', icon: 'fa-capsules', image: 'organizador.jpg' },
-        { id: 3, name: 'Luz Nocturna LED con Sensor', price: 5800, category: 'hogar', icon: 'fa-lightbulb', image: 'luz nocturna web.jpg' },
-        { id: 4, name: 'Bastón Regulable Ergonómico', price: 12900, category: 'salud', icon: 'fa-person-walking-with-cane', image: 'baston regulable.jpg' },
-        { id: 5, name: 'Teléfono Fijo Botones Gigantes', price: 18500, category: 'hogar', icon: 'fa-phone', image: 'telefono fijo.jpg' },
-        { id: 6, name: 'Almohada Cervical Viscoelástica', price: 14200, category: 'hogar', icon: 'fa-bed', image: 'almohada cervical.jpg' }
+        { id: 1, name: 'Tensiómetro Digital de Brazo', price: 24500, category: 'salud', icon: 'fa-heart-pulse', image: 'tensiometro.jpg.jpg' },
+        { id: 2, name: 'Organizador Semanal de Remedios', price: 3200, category: 'salud', icon: 'fa-capsules', image: 'organizador.jpg.jpg' },
+        { id: 3, name: 'Luz Nocturna LED con Sensor', price: 5800, category: 'hogar', icon: 'fa-lightbulb', image: 'luz.jpg.jpg' },
+        { id: 4, name: 'Bastón Regulable Ergonómico', price: 12900, category: 'salud', icon: 'fa-person-walking-with-cane', image: 'baston.jpg.jpg' },
+        { id: 5, name: 'Teléfono Fijo Botones Gigantes', price: 18500, category: 'hogar', icon: 'fa-phone', image: 'telefono.jpg.jpg' },
+        { id: 6, name: 'Almohada Cervical Viscoelástica', price: 14200, category: 'hogar', icon: 'fa-bed', image: 'almohada.jpg.jpg' }
       ],
       staff: [
         { name: 'Lic. María González', role: 'Coordinadora de Salud', phone: '11-4589-2231' },
@@ -1014,14 +1032,19 @@
       `).join('');
     }
 
-    function openAddStaffModal() { document.getElementById('staffModal').classList.remove('hidden'); }
+    function openAddStaffModal() { 
+      document.getElementById('staffName').value = '';
+      document.getElementById('staffRole').value = '';
+      document.getElementById('staffPhone').value = '';
+      document.getElementById('staffModal').classList.remove('hidden'); 
+    }
     function closeStaffModal() { document.getElementById('staffModal').classList.add('hidden'); }
     function saveNewStaff() {
-      const name = document.getElementById('staffName').value;
-      const role = document.getElementById('staffRole').value;
-      const phone = document.getElementById('staffPhone').value;
-      if (!name) return;
-      state.staff.push({ name, role, phone });
+      const name = document.getElementById('staffName').value.trim();
+      const role = document.getElementById('staffRole').value.trim();
+      const phone = document.getElementById('staffPhone').value.trim();
+      if (!name) return alert('Por favor complete al menos el nombre.');
+      state.staff.push({ name, role: role || 'Asistente', phone: phone || 'Sin teléfono' });
       renderStaff();
       closeStaffModal();
     }
@@ -1035,9 +1058,5 @@
       });
     });
   </script>
-  if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js')
-    .then(() => console.log('Service Worker registrado con éxito'));
-}
 </body>
 </html>
