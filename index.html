@@ -927,11 +927,27 @@
       toggleCartModal();
     }
 
+    // --- BUSCADOR INTELIGENTE CORREGIDO ---
     function handleSearch() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      if (!query) { renderProducts(state.products); return; }
-      showSection('productos');
-      renderProducts(state.products.filter(p => p.name.toLowerCase().includes(query)));
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      
+      if (!query) { 
+        showSection('productos');
+        renderProducts(state.products); 
+        return; 
+      }
+
+      // Palabras clave relacionadas con trámites
+      const tramitesKeywords = ['dni', 'anses', 'pami', 'jubilacion', 'jubilación', 'tramite', 'trámite', 'pasaporte', 'impuestos', 'cud', 'herencia'];
+      const esTramite = tramitesKeywords.some(kw => query.includes(kw));
+
+      if (esTramite) {
+        showSection('tramites');
+      } else {
+        showSection('productos');
+        const filtered = state.products.filter(p => p.name.toLowerCase().includes(query));
+        renderProducts(filtered);
+      }
     }
 
     // --- LÓGICA DEL ASISTENTE POR VOZ ---
