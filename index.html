@@ -116,7 +116,8 @@
           <span id="cartCount" class="bg-white text-forest-800 text-xs font-extrabold px-2 py-0.5 rounded-full">0</span>
         </button>
 
-        <button onclick="showSection('personal')" class="p-2.5 bg-forest-800 hover:bg-forest-600 rounded-xl transition text-white text-sm font-semibold flex items-center gap-2">
+        <!-- BOTÓN ACTUALIZADO PARA ABRIR EL MODAL DE MI CUENTA -->
+        <button onclick="checkAndOpenProfile()" class="p-2.5 bg-forest-800 hover:bg-forest-600 rounded-xl transition text-white text-sm font-semibold flex items-center gap-2">
           <i class="fa-solid fa-user-gear"></i>
           <span class="hidden lg:inline">Mi Cuenta</span>
         </button>
@@ -754,6 +755,14 @@
       }
     }
 
+    function checkAndOpenProfile() {
+      if (state.currentUser) {
+        openProfileModal();
+      } else {
+        openLoginModal();
+      }
+    }
+
     function openProfileModal() {
       if (!state.currentUser) return openLoginModal();
       const u = state.currentUser;
@@ -927,7 +936,7 @@
       toggleCartModal();
     }
 
-    // --- BUSCADOR INTELIGENTE CORREGIDO ---
+    // --- BUSCADOR INTELIGENTE ---
     function handleSearch() {
       const query = document.getElementById('searchInput').value.toLowerCase().trim();
       
@@ -937,7 +946,6 @@
         return; 
       }
 
-      // Palabras clave relacionadas con trámites
       const tramitesKeywords = ['dni', 'anses', 'pami', 'jubilacion', 'jubilación', 'tramite', 'trámite', 'pasaporte', 'impuestos', 'cud', 'herencia'];
       const esTramite = tramitesKeywords.some(kw => query.includes(kw));
 
@@ -1003,7 +1011,7 @@
       } else if (command.includes('inicio') || command.includes('home')) {
         showSection('inicio');
       } else if (command.includes('personal') || command.includes('cuenta') || command.includes('asistente')) {
-        showSection('personal');
+        checkAndOpenProfile();
       } else if (command.includes('ayuda') || command.includes('emergencia') || command.includes('same')) {
         openHelpModal();
       } else {
