@@ -628,13 +628,45 @@
     </div>
   </div>
 
+  <!-- MODAL SIMULADOR PREVISIONAL AVANZADO -->
   <div id="pensionModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-xl">
-      <h3 class="text-xl font-bold text-navy-800">Simulador Previsional</h3>
-      <input type="number" id="pensionYears" placeholder="Años de aportes" class="w-full p-3 border rounded-xl text-sm">
-      <button onclick="calculatePension()" class="w-full py-2 bg-indigo-600 text-white rounded-xl">Simular</button>
-      <div id="pensionResult" class="hidden p-3 bg-indigo-50 text-indigo-900 rounded-xl text-center"></div>
-      <button onclick="closePensionModal()" class="w-full text-xs text-gray-500">Cerrar</button>
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-indigo-600">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-xl font-black text-navy-800 flex items-center gap-2">
+          <i class="fa-solid fa-piggy-bank text-indigo-600"></i> Simulador Previsional Avanzado
+        </h3>
+        <button onclick="closePensionModal()" class="text-gray-400 hover:text-navy-800 text-xl font-bold">&times;</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Edad Actual (Años)</label>
+          <input type="number" id="pensionEdad" placeholder="Ej. 62" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Años de Aportes Registrados</label>
+          <input type="number" id="pensionYears" placeholder="Ej. 25" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Género</label>
+          <select id="pensionGenero" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none bg-white">
+            <option value="femenino">Femenino (Jubilación a los 60)</option>
+            <option value="masculino">Masculino (Jubilación a los 65)</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="calculatePension()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs rounded-xl transition shadow">
+        Calcular Estado Previsional
+      </button>
+
+      <div id="pensionResult" class="hidden p-4 bg-indigo-50 text-indigo-900 rounded-2xl text-xs space-y-2 border border-indigo-200"></div>
+
+      <button onclick="closePensionModal()" class="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold text-xs rounded-xl transition">
+        Cerrar
+      </button>
     </div>
   </div>
 
@@ -692,7 +724,7 @@
       products: [
         { id: 1, name: 'Tensiómetro Digital de Brazo', price: 24500, category: 'salud', icon: 'fa-heart-pulse', image: 'tensiometro.jpg.jpg' },
         { id: 2, name: 'Organizador Semanal de Remedios', price: 3200, category: 'salud', icon: 'fa-capsules', image: 'organizador.jpg.jpg' },
-        { id: 3, name: 'Luz Nocturna LED con Sensor', price: 5800, category: 'hogar', icon: 'fa-lightbulb', image: 'luz.jpg.jpg' },
+        { id: 3, name: 'Luz Nocturna LED with Sensor', price: 5800, category: 'hogar', icon: 'fa-lightbulb', image: 'luz.jpg.jpg' },
         { id: 4, name: 'Bastón Regulable Ergonómico', price: 12900, category: 'salud', icon: 'fa-person-walking-with-cane', image: 'baston.jpg.jpg' },
         { id: 5, name: 'Teléfono Fijo Botones Gigantes', price: 18500, category: 'hogar', icon: 'fa-phone', image: 'telefono.jpg.jpg' },
         { id: 6, name: 'Almohada Cervical Viscoelástica', price: 14200, category: 'hogar', icon: 'fa-bed', image: 'almohada.jpg.jpg' }
@@ -1050,11 +1082,43 @@
 
     function openPensionModal() { document.getElementById('pensionModal').classList.remove('hidden'); }
     function closePensionModal() { document.getElementById('pensionModal').classList.add('hidden'); }
+    
+    // --- NUEVO SIMULADOR PREVISIONAL AVANZADO ---
     function calculatePension() {
-      const yrs = document.getElementById('pensionYears').value;
+      const edad = parseInt(document.getElementById('pensionEdad').value) || 0;
+      const anosAportes = parseInt(document.getElementById('pensionYears').value) || 0;
+      const genero = document.getElementById('pensionGenero').value;
       const res = document.getElementById('pensionResult');
+
+      if (edad <= 0 || anosAportes < 0) {
+        alert('Por favor ingresa una edad y años de aportes válidos.');
+        return;
+      }
+
+      const edadMinima = genero === 'femenino' ? 60 : 65;
+      const aportesNecesarios = 30;
+
+      let cumpleEdad = edad >= edadMinima;
+      let cumpleAportes = anosAportes >= aportesNecesarios;
+
       res.classList.remove('hidden');
-      res.innerText = `Estimado para ${yrs} años de aporte: Categoría Estándar`;
+
+      if (cumpleEdad && cumpleAportes) {
+        res.innerHTML = `
+          <p class="font-black text-emerald-700 text-sm"><i class="fa-solid fa-circle-check"></i> ¡Cumples con los requisitos!</p>
+          <p>Estás en condiciones de iniciar tu trámite jubilatorio en ANSES.</p>
+          <p class="font-bold text-navy-800 mt-1">Haber estimado mensual: <span class="text-emerald-700 font-black">$320.000 + Moratoria/Bonos</span></p>
+        `;
+      } else {
+        let faltanteEdad = Math.max(0, edadMinima - edad);
+        let faltanteAportes = Math.max(0, aportesNecesarios - anosAportes);
+        
+        res.innerHTML = `
+          <p class="font-black text-amber-700 text-sm"><i class="fa-solid fa-triangle-exclamation"></i> En proceso de requisitos</p>
+          <p>Te faltan <b>${faltanteEdad} años de edad</b> y <b>${faltanteAportes} años de aportes</b> para la jubilación ordinaria.</p>
+          <p class="text-[11px] text-gray-600 mt-1">💡 <i>Tip: Podés consultar planes de regularización de deuda previsional (moratoria) en la sección de trámites de ANSES.</i></p>
+        `;
+      }
     }
 
     function openDniModal() { alert('Turno DNI solicitado'); }
