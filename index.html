@@ -77,7 +77,7 @@
         <a href="tel:107" class="bg-red-600 hover:bg-red-500 text-white font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow">
           <i class="fa-solid fa-phone-flip text-xs"></i> SAME: 107
         </a>
-        <span class="hidden sm:inline"><i class="fa-solid fa-phone mr-1"></i> Línea Gratuita: 0800-CENS-38</span>
+        <span class="hidden sm:inline"><i class="fa-solid fa-phone mr-1"></i> Línea Gratuita: 3764-1563-21</span>
       </div>
     </div>
 
@@ -136,6 +136,9 @@
         </button>
         <button onclick="showSection('personal')" class="px-4 py-1.5 rounded-lg text-sage-100 hover:bg-forest-700 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
           <i class="fa-solid fa-users-gear"></i> Gestión de Personal
+        </button>
+        <button onclick="showSection('resenas')" class="px-4 py-1.5 rounded-lg text-sage-100 hover:bg-forest-700 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-solid fa-star text-amber-400"></i> Reseñas & Opiniones
         </button>
         <button onclick="openHelpModal()" class="px-4 py-1.5 rounded-lg bg-red-600/90 text-white hover:bg-red-600 transition flex items-center gap-2 whitespace-nowrap ml-auto font-bold animate-pulse">
           <i class="fa-solid fa-triangle-exclamation"></i> Ayuda 24/7
@@ -434,15 +437,86 @@
       <div class="border-b border-forest-200 pb-4 flex justify-between items-center flex-wrap gap-4">
         <div>
           <h2 class="text-3xl font-extrabold text-navy-800">Gestión de Personal y Contactos</h2>
-          <p class="text-sm text-gray-600">Acompañantes asignados y red de asistencia.</p>
+          <p class="text-sm text-gray-600">Acompañantes asignados, profesionales de la salud y soporte técnico exclusivo.</p>
         </div>
-        <button onclick="openAddStaffModal()" class="px-4 py-2 bg-forest-700 text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow"><i class="fa-solid fa-plus"></i> Registrar</button>
+        <button onclick="checkAdminAndOpenStaffModal()" class="px-4 py-2.5 bg-forest-700 text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow hover:bg-forest-600 transition">
+          <i class="fa-solid fa-user-shield"></i> Registrar (Exclusivo Admin)
+        </button>
       </div>
       <div id="staffGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
+
+    <!-- SECTION: RESEÑAS Y CALIFICACIONES -->
+    <div id="sec-resenas" class="hidden space-y-8">
+      <div class="border-b border-forest-200 pb-4">
+        <h2 class="text-3xl font-extrabold text-navy-800">Reseñas, Consultas y Experiencias</h2>
+        <p class="text-sm text-gray-600">Conoce las opiniones de nuestros usuarios sobre la calidad de atención del CENS 38.</p>
+      </div>
+
+      <!-- RESUMEN DE CALIFICACIONES -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-6 sm:p-8 rounded-3xl custom-shadow border border-forest-100">
+        <div class="flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-gray-200 pb-6 md:pb-0">
+          <span class="text-5xl font-black text-forest-700">4.9</span>
+          <div class="flex text-amber-400 text-lg my-2">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <span class="text-xs text-gray-500 font-semibold">Basado en 128 valoraciones</span>
+        </div>
+
+        <div class="space-y-2 justify-center flex flex-col col-span-2">
+          <div class="flex items-center text-xs gap-3">
+            <span class="font-bold text-navy-800 w-12">5 estrellas</span>
+            <div class="flex-grow bg-gray-200 rounded-full h-2 overflow-hidden">
+              <div class="bg-emerald-600 h-full w-[90%]"></div>
+            </div>
+            <span class="text-gray-500 font-bold">90%</span>
+          </div>
+          <div class="flex items-center text-xs gap-3">
+            <span class="font-bold text-navy-800 w-12">4 estrellas</span>
+            <div class="flex-grow bg-gray-200 rounded-full h-2 overflow-hidden">
+              <div class="bg-emerald-500 h-full w-[8%]"></div>
+            </div>
+            <span class="text-gray-500 font-bold">8%</span>
+          </div>
+          <div class="flex items-center text-xs gap-3">
+            <span class="font-bold text-navy-800 w-12">3 estrellas</span>
+            <div class="flex-grow bg-gray-200 rounded-full h-2 overflow-hidden">
+              <div class="bg-amber-400 h-full w-[2%]"></div>
+            </div>
+            <span class="text-gray-500 font-bold">2%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMULARIO PARA DEJAR RESEÑA -->
+      <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-2 border-emerald-500/30">
+        <h3 class="text-lg font-bold text-navy-800 flex items-center gap-2">
+          <i class="fa-solid fa-pen-to-square text-emerald-600"></i> Déjanos tu consulta o valoración
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input type="text" id="reviewAuthor" placeholder="Tu Nombre completo" class="p-3 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
+          <select id="reviewRating" class="p-3 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none bg-white">
+            <option value="5">⭐⭐⭐⭐⭐ Excelente (5/5)</option>
+            <option value="4">⭐⭐⭐⭐ Muy Bueno (4/5)</option>
+            <option value="3">⭐⭐⭐ Regular (3/5)</option>
+          </select>
+        </div>
+        <textarea id="reviewText" rows="3" placeholder="Escribe tu experiencia o consulta para la comunidad..." class="w-full p-3 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none"></textarea>
+        <button onclick="submitReview()" class="px-6 py-3 bg-forest-700 hover:bg-forest-600 text-white font-bold text-xs rounded-xl transition shadow flex items-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i> Publicar Reseña
+        </button>
+      </div>
+
+      <!-- LISTA DE RESEÑAS -->
+      <div id="reviewsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+    </div>
   </main>
 
-  <!-- BOTÓN FLOTANTE DE ASISTENTE POR VOZ (Abajo Izquierda) -->
+  <!-- BOTÓN FLOTANTE DE ASISTENTE POR VOZ -->
   <div class="fixed bottom-6 left-6 z-40">
     <button onclick="startVoiceAssistant()" class="bg-emerald-600 hover:bg-emerald-500 text-white p-4 rounded-full shadow-2xl flex items-center justify-center gap-3 transition transform hover:scale-105 border-2 border-white">
       <i class="fa-solid fa-microphone text-xl animate-pulse"></i>
@@ -458,7 +532,7 @@
       </div>
       <div>
         <h3 class="text-xl font-black text-navy-800">Escuchando comando...</h3>
-        <p id="voiceTranscript" class="text-xs text-gray-500 mt-2 italic">Diga: "productos", "trámites", "inicio", "ayuda" o el nombre de un artículo...</p>
+        <p id="voiceTranscript" class="text-xs text-gray-500 mt-2 italic">Diga: "productos", "trámites", "inicio", "reseñas", "ayuda"...</p>
       </div>
       <button onclick="stopVoiceAssistant()" class="w-full py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl text-xs transition">
         Cancelar
@@ -673,17 +747,20 @@
   <!-- MODAL REGISTRAR ASISTENTE CON BOTÓN CANCELAR Y GUARDAR -->
   <div id="staffModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-forest-600">
-      <h3 class="text-xl font-extrabold text-navy-800 mb-2">Registrar Asistente</h3>
-      <input type="text" id="staffName" placeholder="Nombre" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
-      <input type="text" id="staffRole" placeholder="Rol" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
-      <input type="text" id="staffPhone" placeholder="Teléfono" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-xl font-extrabold text-navy-800">Registrar Personal (Admin)</h3>
+        <span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">Modo Administrador</span>
+      </div>
+      <input type="text" id="staffName" placeholder="Nombre completo" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <input type="text" id="staffRole" placeholder="Rol / Especialidad (ej: Abogado, Electricista)" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <input type="text" id="staffPhone" placeholder="Teléfono de contacto" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
       
       <div class="grid grid-cols-2 gap-3 pt-2">
         <button type="button" onclick="closeStaffModal()" class="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl text-xs transition">
           Cancelar
         </button>
         <button type="button" onclick="saveNewStaff()" class="w-full py-3 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition shadow">
-          Guardar
+          Guardar Personal
         </button>
       </div>
     </div>
@@ -719,19 +796,27 @@
 
     const state = {
       currentUser: null,
+      isAdmin: false,
       cart: [],
       favorites: [],
       products: [
         { id: 1, name: 'Tensiómetro Digital de Brazo', price: 24500, category: 'salud', icon: 'fa-heart-pulse', image: 'tensiometro.jpg.jpg' },
         { id: 2, name: 'Organizador Semanal de Remedios', price: 3200, category: 'salud', icon: 'fa-capsules', image: 'organizador.jpg.jpg' },
-        { id: 3, name: 'Luz Nocturna LED with Sensor', price: 5800, category: 'hogar', icon: 'fa-lightbulb', image: 'luz.jpg.jpg' },
+        { id: 3, name: 'Luz Nocturna LED con Sensor', price: 5800, category: 'hogar', icon: 'fa-lightbulb', image: 'luz.jpg.jpg' },
         { id: 4, name: 'Bastón Regulable Ergonómico', price: 12900, category: 'salud', icon: 'fa-person-walking-with-cane', image: 'baston.jpg.jpg' },
         { id: 5, name: 'Teléfono Fijo Botones Gigantes', price: 18500, category: 'hogar', icon: 'fa-phone', image: 'telefono.jpg.jpg' },
         { id: 6, name: 'Almohada Cervical Viscoelástica', price: 14200, category: 'hogar', icon: 'fa-bed', image: 'almohada.jpg.jpg' }
       ],
       staff: [
         { name: 'Lic. María González', role: 'Coordinadora de Salud', phone: '11-4589-2231' },
-        { name: 'Carlos Benítez', role: 'Acompañante de Trámites', phone: '11-6632-9011' }
+        { name: 'Carlos Benítez', role: 'Acompañante de Trámites', phone: '11-6632-9011' },
+        { name: 'Dr. Roberto Fernández', role: 'Abogado y Asesor Legal', phone: '11-5544-3322' },
+        { name: 'Miguel Ángel Torres', role: 'Electricista Matriculado', phone: '11-4433-2211' }
+      ],
+      reviews: [
+        { author: 'Norma R.', rating: 5, date: 'Ayer', text: 'Excelente atención en la sección de trámites. El equipo nos ayudó paso a paso para gestionar la receta electrónica.' },
+        { author: 'Jorge L.', rating: 5, date: 'Hace 3 días', text: 'Compré el tensiómetro digital y llegó súper rápido a mi domicilio. Una app muy confiable.' },
+        { author: 'Beatriz M.', rating: 5, date: 'Hace 1 semana', text: 'El simulador previsional me dio una respuesta clarísima sobre mis aportes. Muy conforme con el CENS 38.' }
       ]
     };
 
@@ -739,6 +824,7 @@
       loadStoredUserSession();
       renderProducts(state.products);
       renderStaff();
+      renderReviews();
       updateBadges();
     };
 
@@ -823,6 +909,7 @@
     function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); }
     function handleLogout() {
       state.currentUser = null;
+      state.isAdmin = false;
       localStorage.removeItem('cens38_user');
       updateHeaderUserWidget();
       closeProfileModal();
@@ -834,6 +921,7 @@
       document.getElementById('sec-productos').classList.add('hidden');
       document.getElementById('sec-tramites').classList.add('hidden');
       document.getElementById('sec-personal').classList.add('hidden');
+      document.getElementById('sec-resenas').classList.add('hidden');
       const target = document.getElementById(`sec-${sectionId}`);
       if (target) {
         target.classList.remove('hidden');
@@ -1022,7 +1110,7 @@
       const modal = document.getElementById('voiceModal');
       const transcriptEl = document.getElementById('voiceTranscript');
       modal.classList.remove('hidden');
-      transcriptEl.innerText = "Escuchando... Di un comando (ej: 'productos', 'ayuda', 'trámites')";
+      transcriptEl.innerText = "Escuchando... Di un comando (ej: 'productos', 'reseñas', 'trámites')";
 
       recognition.onresult = (event) => {
         const speechToText = event.results[0][0].transcript.toLowerCase();
@@ -1054,6 +1142,8 @@
         showSection('productos');
       } else if (command.includes('trámite') || command.includes('tramite') || command.includes('anses') || command.includes('pami')) {
         showSection('tramites');
+      } else if (command.includes('reseña') || command.includes('opinión') || command.includes('resenas')) {
+        showSection('resenas');
       } else if (command.includes('inicio') || command.includes('home')) {
         showSection('inicio');
       } else if (command.includes('personal') || command.includes('cuenta') || command.includes('asistente')) {
@@ -1083,7 +1173,6 @@
     function openPensionModal() { document.getElementById('pensionModal').classList.remove('hidden'); }
     function closePensionModal() { document.getElementById('pensionModal').classList.add('hidden'); }
     
-    // --- NUEVO SIMULADOR PREVISIONAL AVANZADO ---
     function calculatePension() {
       const edad = parseInt(document.getElementById('pensionEdad').value) || 0;
       const anosAportes = parseInt(document.getElementById('pensionYears').value) || 0;
@@ -1123,15 +1212,35 @@
 
     function openDniModal() { alert('Turno DNI solicitado'); }
 
+    // --- GESTIÓN DE PERSONAL CON AUTENTICACIÓN ADMIN ---
     function renderStaff() {
       const grid = document.getElementById('staffGrid');
       if (!grid) return;
       grid.innerHTML = state.staff.map(s => `
         <div class="bg-white p-6 rounded-2xl custom-shadow flex items-start gap-4">
           <div class="w-12 h-12 bg-forest-700 text-white rounded-xl flex items-center justify-center font-bold text-lg">${s.name.charAt(0)}</div>
-          <div><h4 class="font-bold text-navy-800 text-base">${s.name}</h4><p class="text-xs text-forest-700 font-semibold">${s.role}</p><p class="text-xs text-gray-500 mt-2">${s.phone}</p></div>
+          <div>
+            <h4 class="font-bold text-navy-800 text-base">${s.name}</h4>
+            <p class="text-xs text-forest-700 font-semibold">${s.role}</p>
+            <p class="text-xs text-gray-500 mt-2 flex items-center gap-1.5"><i class="fa-solid fa-phone text-emerald-600"></i> ${s.phone}</p>
+          </div>
         </div>
       `).join('');
+    }
+
+    function checkAdminAndOpenStaffModal() {
+      if (!state.isAdmin) {
+        const pass = prompt('Acceso restringido a Administrador.\nIngrese la clave de administrador:');
+        if (pass === 'admin123') {
+          state.isAdmin = true;
+          alert('Autenticación correcta como Administrador.');
+          openAddStaffModal();
+        } else if (pass !== null) {
+          alert('Clave incorrecta. Solo el administrador puede registrar personal.');
+        }
+      } else {
+        openAddStaffModal();
+      }
     }
 
     function openAddStaffModal() { 
@@ -1141,6 +1250,7 @@
       document.getElementById('staffModal').classList.remove('hidden'); 
     }
     function closeStaffModal() { document.getElementById('staffModal').classList.add('hidden'); }
+    
     function saveNewStaff() {
       const name = document.getElementById('staffName').value.trim();
       const role = document.getElementById('staffRole').value.trim();
@@ -1149,6 +1259,48 @@
       state.staff.push({ name, role: role || 'Asistente', phone: phone || 'Sin teléfono' });
       renderStaff();
       closeStaffModal();
+      alert(`Se ha registrado a ${name} exitosamente.`);
+    }
+
+    // --- SECCIÓN DE RESEÑAS Y OPINIONES ---
+    function renderReviews() {
+      const container = document.getElementById('reviewsContainer');
+      if (!container) return;
+      container.innerHTML = state.reviews.map(r => `
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-2 border border-gray-100">
+          <div class="flex justify-between items-center">
+            <h4 class="font-bold text-navy-800 text-sm">${r.author}</h4>
+            <span class="text-[10px] text-gray-400 font-semibold">${r.date}</span>
+          </div>
+          <div class="flex text-amber-400 text-xs">
+            ${'<i class="fa-solid fa-star"></i>'.repeat(r.rating)}
+          </div>
+          <p class="text-xs text-gray-600 leading-relaxed">${r.text}</p>
+        </div>
+      `).join('');
+    }
+
+    function submitReview() {
+      const author = document.getElementById('reviewAuthor').value.trim();
+      const rating = parseInt(document.getElementById('reviewRating').value);
+      const text = document.getElementById('reviewText').value.trim();
+
+      if (!author || !text) {
+        alert('Por favor complete su nombre y el comentario.');
+        return;
+      }
+
+      state.reviews.unshift({
+        author: author,
+        rating: rating,
+        date: 'Hace un momento',
+        text: text
+      });
+
+      renderReviews();
+      document.getElementById('reviewAuthor').value = '';
+      document.getElementById('reviewText').value = '';
+      alert('¡Muchas gracias! Tu opinión ha sido publicada.');
     }
 
     document.addEventListener("DOMContentLoaded", function() {
