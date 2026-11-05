@@ -77,7 +77,7 @@
         <a href="tel:107" class="bg-red-600 hover:bg-red-500 text-white font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow">
           <i class="fa-solid fa-phone-flip text-xs"></i> SAME: 107
         </a>
-        <span class="hidden sm:inline"><i class="fa-solid fa-phone mr-1"></i> Línea Gratuita: 3764-1563-21</span>
+        <span class="hidden sm:inline"><i class="fa-solid fa-phone mr-1"></i> Línea Gratuita: 0800-CENS-38</span>
       </div>
     </div>
 
@@ -90,10 +90,14 @@
         </div>
       </div>
 
+      <!-- BUSCADOR INTELIGENTE CON SUGERENCIAS -->
       <div class="w-full md:w-96 relative">
         <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Buscar productos, trámites o servicios..." 
-          class="w-full pl-10 pr-4 py-2.5 rounded-full text-sm text-navy-800 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-inner">
+          class="w-full pl-10 pr-4 py-2.5 rounded-full text-sm text-navy-800 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-inner" autocomplete="off">
         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
+        
+        <!-- CONTENEDOR DE SUGERENCIAS -->
+        <div id="searchResults" class="hidden absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 max-h-60 overflow-y-auto text-navy-800 text-xs font-semibold"></div>
       </div>
 
       <div class="flex items-center gap-3 sm:gap-4">
@@ -405,7 +409,7 @@
             </div>
           </div>
           <a href="https://www.argentina.gob.ar/afip" target="_blank" class="block w-full py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl text-xs transition text-center shadow">
-            Ir al AFIP / Impuestos <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+            Ir a AFIP / Impuestos <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
           </a>
         </div>
 
@@ -686,12 +690,21 @@
     </div>
   </div>
 
+  <!-- MODAL DE RECLAMO CON BOTÓN CANCELAR Y ENVIAR -->
   <div id="complaintModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-xl">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-forest-600">
       <h3 class="text-xl font-bold text-navy-800">Registro de Reclamo</h3>
-      <input type="text" id="compTitle" placeholder="Motivo" class="w-full p-3 border rounded-xl text-sm">
-      <textarea id="compDesc" placeholder="Detalle..." class="w-full p-3 border rounded-xl text-sm h-24"></textarea>
-      <button onclick="submitComplaint()" class="w-full py-2 bg-forest-700 text-white font-bold rounded-xl">Enviar</button>
+      <input type="text" id="compTitle" placeholder="Motivo" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <textarea id="compDesc" placeholder="Detalle..." class="w-full p-3 border border-gray-300 rounded-xl text-sm h-24 focus:ring-2 focus:ring-forest-600 focus:outline-none"></textarea>
+      
+      <div class="grid grid-cols-2 gap-3 pt-2">
+        <button type="button" onclick="closeComplaintModal()" class="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl text-xs transition">
+          Cancelar
+        </button>
+        <button type="button" onclick="submitComplaint()" class="w-full py-3 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition shadow">
+          Enviar
+        </button>
+      </div>
     </div>
   </div>
 
@@ -819,6 +832,19 @@
         { author: 'Beatriz M.', rating: 5, date: 'Hace 1 semana', text: 'El simulador previsional me dio una respuesta clarísima sobre mis aportes. Muy conforme con el CENS 38.' }
       ]
     };
+
+    // Base de datos de elementos buscables para sugerencias
+    const searchableItems = [
+      { text: 'Jubilación y Pensiones', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Acreditación y Datos ANSES', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Afiliación PAMI & Medicamentos', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Renovación de DNI / Pasaporte', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Herencias y Sucesiones', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Pago de Impuestos y Servicios', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Tensiómetro Digital', type: 'producto', action: () => showSection('productos') },
+      { text: 'Organizador Semanal de Remedios', type: 'producto', action: () => showSection('productos') },
+      { text: 'Luz Nocturna LED con Sensor', type: 'producto', action: () => showSection('productos') }
+    ];
 
     window.onload = () => {
       loadStoredUserSession();
@@ -1070,27 +1096,64 @@
       toggleCartModal();
     }
 
-    // --- BUSCADOR INTELIGENTE ---
+    // --- BUSCADOR INTELIGENTE CON SUGERENCIAS ---
     function handleSearch() {
-      const query = document.getElementById('searchInput').value.toLowerCase().trim();
-      
-      if (!query) { 
-        showSection('productos');
-        renderProducts(state.products); 
-        return; 
+      const input = document.getElementById('searchInput');
+      const resultsContainer = document.getElementById('searchResults');
+      const query = input.value.toLowerCase().trim();
+
+      if (query.length < 1) {
+        resultsContainer.classList.add('hidden');
+        resultsContainer.innerHTML = '';
+        return;
       }
 
-      const tramitesKeywords = ['dni', 'anses', 'pami', 'jubilacion', 'jubilación', 'tramite', 'trámite', 'pasaporte', 'impuestos', 'cud', 'herencia'];
-      const esTramite = tramitesKeywords.some(kw => query.includes(kw));
+      const matches = searchableItems.filter(item =>
+        item.text.toLowerCase().includes(query)
+      );
 
-      if (esTramite) {
+      if (matches.length === 0) {
+        resultsContainer.innerHTML = `<div class="p-3 text-gray-400 italic">No se encontraron resultados</div>`;
+        resultsContainer.classList.remove('hidden');
+        return;
+      }
+
+      resultsContainer.innerHTML = matches.map(item => `
+        <div onclick="selectSearchResult('${item.text}')" class="p-3 hover:bg-emerald-50 cursor-pointer flex items-center justify-between border-b border-gray-100 last:border-0 transition">
+          <span class="flex items-center gap-2">
+            <i class="fa-solid ${item.type === 'tramite' ? 'fa-file-lines text-blue-600' : 'fa-cart-shopping text-emerald-600'}"></i>
+            ${item.text}
+          </span>
+          <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${item.type === 'tramite' ? 'bg-blue-100 text-blue-800' : 'bg-emerald-100 text-emerald-800'}">
+            ${item.type}
+          </span>
+        </div>
+      `).join('');
+
+      resultsContainer.classList.remove('hidden');
+
+      if (query.includes('jubi') || query.includes('tramit') || query.includes('anses') || query.includes('pami') || query.includes('dni')) {
         showSection('tramites');
-      } else {
+      } else if (query.includes('prod') || query.includes('salud') || query.includes('hogar')) {
         showSection('productos');
-        const filtered = state.products.filter(p => p.name.toLowerCase().includes(query));
-        renderProducts(filtered);
       }
     }
+
+    function selectSearchResult(text) {
+      const item = searchableItems.find(i => i.text === text);
+      if (item) {
+        document.getElementById('searchInput').value = item.text;
+        document.getElementById('searchResults').classList.add('hidden');
+        item.action();
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      const searchContainer = document.getElementById('searchInput')?.parentElement;
+      if (searchContainer && !searchContainer.contains(e.target)) {
+        document.getElementById('searchResults')?.classList.add('hidden');
+      }
+    });
 
     // --- LÓGICA DEL ASISTENTE POR VOZ ---
     let recognition = null;
@@ -1163,9 +1226,18 @@
       setTimeout(() => alert('¡Alerta enviada a la central de ayuda y a tus contactos de emergencia!'), 1500);
     }
 
-    function openComplaintModal() { document.getElementById('complaintModal').classList.remove('hidden'); }
+    function openComplaintModal() { 
+      document.getElementById('compTitle').value = '';
+      document.getElementById('compDesc').value = '';
+      document.getElementById('complaintModal').classList.remove('hidden'); 
+    }
     function closeComplaintModal() { document.getElementById('complaintModal').classList.add('hidden'); }
-    function submitComplaint() { alert('Reclamo registrado'); closeComplaintModal(); }
+    function submitComplaint() { 
+      const title = document.getElementById('compTitle').value.trim();
+      if(!title) return alert('Por favor ingrese el motivo del reclamo.');
+      alert('Reclamo registrado con éxito'); 
+      closeComplaintModal(); 
+    }
 
     function openHealthModal() { document.getElementById('healthModal').classList.remove('hidden'); }
     function closeHealthModal() { document.getElementById('healthModal').classList.add('hidden'); }
