@@ -498,25 +498,25 @@
 
       <!-- FORMULARIO PARA DEJAR RESEÑA -->
       <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-2 border-emerald-500/30">
-        <h3 class="text-lg font-bold text-navy-800">Dejanos tu opinión o consulta</h3>
-        <form onsubmit="handleReviewSubmit(event)" class="space-y-3">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <input type="text" id="reviewName" required placeholder="Tu nombre y apellido" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
-            <select id="reviewRating" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
-              <option value="5">⭐⭐⭐⭐⭐ Excelente (5/5)</option>
-              <option value="4">⭐⭐⭐⭐ Muy bueno (4/5)</option>
-              <option value="3">⭐⭐⭐ Bueno (3/5)</option>
-              <option value="2">⭐⭐ Regular (2/5)</option>
-              <option value="1">⭐ Malo (1/5)</option>
-            </select>
-          </div>
-          <textarea id="reviewComment" required rows="3" placeholder="Escribí tu experiencia, consulta o sugerencia sobre la plataforma..." class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none"></textarea>
-          <button type="submit" class="py-2.5 px-6 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition shadow">Publicar Opinión</button>
-        </form>
+        <h3 class="text-lg font-bold text-navy-800 flex items-center gap-2">
+          <i class="fa-solid fa-pen-to-square text-emerald-600"></i> Déjanos tu consulta o valoración
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input type="text" id="reviewAuthor" placeholder="Tu Nombre completo" class="p-3 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
+          <select id="reviewRating" class="p-3 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none bg-white">
+            <option value="5">⭐⭐⭐⭐⭐ Excelente (5/5)</option>
+            <option value="4">⭐⭐⭐⭐ Muy Bueno (4/5)</option>
+            <option value="3">⭐⭐⭐ Regular (3/5)</option>
+          </select>
+        </div>
+        <textarea id="reviewText" rows="3" placeholder="Escribe tu experiencia o consulta para la comunidad..." class="w-full p-3 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none"></textarea>
+        <button onclick="submitReview()" class="px-6 py-3 bg-forest-700 hover:bg-forest-600 text-white font-bold text-xs rounded-xl transition shadow flex items-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i> Publicar Reseña
+        </button>
       </div>
 
-      <!-- LISTADO DE RESEÑAS -->
-      <div id="reviewsListContainer" class="space-y-4"></div>
+      <!-- LISTA DE RESEÑAS -->
+      <div id="reviewsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
     </div>
   </main>
 
@@ -536,7 +536,7 @@
       </div>
       <div>
         <h3 class="text-xl font-black text-navy-800">Escuchando comando...</h3>
-        <p id="voiceTranscript" class="text-xs text-gray-500 mt-2 italic">Diga: "productos", "trámites", "inicio", "ayuda" o el nombre de un artículo...</p>
+        <p id="voiceTranscript" class="text-xs text-gray-500 mt-2 italic">Diga: "productos", "trámites", "inicio", "reseñas", "ayuda"...</p>
       </div>
       <button onclick="stopVoiceAssistant()" class="w-full py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl text-xs transition">
         Cancelar
@@ -690,12 +690,21 @@
     </div>
   </div>
 
+  <!-- MODAL DE RECLAMO CON BOTÓN CANCELAR Y ENVIAR -->
   <div id="complaintModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-xl">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-forest-600">
       <h3 class="text-xl font-bold text-navy-800">Registro de Reclamo</h3>
-      <input type="text" id="compTitle" placeholder="Motivo" class="w-full p-3 border rounded-xl text-sm">
-      <textarea id="compDesc" placeholder="Detalle..." class="w-full p-3 border rounded-xl text-sm h-24"></textarea>
-      <button onclick="submitComplaint()" class="w-full py-2 bg-forest-700 text-white font-bold rounded-xl">Enviar</button>
+      <input type="text" id="compTitle" placeholder="Motivo" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <textarea id="compDesc" placeholder="Detalle..." class="w-full p-3 border border-gray-300 rounded-xl text-sm h-24 focus:ring-2 focus:ring-forest-600 focus:outline-none"></textarea>
+      
+      <div class="grid grid-cols-2 gap-3 pt-2">
+        <button type="button" onclick="closeComplaintModal()" class="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl text-xs transition">
+          Cancelar
+        </button>
+        <button type="button" onclick="submitComplaint()" class="w-full py-3 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition shadow">
+          Enviar
+        </button>
+      </div>
     </div>
   </div>
 
@@ -706,23 +715,57 @@
     </div>
   </div>
 
+  <!-- MODAL SIMULADOR PREVISIONAL AVANZADO -->
   <div id="pensionModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-xl">
-      <h3 class="text-xl font-bold text-navy-800">Simulador Previsional</h3>
-      <input type="number" id="pensionYears" placeholder="Años de aportes" class="w-full p-3 border rounded-xl text-sm">
-      <button onclick="calculatePension()" class="w-full py-2 bg-indigo-600 text-white rounded-xl">Simular</button>
-      <div id="pensionResult" class="hidden p-3 bg-indigo-50 text-indigo-900 rounded-xl text-center"></div>
-      <button onclick="closePensionModal()" class="w-full text-xs text-gray-500">Cerrar</button>
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-indigo-600">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-xl font-black text-navy-800 flex items-center gap-2">
+          <i class="fa-solid fa-piggy-bank text-indigo-600"></i> Simulador Previsional Avanzado
+        </h3>
+        <button onclick="closePensionModal()" class="text-gray-400 hover:text-navy-800 text-xl font-bold">&times;</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Edad Actual (Años)</label>
+          <input type="number" id="pensionEdad" placeholder="Ej. 62" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Años de Aportes Registrados</label>
+          <input type="number" id="pensionYears" placeholder="Ej. 25" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Género</label>
+          <select id="pensionGenero" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-600 focus:outline-none bg-white">
+            <option value="femenino">Femenino (Jubilación a los 60)</option>
+            <option value="masculino">Masculino (Jubilación a los 65)</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="calculatePension()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs rounded-xl transition shadow">
+        Calcular Estado Previsional
+      </button>
+
+      <div id="pensionResult" class="hidden p-4 bg-indigo-50 text-indigo-900 rounded-2xl text-xs space-y-2 border border-indigo-200"></div>
+
+      <button onclick="closePensionModal()" class="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold text-xs rounded-xl transition">
+        Cerrar
+      </button>
     </div>
   </div>
 
-  <!-- MODAL REGISTRAR ASISTENTE -->
+  <!-- MODAL REGISTRAR ASISTENTE CON BOTÓN CANCELAR Y GUARDAR -->
   <div id="staffModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-forest-600">
-      <h3 class="text-xl font-extrabold text-navy-800 mb-2">Registrar Asistente (Admin)</h3>
-      <input type="password" id="adminPin" placeholder="Ingrese PIN de Administrador (ej. 1234)" class="w-full p-3 border border-red-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
-      <input type="text" id="staffName" placeholder="Nombre y Apellido" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
-      <input type="text" id="staffRole" placeholder="Rol / Especialidad" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-xl font-extrabold text-navy-800">Registrar Personal (Admin)</h3>
+        <span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">Modo Administrador</span>
+      </div>
+      <input type="text" id="staffName" placeholder="Nombre completo" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <input type="text" id="staffRole" placeholder="Rol / Especialidad (ej: Abogado, Electricista)" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
       <input type="text" id="staffPhone" placeholder="Teléfono de contacto" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
       
       <div class="grid grid-cols-2 gap-3 pt-2">
@@ -730,7 +773,7 @@
           Cancelar
         </button>
         <button type="button" onclick="saveNewStaff()" class="w-full py-3 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition shadow">
-          Guardar
+          Guardar Personal
         </button>
       </div>
     </div>
@@ -766,6 +809,7 @@
 
     const state = {
       currentUser: null,
+      isAdmin: false,
       cart: [],
       favorites: [],
       products: [
@@ -778,13 +822,29 @@
       ],
       staff: [
         { name: 'Lic. María González', role: 'Coordinadora de Salud', phone: '11-4589-2231' },
-        { name: 'Carlos Benítez', role: 'Acompañante de Trámites', phone: '11-6632-9011' }
+        { name: 'Carlos Benítez', role: 'Acompañante de Trámites', phone: '11-6632-9011' },
+        { name: 'Dr. Roberto Fernández', role: 'Abogado y Asesor Legal', phone: '11-5544-3322' },
+        { name: 'Juan Carlos Gómez', role: 'Electricista Matriculado', phone: '11-4433-2211' }
       ],
       reviews: [
-        { name: 'Héctor Gómez', rating: 5, comment: 'Excelente iniciativa para los adultos mayores. Muy fácil de usar y con los números de emergencia a mano.', date: 'Hace 2 días' },
-        { name: 'Silvia Martínez', rating: 5, comment: 'Pude ver los requisitos para PAMI sin moverme de casa. Felicitaciones al equipo del CENS 38.', date: 'Hace 5 días' }
+        { author: 'Norma R.', rating: 5, date: 'Ayer', text: 'Excelente atención en la sección de trámites. El equipo nos ayudó paso a paso para gestionar la receta electrónica.' },
+        { author: 'Jorge L.', rating: 5, date: 'Hace 3 días', text: 'Compré el tensiómetro digital y llegó súper rápido a mi domicilio. Una app muy confiable.' },
+        { author: 'Beatriz M.', rating: 5, date: 'Hace 1 semana', text: 'El simulador previsional me dio una respuesta clarísima sobre mis aportes. Muy conforme con el CENS 38.' }
       ]
     };
+
+    // Base de datos de elementos buscables para sugerencias
+    const searchableItems = [
+      { text: 'Jubilación y Pensiones', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Acreditación y Datos ANSES', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Afiliación PAMI & Medicamentos', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Renovación de DNI / Pasaporte', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Herencias y Sucesiones', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Pago de Impuestos y Servicios', type: 'tramite', action: () => showSection('tramites') },
+      { text: 'Tensiómetro Digital', type: 'producto', action: () => showSection('productos') },
+      { text: 'Organizador Semanal de Remedios', type: 'producto', action: () => showSection('productos') },
+      { text: 'Luz Nocturna LED con Sensor', type: 'producto', action: () => showSection('productos') }
+    ];
 
     window.onload = () => {
       loadStoredUserSession();
@@ -875,6 +935,7 @@
     function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); }
     function handleLogout() {
       state.currentUser = null;
+      state.isAdmin = false;
       localStorage.removeItem('cens38_user');
       updateHeaderUserWidget();
       closeProfileModal();
@@ -918,7 +979,10 @@
                 <h4 class="text-base font-bold text-navy-800 mt-2">${p.name}</h4>
                 <p class="text-xl font-black text-forest-700 mt-1">$${p.price.toLocaleString()}</p>
               </div>
-              <button onclick="addToCart(${p.id})" class="w-full py-2.5 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition">Agregar al Carrito</button>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="addToCart(${p.id})" class="w-full py-2.5 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition">Agregar al Carrito</button>
+                <button onclick="buyNow(${p.id})" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow">Comprar</button>
+              </div>
             </div>
           </div>
         `;
@@ -930,6 +994,11 @@
         glare: true,
         "max-glare": 0.2
       });
+    }
+
+    function buyNow(id) {
+      addToCart(id);
+      toggleCartModal();
     }
 
     function filterProducts(cat) {
@@ -1029,83 +1098,62 @@
 
     // --- BUSCADOR INTELIGENTE CON SUGERENCIAS ---
     function handleSearch() {
-      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const input = document.getElementById('searchInput');
       const resultsContainer = document.getElementById('searchResults');
-      
-      if (!query) { 
+      const query = input.value.toLowerCase().trim();
+
+      if (query.length < 1) {
         resultsContainer.classList.add('hidden');
         resultsContainer.innerHTML = '';
-        return; 
+        return;
       }
 
-      // Buscar coincidencias en productos y trámites
-      const matchingProducts = state.products.filter(p => p.name.toLowerCase().includes(query));
-      const tramitesDisponibles = [
-        { name: 'Acreditación y Datos ANSES', section: 'tramites' },
-        { name: 'Afiliación PAMI & Medicamentos', section: 'tramites' },
-        { name: 'Renovación de DNI / Pasaporte', section: 'tramites' },
-        { name: 'Herencias y Sucesiones', section: 'tramites' },
-        { name: 'Pago de Impuestos y Servicios (AFIP)', section: 'tramites' },
-        { name: 'Jubilación y Pensiones', section: 'tramites' }
-      ];
-      const matchingTramites = tramitesDisponibles.filter(t => t.name.toLowerCase().includes(query));
+      const matches = searchableItems.filter(item =>
+        item.text.toLowerCase().includes(query)
+      );
 
-      if (matchingProducts.length === 0 && matchingTramites.length === 0) {
-        resultsContainer.innerHTML = '<div class="p-3 text-gray-500 text-center">No se encontraron resultados</div>';
+      if (matches.length === 0) {
+        resultsContainer.innerHTML = `<div class="p-3 text-gray-400 italic">No se encontraron resultados</div>`;
         resultsContainer.classList.remove('hidden');
         return;
       }
 
-      let html = '';
-      if (matchingProducts.length > 0) {
-        html += '<div class="p-2 bg-gray-50 text-[10px] font-bold text-forest-800 uppercase tracking-wider">Productos en Tienda</div>';
-        matchingProducts.forEach(p => {
-          html += `<div onclick="showSection('productos'); document.getElementById('searchInput').value=''; document.getElementById('searchResults').classList.add('hidden');" class="p-3 hover:bg-sage-50 cursor-pointer border-b flex justify-between items-center"><span>${p.name}</span><span class="text-forest-700 font-bold">$${p.price.toLocaleString()}</span></div>`;
-        });
-      }
-
-      if (matchingTramites.length > 0) {
-        html += '<div class="p-2 bg-gray-50 text-[10px] font-bold text-forest-800 uppercase tracking-wider">Trámites y Guías</div>';
-        matchingTramites.forEach(t => {
-          html += `<div onclick="showSection('${t.section}'); document.getElementById('searchInput').value=''; document.getElementById('searchResults').classList.add('hidden');" class="p-3 hover:bg-sage-50 cursor-pointer border-b text-navy-800 font-semibold"><i class="fa-solid fa-file-lines text-forest-700 mr-2"></i>${t.name}</div>`;
-        });
-      }
-
-      resultsContainer.innerHTML = html;
-      resultsContainer.classList.remove('hidden');
-    }
-
-    // --- GESTIÓN DE RESEÑAS ---
-    function renderReviews() {
-      const container = document.getElementById('reviewsListContainer');
-      if (!container) return;
-      container.innerHTML = state.reviews.map(r => `
-        <div class="bg-white p-5 rounded-2xl custom-shadow space-y-2">
-          <div class="flex justify-between items-center">
-            <h4 class="font-extrabold text-navy-800 text-sm">${r.name}</h4>
-            <span class="text-[10px] text-gray-400 font-semibold">${r.date}</span>
-          </div>
-          <div class="flex text-amber-400 text-xs">
-            ${'<i class="fa-solid fa-star"></i>'.repeat(r.rating)}
-          </div>
-          <p class="text-xs text-gray-600 leading-relaxed">${r.comment}</p>
+      resultsContainer.innerHTML = matches.map(item => `
+        <div onclick="selectSearchResult('${item.text}')" class="p-3 hover:bg-emerald-50 cursor-pointer flex items-center justify-between border-b border-gray-100 last:border-0 transition">
+          <span class="flex items-center gap-2">
+            <i class="fa-solid ${item.type === 'tramite' ? 'fa-file-lines text-blue-600' : 'fa-cart-shopping text-emerald-600'}"></i>
+            ${item.text}
+          </span>
+          <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${item.type === 'tramite' ? 'bg-blue-100 text-blue-800' : 'bg-emerald-100 text-emerald-800'}">
+            ${item.type}
+          </span>
         </div>
       `).join('');
+
+      resultsContainer.classList.remove('hidden');
+
+      if (query.includes('jubi') || query.includes('tramit') || query.includes('anses') || query.includes('pami') || query.includes('dni')) {
+        showSection('tramites');
+      } else if (query.includes('prod') || query.includes('salud') || query.includes('hogar')) {
+        showSection('productos');
+      }
     }
 
-    function handleReviewSubmit(event) {
-      event.preventDefault();
-      const name = document.getElementById('reviewName').value.trim();
-      const rating = parseInt(document.getElementById('reviewRating').value);
-      const comment = document.getElementById('reviewComment').value.trim();
-
-      if (!name || !comment) return;
-
-      state.reviews.unshift({ name, rating, comment, date: 'Recién publicado' });
-      renderReviews();
-      event.target.reset();
-      alert('¡Muchas gracias por dejar tu opinión!');
+    function selectSearchResult(text) {
+      const item = searchableItems.find(i => i.text === text);
+      if (item) {
+        document.getElementById('searchInput').value = item.text;
+        document.getElementById('searchResults').classList.add('hidden');
+        item.action();
+      }
     }
+
+    document.addEventListener('click', (e) => {
+      const searchContainer = document.getElementById('searchInput')?.parentElement;
+      if (searchContainer && !searchContainer.contains(e.target)) {
+        document.getElementById('searchResults')?.classList.add('hidden');
+      }
+    });
 
     // --- LÓGICA DEL ASISTENTE POR VOZ ---
     let recognition = null;
@@ -1125,7 +1173,7 @@
       const modal = document.getElementById('voiceModal');
       const transcriptEl = document.getElementById('voiceTranscript');
       modal.classList.remove('hidden');
-      transcriptEl.innerText = "Escuchando... Di un comando (ej: 'productos', 'ayuda', 'trámites')";
+      transcriptEl.innerText = "Escuchando... Di un comando (ej: 'productos', 'reseñas', 'trámites')";
 
       recognition.onresult = (event) => {
         const speechToText = event.results[0][0].transcript.toLowerCase();
@@ -1157,10 +1205,10 @@
         showSection('productos');
       } else if (command.includes('trámite') || command.includes('tramite') || command.includes('anses') || command.includes('pami')) {
         showSection('tramites');
+      } else if (command.includes('reseña') || command.includes('opinión') || command.includes('resenas')) {
+        showSection('resenas');
       } else if (command.includes('inicio') || command.includes('home')) {
         showSection('inicio');
-      } else if (command.includes('reseña') || command.includes('opinion') || command.includes('opinión')) {
-        showSection('resenas');
       } else if (command.includes('personal') || command.includes('cuenta') || command.includes('asistente')) {
         checkAndOpenProfile();
       } else if (command.includes('ayuda') || command.includes('emergencia') || command.includes('same')) {
@@ -1178,62 +1226,153 @@
       setTimeout(() => alert('¡Alerta enviada a la central de ayuda y a tus contactos de emergencia!'), 1500);
     }
 
-    function openComplaintModal() { document.getElementById('complaintModal').classList.remove('hidden'); }
+    function openComplaintModal() { 
+      document.getElementById('compTitle').value = '';
+      document.getElementById('compDesc').value = '';
+      document.getElementById('complaintModal').classList.remove('hidden'); 
+    }
     function closeComplaintModal() { document.getElementById('complaintModal').classList.add('hidden'); }
-    function submitComplaint() { alert('Reclamo registrado'); closeComplaintModal(); }
+    function submitComplaint() { 
+      const title = document.getElementById('compTitle').value.trim();
+      if(!title) return alert('Por favor ingrese el motivo del reclamo.');
+      alert('Reclamo registrado con éxito'); 
+      closeComplaintModal(); 
+    }
 
     function openHealthModal() { document.getElementById('healthModal').classList.remove('hidden'); }
     function closeHealthModal() { document.getElementById('healthModal').classList.add('hidden'); }
 
     function openPensionModal() { document.getElementById('pensionModal').classList.remove('hidden'); }
     function closePensionModal() { document.getElementById('pensionModal').classList.add('hidden'); }
+    
     function calculatePension() {
-      const yrs = document.getElementById('pensionYears').value;
+      const edad = parseInt(document.getElementById('pensionEdad').value) || 0;
+      const anosAportes = parseInt(document.getElementById('pensionYears').value) || 0;
+      const genero = document.getElementById('pensionGenero').value;
       const res = document.getElementById('pensionResult');
+
+      if (edad <= 0 || anosAportes < 0) {
+        alert('Por favor ingresa una edad y años de aportes válidos.');
+        return;
+      }
+
+      const edadMinima = genero === 'femenino' ? 60 : 65;
+      const aportesNecesarios = 30;
+
+      let cumpleEdad = edad >= edadMinima;
+      let cumpleAportes = anosAportes >= aportesNecesarios;
+
       res.classList.remove('hidden');
-      res.innerText = `Estimado para ${yrs} años de aporte: Categoría Estándar`;
+
+      if (cumpleEdad && cumpleAportes) {
+        res.innerHTML = `
+          <p class="font-black text-emerald-700 text-sm"><i class="fa-solid fa-circle-check"></i> ¡Cumples con los requisitos!</p>
+          <p>Estás en condiciones de iniciar tu trámite jubilatorio en ANSES.</p>
+          <p class="font-bold text-navy-800 mt-1">Haber estimado mensual: <span class="text-emerald-700 font-black">$320.000 + Moratoria/Bonos</span></p>
+        `;
+      } else {
+        let faltanteEdad = Math.max(0, edadMinima - edad);
+        let faltanteAportes = Math.max(0, aportesNecesarios - anosAportes);
+        
+        res.innerHTML = `
+          <p class="font-black text-amber-700 text-sm"><i class="fa-solid fa-triangle-exclamation"></i> En proceso de requisitos</p>
+          <p>Te faltan <b>${faltanteEdad} años de edad</b> y <b>${faltanteAportes} años de aportes</b> para la jubilación ordinaria.</p>
+          <p class="text-[11px] text-gray-600 mt-1">💡 <i>Tip: Podés consultar planes de regularización de deuda previsional (moratoria) en la sección de trámites de ANSES.</i></p>
+        `;
+      }
     }
 
     function openDniModal() { alert('Turno DNI solicitado'); }
 
+    // --- GESTIÓN DE PERSONAL CON AUTENTICACIÓN ADMIN ---
     function renderStaff() {
       const grid = document.getElementById('staffGrid');
       if (!grid) return;
       grid.innerHTML = state.staff.map(s => `
         <div class="bg-white p-6 rounded-2xl custom-shadow flex items-start gap-4">
           <div class="w-12 h-12 bg-forest-700 text-white rounded-xl flex items-center justify-center font-bold text-lg">${s.name.charAt(0)}</div>
-          <div><h4 class="font-bold text-navy-800 text-base">${s.name}</h4><p class="text-xs text-forest-700 font-semibold">${s.role}</p><p class="text-xs text-gray-500 mt-2">${s.phone}</p></div>
+          <div>
+            <h4 class="font-bold text-navy-800 text-base">${s.name}</h4>
+            <p class="text-xs text-forest-700 font-semibold">${s.role}</p>
+            <p class="text-xs text-gray-500 mt-2 flex items-center gap-1.5"><i class="fa-solid fa-phone text-emerald-600"></i> ${s.phone}</p>
+          </div>
         </div>
       `).join('');
     }
 
     function checkAdminAndOpenStaffModal() {
-      const pin = prompt("Ingrese el PIN de Administrador para registrar nuevo personal:");
-      if (pin === "1234") {
-        document.getElementById('adminPin').value = "1234";
-        document.getElementById('staffName').value = '';
-        document.getElementById('staffRole').value = '';
-        document.getElementById('staffPhone').value = '';
-        document.getElementById('staffModal').classList.remove('hidden');
-      } else if (pin !== null) {
-        alert("PIN incorrecto. Acceso denegado.");
+      if (!state.isAdmin) {
+        const pass = prompt('Acceso restringido a Administrador.\nIngrese la clave de administrador:');
+        if (pass === 'admin123') {
+          state.isAdmin = true;
+          alert('Autenticación correcta como Administrador.');
+          openAddStaffModal();
+        } else if (pass !== null) {
+          alert('Clave incorrecta. Solo el administrador puede registrar personal.');
+        }
+      } else {
+        openAddStaffModal();
       }
     }
 
+    function openAddStaffModal() { 
+      document.getElementById('staffName').value = '';
+      document.getElementById('staffRole').value = '';
+      document.getElementById('staffPhone').value = '';
+      document.getElementById('staffModal').classList.remove('hidden'); 
+    }
     function closeStaffModal() { document.getElementById('staffModal').classList.add('hidden'); }
+    
     function saveNewStaff() {
-      const pin = document.getElementById('adminPin').value.trim();
-      if (pin !== "1234") return alert("PIN de administrador inválido.");
-
       const name = document.getElementById('staffName').value.trim();
       const role = document.getElementById('staffRole').value.trim();
       const phone = document.getElementById('staffPhone').value.trim();
       if (!name) return alert('Por favor complete al menos el nombre.');
-      
       state.staff.push({ name, role: role || 'Asistente', phone: phone || 'Sin teléfono' });
       renderStaff();
       closeStaffModal();
-      alert("¡Personal registrado con éxito!");
+      alert(`Se ha registrado a ${name} exitosamente.`);
+    }
+
+    // --- SECCIÓN DE RESEÑAS Y OPINIONES ---
+    function renderReviews() {
+      const container = document.getElementById('reviewsContainer');
+      if (!container) return;
+      container.innerHTML = state.reviews.map(r => `
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-2 border border-gray-100">
+          <div class="flex justify-between items-center">
+            <h4 class="font-bold text-navy-800 text-sm">${r.author}</h4>
+            <span class="text-[10px] text-gray-400 font-semibold">${r.date}</span>
+          </div>
+          <div class="flex text-amber-400 text-xs">
+            ${'<i class="fa-solid fa-star"></i>'.repeat(r.rating)}
+          </div>
+          <p class="text-xs text-gray-600 leading-relaxed">${r.text}</p>
+        </div>
+      `).join('');
+    }
+
+    function submitReview() {
+      const author = document.getElementById('reviewAuthor').value.trim();
+      const rating = parseInt(document.getElementById('reviewRating').value);
+      const text = document.getElementById('reviewText').value.trim();
+
+      if (!author || !text) {
+        alert('Por favor complete su nombre y el comentario.');
+        return;
+      }
+
+      state.reviews.unshift({
+        author: author,
+        rating: rating,
+        date: 'Hace un momento',
+        text: text
+      });
+
+      renderReviews();
+      document.getElementById('reviewAuthor').value = '';
+      document.getElementById('reviewText').value = '';
+      alert('¡Muchas gracias! Tu opinión ha sido publicada.');
     }
 
     document.addEventListener("DOMContentLoaded", function() {
