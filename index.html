@@ -90,10 +90,14 @@
         </div>
       </div>
 
+      <!-- BUSCADOR INTELIGENTE CON SUGERENCIAS -->
       <div class="w-full md:w-96 relative">
         <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Buscar productos, trámites o servicios..." 
-          class="w-full pl-10 pr-4 py-2.5 rounded-full text-sm text-navy-800 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-inner">
+          class="w-full pl-10 pr-4 py-2.5 rounded-full text-sm text-navy-800 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-inner" autocomplete="off">
         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-400 text-sm"></i>
+        
+        <!-- CONTENEDOR DE SUGERENCIAS -->
+        <div id="searchResults" class="hidden absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 max-h-60 overflow-y-auto text-navy-800 text-xs font-semibold"></div>
       </div>
 
       <div class="flex items-center gap-3 sm:gap-4">
@@ -136,6 +140,9 @@
         </button>
         <button onclick="showSection('personal')" class="px-4 py-1.5 rounded-lg text-sage-100 hover:bg-forest-700 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
           <i class="fa-solid fa-users-gear"></i> Gestión de Personal
+        </button>
+        <button onclick="showSection('resenas')" class="px-4 py-1.5 rounded-lg text-sage-100 hover:bg-forest-700 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-solid fa-star text-amber-400"></i> Reseñas & Opiniones
         </button>
         <button onclick="openHelpModal()" class="px-4 py-1.5 rounded-lg bg-red-600/90 text-white hover:bg-red-600 transition flex items-center gap-2 whitespace-nowrap ml-auto font-bold animate-pulse">
           <i class="fa-solid fa-triangle-exclamation"></i> Ayuda 24/7
@@ -302,122 +309,129 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- ANSES -->
-        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-forest-700">
-          <div class="flex items-center gap-3 text-forest-700">
-            <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl">
-              <i class="fa-solid fa-clipboard-check"></i>
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-forest-700 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-3 text-forest-700 mb-3">
+              <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl">
+                <i class="fa-solid fa-clipboard-check"></i>
+              </div>
+              <h3 class="text-lg font-bold text-navy-800">Acreditación y Datos ANSES</h3>
             </div>
-            <h3 class="text-lg font-bold text-navy-800">Acreditación y Datos ANSES</h3>
+            <div class="space-y-2 text-xs text-gray-700">
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI Argentino Vigente (original y copia)</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Constancia de CUIL emitida</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento / Matrimonio</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Clave de la Seguridad Social creada</label>
+            </div>
           </div>
-          <div class="space-y-2 text-xs text-gray-700">
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI Argentino Vigente (original y copia)</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Constancia de CUIL emitida</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento / Matrimonio</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Clave de la Seguridad Social creada</label>
-          </div>
-          <button onclick="alert('Requisitos verificados para ANSES.')" class="w-full py-2.5 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition">Confirmar Requisitos ANSES</button>
+          <a href="https://servicioscorp.anses.gob.ar/clavelogon/logon.aspx?system=mianses" target="_blank" class="block w-full py-2.5 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition text-center shadow">
+            Ir directo a Mi ANSES <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+          </a>
         </div>
 
         <!-- PAMI Y MEDICAMENTOS -->
-        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-emerald-600">
-          <div class="flex items-center gap-3 text-emerald-800">
-            <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-xl">
-              <i class="fa-solid fa-hospital-user"></i>
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-emerald-600 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-3 text-emerald-800 mb-3">
+              <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-xl">
+                <i class="fa-solid fa-hospital-user"></i>
+              </div>
+              <h3 class="text-lg font-bold text-navy-800">Afiliación PAMI & Medicamentos</h3>
             </div>
-            <h3 class="text-lg font-bold text-navy-800">Afiliación PAMI & Medicamentos</h3>
+            <div class="space-y-2 text-xs text-gray-700">
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Credencial PAMI física o digital</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Receta médica electrónica vigente</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI y comprobante de cobro</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Formulario de Subsidio por Razones Sociales</label>
+            </div>
           </div>
-          <div class="space-y-2 text-xs text-gray-700">
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Credencial PAMI física o digital</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Receta médica electrónica vigente</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI y comprobante de cobro</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Formulario de Subsidio por Razones Sociales</label>
-          </div>
-          <button onclick="alert('Requisitos PAMI confirmados.')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition">Confirmar Requisitos PAMI</button>
+          <a href="https://www.pami.org.ar/medicamentos" target="_blank" class="block w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition text-center shadow">
+            Ir a Medicamentos PAMI <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+          </a>
         </div>
 
         <!-- RENOVAR DNI Y PASAPORTE -->
-        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-sky-600">
-          <div class="flex items-center gap-3 text-sky-700">
-            <div class="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center text-xl">
-              <i class="fa-solid fa-id-card"></i>
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-sky-600 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-3 text-sky-700 mb-3">
+              <div class="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center text-xl">
+                <i class="fa-solid fa-id-card"></i>
+              </div>
+              <h3 class="text-lg font-bold text-navy-800">Renovación de DNI / Pasaporte</h3>
             </div>
-            <h3 class="text-lg font-bold text-navy-800">Renovación de DNI / Pasaporte</h3>
+            <div class="space-y-2 text-xs text-gray-700">
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI anterior o denuncia de robo/extravío</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Turno presencial asignado (Mi Argentina)</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Comprobante de pago de tasa del trámite</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento actualizada (si aplica)</label>
+            </div>
           </div>
-          <div class="space-y-2 text-xs text-gray-700">
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI anterior o denuncia de robo/extravío</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Turno presencial asignado (Mi Argentina)</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Comprobante de pago de tasa del trámite</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento actualizada (si aplica)</label>
-          </div>
-          <button onclick="openDniModal()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl text-xs transition">Solicitar Turno DNI</button>
+          <a href="https://mi.argentina.gob.ar/" target="_blank" class="block w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl text-xs transition text-center shadow">
+            Sacar Turno en Mi Argentina <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+          </a>
         </div>
 
         <!-- HERENCIAS Y SUCESIONES -->
-        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-amber-600">
-          <div class="flex items-center gap-3 text-amber-800">
-            <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">
-              <i class="fa-solid fa-scale-balanced"></i>
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-amber-600 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-3 text-amber-800 mb-3">
+              <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">
+                <i class="fa-solid fa-scale-balanced"></i>
+              </div>
+              <h3 class="text-lg font-bold text-navy-800">Herencias y Sucesiones</h3>
             </div>
-            <h3 class="text-lg font-bold text-navy-800">Herencias y Sucesiones</h3>
+            <div class="space-y-2 text-xs text-gray-700">
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Defunción legalizada del causante</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partidas acreditantes de vínculo heredero</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Títulos de propiedad de bienes inmuebles / rodados</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Patrocinio jurídico letrado asignado</label>
+            </div>
           </div>
-          <div class="space-y-2 text-xs text-gray-700">
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Defunción legalizada del causante</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partidas acreditantes de vínculo heredero</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Títulos de propiedad de bienes inmuebles / rodados</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Patrocinio jurídico letrado asignado</label>
-          </div>
-          <button onclick="alert('Documentación para trámite sucesorio guardada.')" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition">Verificar Documentos Sucesión</button>
+          <a href="https://www.argentina.gob.ar/justicia/derechofacil/leysimple/sucesion" target="_blank" class="block w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition text-center shadow">
+            Ver Guía de Sucesión (Derecho Fácil) <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+          </a>
         </div>
 
         <!-- PAGO DE IMPUESTOS Y SERVICIOS -->
-        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-teal-600">
-          <div class="flex items-center gap-3 text-teal-800">
-            <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-xl">
-              <i class="fa-solid fa-file-invoice-dollar"></i>
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-teal-600 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-3 text-teal-800 mb-3">
+              <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-xl">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+              </div>
+              <h3 class="text-lg font-bold text-navy-800">Pago de Impuestos y Servicios</h3>
             </div>
-            <h3 class="text-lg font-bold text-navy-800">Pago de Impuestos y Servicios</h3>
+            <div class="space-y-2 text-xs text-gray-700">
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Código de pago electrónico de la boleta</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Clave Fiscal / Cuenta bancaria asociada</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Adhesión a débito automático / Tarjeta de débito</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Comprobante del último periodo abonado</label>
+            </div>
           </div>
-          <div class="space-y-2 text-xs text-gray-700">
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Código de pago electrónico de la boleta</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Clave Fiscal / Cuenta bancaria asociada</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Adhesión a débito automático / Tarjeta de débito</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Comprobante del último periodo abonado</label>
-          </div>
-          <button onclick="alert('Recordatorio de vencimiento de impuestos configurado.')" class="w-full py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl text-xs transition">Confirmar Pago de Impuestos</button>
+          <a href="https://www.argentina.gob.ar/afip" target="_blank" class="block w-full py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl text-xs transition text-center shadow">
+            Ir a AFIP / Impuestos <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+          </a>
         </div>
 
         <!-- JUBILACIÓN Y PENSIONES -->
-        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-indigo-600">
-          <div class="flex items-center gap-3 text-indigo-700">
-            <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-xl">
-              <i class="fa-solid fa-piggy-bank"></i>
+        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-indigo-600 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-3 text-indigo-700 mb-3">
+              <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-xl">
+                <i class="fa-solid fa-piggy-bank"></i>
+              </div>
+              <h3 class="text-lg font-bold text-navy-800">Jubilación y Pensiones</h3>
             </div>
-            <h3 class="text-lg font-bold text-navy-800">Jubilación y Pensiones</h3>
-          </div>
-          <div class="space-y-2 text-xs text-gray-700">
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Historia laboral acreditada (30 años de aportes)</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Formulario PS 6.18 de Solicitud de Prestaciones</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Certificación de servicios expedida por empleador</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI del beneficiario y CBU para cobro</label>
-          </div>
-          <button onclick="openPensionModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition">Simular Haber Previsional</button>
-        </div>
-
-        <!-- SALUD Y CUD (DISCAPACIDAD) -->
-        <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-t-4 border-rose-600">
-          <div class="flex items-center gap-3 text-rose-700">
-            <div class="w-10 h-10 bg-rose-100 rounded-xl flex items-center justify-center text-xl">
-              <i class="fa-solid fa-wheelchair"></i>
+            <div class="space-y-2 text-xs text-gray-700">
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Historia laboral acreditada (30 años de aportes)</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Formulario PS 6.18 de Solicitud de Prestaciones</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Certificación de servicios expedida por empleador</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI del beneficiario y CBU para cobro</label>
             </div>
-            <h3 class="text-lg font-bold text-navy-800">Certificado Único de Discapacidad (CUD)</h3>
           </div>
-          <div class="space-y-2 text-xs text-gray-700">
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Planilla médica firmada y completada por especialista</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Estudios complementarios no mayores a 6 meses</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI original y fotocopia del solicitante</label>
-            <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Carnet de obra social o cobertura médica</label>
-          </div>
-          <button onclick="alert('Información para evaluación CUD lista.')" class="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs transition">Verificar CUD / Discapacidad</button>
+          <a href="https://www.anses.gob.ar/jubilaciones-y-pensiones" target="_blank" class="block w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition text-center shadow">
+            Iniciar Jubilación en ANSES <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -427,11 +441,82 @@
       <div class="border-b border-forest-200 pb-4 flex justify-between items-center flex-wrap gap-4">
         <div>
           <h2 class="text-3xl font-extrabold text-navy-800">Gestión de Personal y Contactos</h2>
-          <p class="text-sm text-gray-600">Acompañantes asignados y red de asistencia.</p>
+          <p class="text-sm text-gray-600">Acompañantes asignados, profesionales de la salud y soporte técnico exclusivo.</p>
         </div>
-        <button onclick="openAddStaffModal()" class="px-4 py-2 bg-forest-700 text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow"><i class="fa-solid fa-plus"></i> Registrar</button>
+        <button onclick="checkAdminAndOpenStaffModal()" class="px-4 py-2.5 bg-forest-700 text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow hover:bg-forest-600 transition">
+          <i class="fa-solid fa-user-shield"></i> Registrar (Exclusivo Admin)
+        </button>
       </div>
       <div id="staffGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
+
+    <!-- SECTION: RESEÑAS Y CALIFICACIONES -->
+    <div id="sec-resenas" class="hidden space-y-8">
+      <div class="border-b border-forest-200 pb-4">
+        <h2 class="text-3xl font-extrabold text-navy-800">Reseñas, Consultas y Experiencias</h2>
+        <p class="text-sm text-gray-600">Conoce las opiniones de nuestros usuarios sobre la calidad de atención del CENS 38.</p>
+      </div>
+
+      <!-- RESUMEN DE CALIFICACIONES -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-6 sm:p-8 rounded-3xl custom-shadow border border-forest-100">
+        <div class="flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-gray-200 pb-6 md:pb-0">
+          <span class="text-5xl font-black text-forest-700">4.9</span>
+          <div class="flex text-amber-400 text-lg my-2">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <span class="text-xs text-gray-500 font-semibold">Basado en 128 valoraciones</span>
+        </div>
+
+        <div class="space-y-2 justify-center flex flex-col col-span-2">
+          <div class="flex items-center text-xs gap-3">
+            <span class="font-bold text-navy-800 w-12">5 estrellas</span>
+            <div class="flex-grow bg-gray-200 rounded-full h-2 overflow-hidden">
+              <div class="bg-emerald-600 h-full w-[90%]"></div>
+            </div>
+            <span class="text-gray-500 font-bold">90%</span>
+          </div>
+          <div class="flex items-center text-xs gap-3">
+            <span class="font-bold text-navy-800 w-12">4 estrellas</span>
+            <div class="flex-grow bg-gray-200 rounded-full h-2 overflow-hidden">
+              <div class="bg-emerald-500 h-full w-[8%]"></div>
+            </div>
+            <span class="text-gray-500 font-bold">8%</span>
+          </div>
+          <div class="flex items-center text-xs gap-3">
+            <span class="font-bold text-navy-800 w-12">3 estrellas</span>
+            <div class="flex-grow bg-gray-200 rounded-full h-2 overflow-hidden">
+              <div class="bg-amber-400 h-full w-[2%]"></div>
+            </div>
+            <span class="text-gray-500 font-bold">2%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMULARIO PARA DEJAR RESEÑA -->
+      <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-2 border-emerald-500/30">
+        <h3 class="text-lg font-bold text-navy-800">Dejanos tu opinión o consulta</h3>
+        <form onsubmit="handleReviewSubmit(event)" class="space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input type="text" id="reviewName" required placeholder="Tu nombre y apellido" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
+            <select id="reviewRating" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
+              <option value="5">⭐⭐⭐⭐⭐ Excelente (5/5)</option>
+              <option value="4">⭐⭐⭐⭐ Muy bueno (4/5)</option>
+              <option value="3">⭐⭐⭐ Bueno (3/5)</option>
+              <option value="2">⭐⭐ Regular (2/5)</option>
+              <option value="1">⭐ Malo (1/5)</option>
+            </select>
+          </div>
+          <textarea id="reviewComment" required rows="3" placeholder="Escribí tu experiencia, consulta o sugerencia sobre la plataforma..." class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none"></textarea>
+          <button type="submit" class="py-2.5 px-6 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition shadow">Publicar Opinión</button>
+        </form>
+      </div>
+
+      <!-- LISTADO DE RESEÑAS -->
+      <div id="reviewsListContainer" class="space-y-4"></div>
     </div>
   </main>
 
@@ -634,10 +719,11 @@
   <!-- MODAL REGISTRAR ASISTENTE -->
   <div id="staffModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-forest-600">
-      <h3 class="text-xl font-extrabold text-navy-800 mb-2">Registrar Asistente</h3>
-      <input type="text" id="staffName" placeholder="Nombre" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
-      <input type="text" id="staffRole" placeholder="Rol" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
-      <input type="text" id="staffPhone" placeholder="Teléfono" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <h3 class="text-xl font-extrabold text-navy-800 mb-2">Registrar Asistente (Admin)</h3>
+      <input type="password" id="adminPin" placeholder="Ingrese PIN de Administrador (ej. 1234)" class="w-full p-3 border border-red-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <input type="text" id="staffName" placeholder="Nombre y Apellido" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <input type="text" id="staffRole" placeholder="Rol / Especialidad" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+      <input type="text" id="staffPhone" placeholder="Teléfono de contacto" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
       
       <div class="grid grid-cols-2 gap-3 pt-2">
         <button type="button" onclick="closeStaffModal()" class="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl text-xs transition">
@@ -693,6 +779,10 @@
       staff: [
         { name: 'Lic. María González', role: 'Coordinadora de Salud', phone: '11-4589-2231' },
         { name: 'Carlos Benítez', role: 'Acompañante de Trámites', phone: '11-6632-9011' }
+      ],
+      reviews: [
+        { name: 'Héctor Gómez', rating: 5, comment: 'Excelente iniciativa para los adultos mayores. Muy fácil de usar y con los números de emergencia a mano.', date: 'Hace 2 días' },
+        { name: 'Silvia Martínez', rating: 5, comment: 'Pude ver los requisitos para PAMI sin moverme de casa. Felicitaciones al equipo del CENS 38.', date: 'Hace 5 días' }
       ]
     };
 
@@ -700,6 +790,7 @@
       loadStoredUserSession();
       renderProducts(state.products);
       renderStaff();
+      renderReviews();
       updateBadges();
     };
 
@@ -795,6 +886,7 @@
       document.getElementById('sec-productos').classList.add('hidden');
       document.getElementById('sec-tramites').classList.add('hidden');
       document.getElementById('sec-personal').classList.add('hidden');
+      document.getElementById('sec-resenas').classList.add('hidden');
       const target = document.getElementById(`sec-${sectionId}`);
       if (target) {
         target.classList.remove('hidden');
@@ -935,25 +1027,84 @@
       toggleCartModal();
     }
 
-    // --- BUSCADOR UNIFICADO E INTELIGENTE ---
+    // --- BUSCADOR INTELIGENTE CON SUGERENCIAS ---
     function handleSearch() {
       const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const resultsContainer = document.getElementById('searchResults');
       
       if (!query) { 
-        showSection('inicio');
+        resultsContainer.classList.add('hidden');
+        resultsContainer.innerHTML = '';
         return; 
       }
 
-      const palabrasTramites = ['tramite', 'trámite', 'anses', 'pami', 'dni', 'pasaporte', 'jubilacion', 'jubilación', 'herencia', 'sucesion', 'sucesión', 'impuesto', 'cud', 'discapacidad'];
-      const esTramite = palabrasTramites.some(palabra => query.includes(palabra));
+      // Buscar coincidencias en productos y trámites
+      const matchingProducts = state.products.filter(p => p.name.toLowerCase().includes(query));
+      const tramitesDisponibles = [
+        { name: 'Acreditación y Datos ANSES', section: 'tramites' },
+        { name: 'Afiliación PAMI & Medicamentos', section: 'tramites' },
+        { name: 'Renovación de DNI / Pasaporte', section: 'tramites' },
+        { name: 'Herencias y Sucesiones', section: 'tramites' },
+        { name: 'Pago de Impuestos y Servicios (AFIP)', section: 'tramites' },
+        { name: 'Jubilación y Pensiones', section: 'tramites' }
+      ];
+      const matchingTramites = tramitesDisponibles.filter(t => t.name.toLowerCase().includes(query));
 
-      if (esTramite) {
-        showSection('tramites');
-      } else {
-        showSection('productos');
-        const filtered = state.products.filter(p => p.name.toLowerCase().includes(query));
-        renderProducts(filtered.length > 0 ? filtered : state.products);
+      if (matchingProducts.length === 0 && matchingTramites.length === 0) {
+        resultsContainer.innerHTML = '<div class="p-3 text-gray-500 text-center">No se encontraron resultados</div>';
+        resultsContainer.classList.remove('hidden');
+        return;
       }
+
+      let html = '';
+      if (matchingProducts.length > 0) {
+        html += '<div class="p-2 bg-gray-50 text-[10px] font-bold text-forest-800 uppercase tracking-wider">Productos en Tienda</div>';
+        matchingProducts.forEach(p => {
+          html += `<div onclick="showSection('productos'); document.getElementById('searchInput').value=''; document.getElementById('searchResults').classList.add('hidden');" class="p-3 hover:bg-sage-50 cursor-pointer border-b flex justify-between items-center"><span>${p.name}</span><span class="text-forest-700 font-bold">$${p.price.toLocaleString()}</span></div>`;
+        });
+      }
+
+      if (matchingTramites.length > 0) {
+        html += '<div class="p-2 bg-gray-50 text-[10px] font-bold text-forest-800 uppercase tracking-wider">Trámites y Guías</div>';
+        matchingTramites.forEach(t => {
+          html += `<div onclick="showSection('${t.section}'); document.getElementById('searchInput').value=''; document.getElementById('searchResults').classList.add('hidden');" class="p-3 hover:bg-sage-50 cursor-pointer border-b text-navy-800 font-semibold"><i class="fa-solid fa-file-lines text-forest-700 mr-2"></i>${t.name}</div>`;
+        });
+      }
+
+      resultsContainer.innerHTML = html;
+      resultsContainer.classList.remove('hidden');
+    }
+
+    // --- GESTIÓN DE RESEÑAS ---
+    function renderReviews() {
+      const container = document.getElementById('reviewsListContainer');
+      if (!container) return;
+      container.innerHTML = state.reviews.map(r => `
+        <div class="bg-white p-5 rounded-2xl custom-shadow space-y-2">
+          <div class="flex justify-between items-center">
+            <h4 class="font-extrabold text-navy-800 text-sm">${r.name}</h4>
+            <span class="text-[10px] text-gray-400 font-semibold">${r.date}</span>
+          </div>
+          <div class="flex text-amber-400 text-xs">
+            ${'<i class="fa-solid fa-star"></i>'.repeat(r.rating)}
+          </div>
+          <p class="text-xs text-gray-600 leading-relaxed">${r.comment}</p>
+        </div>
+      `).join('');
+    }
+
+    function handleReviewSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('reviewName').value.trim();
+      const rating = parseInt(document.getElementById('reviewRating').value);
+      const comment = document.getElementById('reviewComment').value.trim();
+
+      if (!name || !comment) return;
+
+      state.reviews.unshift({ name, rating, comment, date: 'Recién publicado' });
+      renderReviews();
+      event.target.reset();
+      alert('¡Muchas gracias por dejar tu opinión!');
     }
 
     // --- LÓGICA DEL ASISTENTE POR VOZ ---
@@ -1008,6 +1159,8 @@
         showSection('tramites');
       } else if (command.includes('inicio') || command.includes('home')) {
         showSection('inicio');
+      } else if (command.includes('reseña') || command.includes('opinion') || command.includes('opinión')) {
+        showSection('resenas');
       } else if (command.includes('personal') || command.includes('cuenta') || command.includes('asistente')) {
         checkAndOpenProfile();
       } else if (command.includes('ayuda') || command.includes('emergencia') || command.includes('same')) {
@@ -1054,21 +1207,33 @@
       `).join('');
     }
 
-    function openAddStaffModal() { 
-      document.getElementById('staffName').value = '';
-      document.getElementById('staffRole').value = '';
-      document.getElementById('staffPhone').value = '';
-      document.getElementById('staffModal').classList.remove('hidden'); 
+    function checkAdminAndOpenStaffModal() {
+      const pin = prompt("Ingrese el PIN de Administrador para registrar nuevo personal:");
+      if (pin === "1234") {
+        document.getElementById('adminPin').value = "1234";
+        document.getElementById('staffName').value = '';
+        document.getElementById('staffRole').value = '';
+        document.getElementById('staffPhone').value = '';
+        document.getElementById('staffModal').classList.remove('hidden');
+      } else if (pin !== null) {
+        alert("PIN incorrecto. Acceso denegado.");
+      }
     }
+
     function closeStaffModal() { document.getElementById('staffModal').classList.add('hidden'); }
     function saveNewStaff() {
+      const pin = document.getElementById('adminPin').value.trim();
+      if (pin !== "1234") return alert("PIN de administrador inválido.");
+
       const name = document.getElementById('staffName').value.trim();
       const role = document.getElementById('staffRole').value.trim();
       const phone = document.getElementById('staffPhone').value.trim();
       if (!name) return alert('Por favor complete al menos el nombre.');
+      
       state.staff.push({ name, role: role || 'Asistente', phone: phone || 'Sin teléfono' });
       renderStaff();
       closeStaffModal();
+      alert("¡Personal registrado con éxito!");
     }
 
     document.addEventListener("DOMContentLoaded", function() {
