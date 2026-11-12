@@ -757,16 +757,51 @@
     </div>
   </div>
 
-  <!-- MODAL REGISTRAR ASISTENTE CON BOTÓN CANCELAR Y GUARDAR -->
+  <!-- MODAL REGISTRAR ASISTENTE COMPLETO (MODO ADMIN) -->
   <div id="staffModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-forest-600">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-forest-600 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="text-xl font-extrabold text-navy-800">Registrar Personal (Admin)</h3>
-        <span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">Modo Administrador</span>
+        <span class="text-[10px] bg-red-100 text-red-700 px-2.5 py-0.5 rounded-full font-bold">Modo Administrador</span>
       </div>
-      <input type="text" id="staffName" placeholder="Nombre completo" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
-      <input type="text" id="staffRole" placeholder="Rol / Especialidad (ej: Abogado, Electricista)" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
-      <input type="text" id="staffPhone" placeholder="Teléfono de contacto" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Nombre Completo</label>
+          <input type="text" id="staffName" placeholder="Ej: Dr. Matías Rossi" class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-forest-600 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Rol / Especialidad</label>
+          <input type="text" id="staffRole" placeholder="Ej: Médico Clínico" class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-forest-600 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">DNI (Documento)</label>
+          <input type="text" id="staffDni" placeholder="Ej: 32.456.789" class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-forest-600 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">N° de Matrícula / Registro</label>
+          <input type="text" id="staffMatricula" placeholder="Ej: MN 145892" class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-forest-600 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Edad</label>
+          <input type="number" id="staffEdad" placeholder="Ej: 42" class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-forest-600 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Teléfono de Contacto</label>
+          <input type="text" id="staffPhone" placeholder="Ej: 11-4455-6677" class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-forest-600 focus:outline-none">
+        </div>
+      </div>
+
+      <div class="text-xs space-y-3">
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Ubicación / Zona de Atención</label>
+          <input type="text" id="staffUbicacion" placeholder="Ej: Palermo, CABA" class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-forest-600 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Tipo de Trabajos / Servicios que realiza</label>
+          <input type="text" id="staffTrabajos" placeholder="Ej: Consultas a domicilio, recetas y certificados" class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-forest-600 focus:outline-none">
+        </div>
+      </div>
       
       <div class="grid grid-cols-2 gap-3 pt-2">
         <button type="button" onclick="closeStaffModal()" class="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl text-xs transition">
@@ -821,10 +856,46 @@
         { id: 6, name: 'Almohada Cervical Viscoelástica', price: 14200, category: 'hogar', icon: 'fa-bed', image: 'almohada.jpg.jpg' }
       ],
       staff: [
-        { name: 'Lic. María González', role: 'Coordinadora de Salud', phone: '11-4589-2231' },
-        { name: 'Carlos Benítez', role: 'Acompañante de Trámites', phone: '11-6632-9011' },
-        { name: 'Dr. Roberto Fernández', role: 'Abogado y Asesor Legal', phone: '11-5544-3322' },
-        { name: 'Juan Carlos Gómez', role: 'Electricista Matriculado', phone: '11-4433-2211' }
+        { 
+          name: 'Lic. María González', 
+          role: 'Coordinadora de Salud', 
+          phone: '11-4589-2231',
+          dni: '31.204.890',
+          matricula: 'MP 45.892',
+          edad: '38 años',
+          ubicacion: 'Palermo, CABA',
+          trabajos: 'Coordinación médica, turnos y asistencia'
+        },
+        { 
+          name: 'Carlos Benítez', 
+          role: 'Acompañante de Trámites', 
+          phone: '11-6632-9011',
+          dni: '28.910.455',
+          matricula: 'Reg. CENS 104',
+          edad: '45 años',
+          ubicacion: 'Recoleta / Palermo, CABA',
+          trabajos: 'Acompañamiento presencial a ANSES, PAMI y Bancos'
+        },
+        { 
+          name: 'Dr. Roberto Fernández', 
+          role: 'Abogado y Asesor Legal', 
+          phone: '11-5544-3322',
+          dni: '25.678.123',
+          matricula: 'T° 112 F° 45 CPACF',
+          edad: '51 años',
+          ubicacion: 'Tribunales / CABA',
+          trabajos: 'Sucesiones, amparos de salud, jubilaciones y reclamos'
+        },
+        { 
+          name: 'Juan Carlos Gómez', 
+          role: 'Electricista Matriculado', 
+          phone: '11-4433-2211',
+          dni: '30.123.456',
+          matricula: 'APSE Mat. 8941',
+          edad: '40 años',
+          ubicacion: 'Palermo y alrededores, CABA',
+          trabajos: 'Instalaciones domiciliarias, reparaciones urgentes y tableros'
+        }
       ],
       reviews: [
         { author: 'Norma R.', rating: 5, date: 'Ayer', text: 'Excelente atención en la sección de trámites. El equipo nos ayudó paso a paso para gestionar la receta electrónica.' },
@@ -1284,20 +1355,42 @@
 
     function openDniModal() { alert('Turno DNI solicitado'); }
 
-    // --- GESTIÓN DE PERSONAL CON AUTENTICACIÓN ADMIN ---
+    // --- GESTIÓN DE PERSONAL AVANZADA ---
     function renderStaff() {
       const grid = document.getElementById('staffGrid');
       if (!grid) return;
-      grid.innerHTML = state.staff.map(s => `
-        <div class="bg-white p-6 rounded-2xl custom-shadow flex items-start gap-4">
-          <div class="w-12 h-12 bg-forest-700 text-white rounded-xl flex items-center justify-center font-bold text-lg">${s.name.charAt(0)}</div>
-          <div>
-            <h4 class="font-bold text-navy-800 text-base">${s.name}</h4>
-            <p class="text-xs text-forest-700 font-semibold">${s.role}</p>
-            <p class="text-xs text-gray-500 mt-2 flex items-center gap-1.5"><i class="fa-solid fa-phone text-emerald-600"></i> ${s.phone}</p>
+      grid.innerHTML = state.staff.map((s, index) => `
+        <div class="bg-white p-6 rounded-2xl custom-shadow flex flex-col justify-between space-y-4 border border-forest-100">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-forest-700 text-white rounded-xl flex items-center justify-center font-bold text-lg shrink-0">${s.name.charAt(0)}</div>
+            <div class="space-y-1">
+              <h4 class="font-extrabold text-navy-800 text-base leading-tight">${s.name}</h4>
+              <p class="text-xs text-forest-700 font-bold bg-sage-100 px-2.5 py-0.5 rounded-full inline-block">${s.role}</p>
+            </div>
           </div>
+
+          <div class="space-y-1.5 text-xs text-gray-600 border-t border-b border-sage-100 py-3">
+            <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-emerald-600 w-4"></i> <b>Tel:</b> ${s.phone}</p>
+            <p class="flex items-center gap-2"><i class="fa-solid fa-id-card text-blue-600 w-4"></i> <b>DNI:</b> ${s.dni || 'No especificado'}</p>
+            <p class="flex items-center gap-2"><i class="fa-solid fa-certificate text-amber-600 w-4"></i> <b>Matrícula:</b> ${s.matricula || 'Sin matrícula'}</p>
+            <p class="flex items-center gap-2"><i class="fa-solid fa-cake-candles text-purple-600 w-4"></i> <b>Edad:</b> ${s.edad || 'No especificada'}</p>
+            <p class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-red-500 w-4"></i> <b>Ubicación:</b> ${s.ubicacion || 'Buenos Aires'}</p>
+            <p class="flex items-start gap-2 pt-1"><i class="fa-solid fa-briefcase text-teal-600 w-4 mt-0.5"></i> <span><b>Servicios:</b> ${s.trabajos || 'Atención personalizada'}</span></p>
+          </div>
+
+          <button onclick="contactStaff('${s.name}', '${s.phone}')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition shadow flex items-center justify-center gap-2">
+            <i class="fa-solid fa-paper-plane"></i> Contactar
+          </button>
         </div>
       `).join('');
+    }
+
+    function contactStaff(name, phone) {
+      const cleanPhone = phone.replace(/[^0-9]/g, '');
+      const confirmAction = confirm(`¿Deseas iniciar una llamada o contactar a ${name}?\nTeléfono: ${phone}`);
+      if (confirmAction) {
+        window.location.href = `tel:${cleanPhone}`;
+      }
     }
 
     function checkAdminAndOpenStaffModal() {
@@ -1318,17 +1411,40 @@
     function openAddStaffModal() { 
       document.getElementById('staffName').value = '';
       document.getElementById('staffRole').value = '';
+      document.getElementById('staffDni').value = '';
+      document.getElementById('staffMatricula').value = '';
+      document.getElementById('staffEdad').value = '';
       document.getElementById('staffPhone').value = '';
+      document.getElementById('staffUbicacion').value = '';
+      document.getElementById('staffTrabajos').value = '';
       document.getElementById('staffModal').classList.remove('hidden'); 
     }
+    
     function closeStaffModal() { document.getElementById('staffModal').classList.add('hidden'); }
     
     function saveNewStaff() {
       const name = document.getElementById('staffName').value.trim();
       const role = document.getElementById('staffRole').value.trim();
+      const dni = document.getElementById('staffDni').value.trim();
+      const matricula = document.getElementById('staffMatricula').value.trim();
+      const edad = document.getElementById('staffEdad').value.trim();
       const phone = document.getElementById('staffPhone').value.trim();
+      const ubicacion = document.getElementById('staffUbicacion').value.trim();
+      const trabajos = document.getElementById('staffTrabajos').value.trim();
+
       if (!name) return alert('Por favor complete al menos el nombre.');
-      state.staff.push({ name, role: role || 'Asistente', phone: phone || 'Sin teléfono' });
+      
+      state.staff.push({ 
+        name, 
+        role: role || 'Asistente', 
+        phone: phone || 'Sin teléfono',
+        dni: dni || 'No especificado',
+        matricula: matricula || 'Sin matrícula',
+        edad: edad ? `${edad} años` : 'No especificada',
+        ubicacion: ubicacion || 'Buenos Aires',
+        trabajos: trabajos || 'Atención personalizada'
+      });
+      
       renderStaff();
       closeStaffModal();
       alert(`Se ha registrado a ${name} exitosamente.`);
