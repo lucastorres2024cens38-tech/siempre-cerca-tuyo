@@ -757,7 +757,7 @@
     </div>
   </div>
 
-  <!-- MODAL REGISTRAR ASISTENTE COMPLETO (MODO ADMIN) -->
+  <!-- MODAL REGISTRAR ASISTENTE COMPLETO (MODO ADMIN CON FOTO Y VALORACIÓN) -->
   <div id="staffModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-lg rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-forest-600 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-2">
@@ -789,6 +789,21 @@
         <div>
           <label class="block font-bold text-navy-800 mb-1">Teléfono de Contacto</label>
           <input type="text" id="staffPhone" placeholder="Ej: 11-4455-6677" class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-forest-600 focus:outline-none">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Foto de Perfil (URL o Nombre de archivo)</label>
+          <input type="text" id="staffPhoto" placeholder="Ej: maria.jpg o URL de imagen" class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-forest-600 focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-navy-800 mb-1">Valoración de desempeño</label>
+          <select id="staffRating" class="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-forest-600 focus:outline-none bg-white">
+            <option value="5">⭐⭐⭐⭐⭐ Excelente (5.0)</option>
+            <option value="4">⭐⭐⭐⭐ Muy Bueno (4.0)</option>
+            <option value="3">⭐⭐⭐ Destacado (3.0)</option>
+          </select>
         </div>
       </div>
 
@@ -864,7 +879,9 @@
           matricula: 'MP 45.892',
           edad: '38 años',
           ubicacion: 'Palermo, CABA',
-          trabajos: 'Coordinación médica, turnos y asistencia'
+          trabajos: 'Coordinación médica, turnos y asistencia',
+          photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250',
+          rating: 5
         },
         { 
           name: 'Carlos Benítez', 
@@ -874,7 +891,9 @@
           matricula: 'Reg. CENS 104',
           edad: '45 años',
           ubicacion: 'Recoleta / Palermo, CABA',
-          trabajos: 'Acompañamiento presencial a ANSES, PAMI y Bancos'
+          trabajos: 'Acompañamiento presencial a ANSES, PAMI y Bancos',
+          photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=250',
+          rating: 5
         },
         { 
           name: 'Dr. Roberto Fernández', 
@@ -884,7 +903,9 @@
           matricula: 'T° 112 F° 45 CPACF',
           edad: '51 años',
           ubicacion: 'Tribunales / CABA',
-          trabajos: 'Sucesiones, amparos de salud, jubilaciones y reclamos'
+          trabajos: 'Sucesiones, amparos de salud, jubilaciones y reclamos',
+          photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+          rating: 5
         },
         { 
           name: 'Juan Carlos Gómez', 
@@ -894,7 +915,9 @@
           matricula: 'APSE Mat. 8941',
           edad: '40 años',
           ubicacion: 'Palermo y alrededores, CABA',
-          trabajos: 'Instalaciones domiciliarias, reparaciones urgentes y tableros'
+          trabajos: 'Instalaciones domiciliarias, reparaciones urgentes y tableros',
+          photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
+          rating: 4
         }
       ],
       reviews: [
@@ -1355,34 +1378,47 @@
 
     function openDniModal() { alert('Turno DNI solicitado'); }
 
-    // --- GESTIÓN DE PERSONAL AVANZADA ---
+    // --- GESTIÓN DE PERSONAL AVANZADA (CON FOTO Y ESTRELLAS) ---
     function renderStaff() {
       const grid = document.getElementById('staffGrid');
       if (!grid) return;
-      grid.innerHTML = state.staff.map((s, index) => `
-        <div class="bg-white p-6 rounded-2xl custom-shadow flex flex-col justify-between space-y-4 border border-forest-100">
-          <div class="flex items-start gap-4">
-            <div class="w-12 h-12 bg-forest-700 text-white rounded-xl flex items-center justify-center font-bold text-lg shrink-0">${s.name.charAt(0)}</div>
-            <div class="space-y-1">
-              <h4 class="font-extrabold text-navy-800 text-base leading-tight">${s.name}</h4>
-              <p class="text-xs text-forest-700 font-bold bg-sage-100 px-2.5 py-0.5 rounded-full inline-block">${s.role}</p>
+      grid.innerHTML = state.staff.map((s) => {
+        const ratingCount = s.rating || 5;
+        const starsHtml = '<i class="fa-solid fa-star"></i>'.repeat(ratingCount);
+        
+        let avatarHtml = s.photo 
+          ? `<img src="${s.photo}" alt="${s.name}" class="w-14 h-14 object-cover rounded-full border-2 border-emerald-500 shadow-md shrink-0">`
+          : `<div class="w-14 h-14 bg-forest-700 text-white rounded-full flex items-center justify-center font-bold text-xl shrink-0 border-2 border-emerald-500 shadow-md">${s.name.charAt(0)}</div>`;
+
+        return `
+          <div class="bg-white p-6 rounded-2xl custom-shadow flex flex-col justify-between space-y-4 border border-forest-100">
+            <div class="flex items-start gap-4">
+              ${avatarHtml}
+              <div class="space-y-1">
+                <h4 class="font-extrabold text-navy-800 text-base leading-tight">${s.name}</h4>
+                <p class="text-xs text-forest-700 font-bold bg-sage-100 px-2.5 py-0.5 rounded-full inline-block">${s.role}</p>
+                <div class="flex items-center gap-1.5 pt-1">
+                  <div class="flex text-amber-400 text-xs">${starsHtml}</div>
+                  <span class="text-[11px] font-extrabold text-navy-800">(${ratingCount}.0)</span>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div class="space-y-1.5 text-xs text-gray-600 border-t border-b border-sage-100 py-3">
-            <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-emerald-600 w-4"></i> <b>Tel:</b> ${s.phone}</p>
-            <p class="flex items-center gap-2"><i class="fa-solid fa-id-card text-blue-600 w-4"></i> <b>DNI:</b> ${s.dni || 'No especificado'}</p>
-            <p class="flex items-center gap-2"><i class="fa-solid fa-certificate text-amber-600 w-4"></i> <b>Matrícula:</b> ${s.matricula || 'Sin matrícula'}</p>
-            <p class="flex items-center gap-2"><i class="fa-solid fa-cake-candles text-purple-600 w-4"></i> <b>Edad:</b> ${s.edad || 'No especificada'}</p>
-            <p class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-red-500 w-4"></i> <b>Ubicación:</b> ${s.ubicacion || 'Buenos Aires'}</p>
-            <p class="flex items-start gap-2 pt-1"><i class="fa-solid fa-briefcase text-teal-600 w-4 mt-0.5"></i> <span><b>Servicios:</b> ${s.trabajos || 'Atención personalizada'}</span></p>
-          </div>
+            <div class="space-y-1.5 text-xs text-gray-600 border-t border-b border-sage-100 py-3">
+              <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-emerald-600 w-4"></i> <b>Tel:</b> ${s.phone}</p>
+              <p class="flex items-center gap-2"><i class="fa-solid fa-id-card text-blue-600 w-4"></i> <b>DNI:</b> ${s.dni || 'No especificado'}</p>
+              <p class="flex items-center gap-2"><i class="fa-solid fa-certificate text-amber-600 w-4"></i> <b>Matrícula:</b> ${s.matricula || 'Sin matrícula'}</p>
+              <p class="flex items-center gap-2"><i class="fa-solid fa-cake-candles text-purple-600 w-4"></i> <b>Edad:</b> ${s.edad || 'No especificada'}</p>
+              <p class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-red-500 w-4"></i> <b>Ubicación:</b> ${s.ubicacion || 'Buenos Aires'}</p>
+              <p class="flex items-start gap-2 pt-1"><i class="fa-solid fa-briefcase text-teal-600 w-4 mt-0.5"></i> <span><b>Servicios:</b> ${s.trabajos || 'Atención personalizada'}</span></p>
+            </div>
 
-          <button onclick="contactStaff('${s.name}', '${s.phone}')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition shadow flex items-center justify-center gap-2">
-            <i class="fa-solid fa-paper-plane"></i> Contactar
-          </button>
-        </div>
-      `).join('');
+            <button onclick="contactStaff('${s.name}', '${s.phone}')" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition shadow flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Contactar
+            </button>
+          </div>
+        `;
+      }).join('');
     }
 
     function contactStaff(name, phone) {
@@ -1415,6 +1451,8 @@
       document.getElementById('staffMatricula').value = '';
       document.getElementById('staffEdad').value = '';
       document.getElementById('staffPhone').value = '';
+      document.getElementById('staffPhoto').value = '';
+      document.getElementById('staffRating').value = '5';
       document.getElementById('staffUbicacion').value = '';
       document.getElementById('staffTrabajos').value = '';
       document.getElementById('staffModal').classList.remove('hidden'); 
@@ -1429,6 +1467,8 @@
       const matricula = document.getElementById('staffMatricula').value.trim();
       const edad = document.getElementById('staffEdad').value.trim();
       const phone = document.getElementById('staffPhone').value.trim();
+      const photo = document.getElementById('staffPhoto').value.trim();
+      const rating = parseInt(document.getElementById('staffRating').value) || 5;
       const ubicacion = document.getElementById('staffUbicacion').value.trim();
       const trabajos = document.getElementById('staffTrabajos').value.trim();
 
@@ -1442,7 +1482,9 @@
         matricula: matricula || 'Sin matrícula',
         edad: edad ? `${edad} años` : 'No especificada',
         ubicacion: ubicacion || 'Buenos Aires',
-        trabajos: trabajos || 'Atención personalizada'
+        trabajos: trabajos || 'Atención personalizada',
+        photo: photo || '',
+        rating: rating
       });
       
       renderStaff();
