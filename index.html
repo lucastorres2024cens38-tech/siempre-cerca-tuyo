@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -52,6 +52,7 @@
       background-color: #e8f3ee;
       color: #1a2530;
       font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     .custom-shadow {
       box-shadow: 0 10px 25px -5px rgba(27, 77, 62, 0.08), 0 8px 10px -6px rgba(27, 77, 62, 0.04);
@@ -73,20 +74,90 @@
       border-radius: 0.75rem;
       z-index: 10;
     }
+
+    /* MODO ALTO CONTRASTE */
+    body.high-contrast {
+      background-color: #000000 !important;
+      color: #ffff00 !important;
+    }
+    body.high-contrast header,
+    body.high-contrast nav,
+    body.high-contrast footer,
+    body.high-contrast .bg-white,
+    body.high-contrast .bg-sage-50,
+    body.high-contrast .bg-sage-100,
+    body.high-contrast .bg-forest-700,
+    body.high-contrast .bg-forest-800,
+    body.high-contrast .bg-forest-900 {
+      background-color: #000000 !important;
+      color: #ffff00 !important;
+      border: 2px solid #ffff00 !important;
+    }
+    body.high-contrast p,
+    body.high-contrast span,
+    body.high-contrast h1,
+    body.high-contrast h2,
+    body.high-contrast h3,
+    body.high-contrast h4,
+    body.high-contrast label,
+    body.high-contrast input,
+    body.high-contrast select,
+    body.high-contrast textarea {
+      color: #ffff00 !important;
+      background-color: #000000 !important;
+    }
+    body.high-contrast button,
+    body.high-contrast a {
+      background-color: #ffff00 !important;
+      color: #000000 !important;
+      font-weight: 900 !important;
+      border: 2px solid #ffffff !important;
+    }
+
+    /* MODO LETRA GRANDE */
+    html.large-text {
+      font-size: 118%;
+    }
+
+    /* ANIMACIONES TOAST */
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .toast-enter {
+      animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
   </style>
   <link rel="manifest" href="manifest.json">
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
+  <!-- CONTENEDOR DE NOTIFICACIONES TOAST MODERNAS -->
+  <div id="toastContainer" class="fixed top-20 right-4 z-50 flex flex-col gap-2.5 max-w-xs w-full pointer-events-none"></div>
+
   <!-- HEADER NATURAL -->
   <header class="bg-forest-700 text-white relative z-40 shadow-lg">
-    <div class="bg-forest-900 text-sage-200 text-xs py-1.5 px-4 text-center sm:text-left flex justify-between items-center max-w-7xl mx-auto">
+    <div class="bg-forest-900 text-sage-200 text-xs py-1.5 px-4 text-center sm:text-left flex flex-wrap justify-between items-center gap-2 max-w-7xl mx-auto">
       <span><i class="fa-solid fa-heart-pulse text-red-400 mr-2"></i>Proyecto CENS 38 - Atención Digital Integral</span>
-      <div class="flex items-center gap-4">
+      
+      <!-- CONTROLES RÁPIDOS DE ACCESIBILIDAD, SONIDO Y PUNTOS -->
+      <div class="flex items-center gap-2 flex-wrap justify-center">
+        <button onclick="openPointsModal()" title="Ver Puntos Vecinales y Medallas" class="bg-amber-500 hover:bg-amber-400 text-navy-900 font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow transition">
+          <i class="fa-solid fa-medal"></i> <span id="userPointsBadge">50</span> pts
+        </button>
+        <button onclick="toggleHighContrast()" title="Alternar Modo Alto Contraste" class="bg-forest-700 hover:bg-forest-600 text-white px-2 py-0.5 rounded-md border border-sage-300/30 font-bold flex items-center gap-1">
+          <i class="fa-solid fa-circle-half-stroke"></i> Contraste
+        </button>
+        <button onclick="toggleLargeText()" title="Aumentar Tamaño de Letra" class="bg-forest-700 hover:bg-forest-600 text-white px-2 py-0.5 rounded-md border border-sage-300/30 font-bold">
+          A+
+        </button>
+        <button onclick="toggleSound()" id="soundToggleBtn" title="Activar/Desactivar Sonidos" class="bg-forest-700 hover:bg-forest-600 text-white px-2 py-0.5 rounded-md border border-sage-300/30">
+          <i class="fa-solid fa-volume-high"></i>
+        </button>
         <a href="tel:107" class="bg-red-600 hover:bg-red-500 text-white font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow">
           <i class="fa-solid fa-phone-flip text-xs"></i> SAME: 107
         </a>
-        <span class="hidden sm:inline"><i class="fa-solid fa-phone mr-1"></i> Línea Gratuita: 0800-CENS-38</span>
+        <span class="hidden md:inline"><i class="fa-solid fa-phone mr-1"></i> 0800-CENS-38</span>
       </div>
     </div>
 
@@ -165,6 +236,28 @@
 
     <!-- SECTION: INICIO -->
     <div id="sec-inicio" class="space-y-10">
+      
+      <!-- WIDGET DE CLIMA Y ALERTAS BARRIALES EN TIEMPO REAL -->
+      <div id="weatherWidget" class="bg-white rounded-2xl p-4 sm:px-6 custom-shadow border-l-4 border-sky-500 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div id="weatherIconBox" class="w-12 h-12 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center text-2xl shrink-0">
+            <i class="fa-solid fa-cloud-sun"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md">Clima en Palermo, CABA</span>
+              <span id="weatherTemp" class="text-lg font-black text-navy-800">--°C</span>
+            </div>
+            <p id="weatherAdvice" class="text-xs text-gray-600 mt-1">Consultando estado del tiempo para ayudarte a planificar tus salidas...</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button onclick="openPointsModal()" class="px-3 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs rounded-xl transition flex items-center gap-1.5">
+            <i class="fa-solid fa-gift"></i> Canjear Puntos
+          </button>
+        </div>
+      </div>
+
       <div class="card-container w-full">
         <section class="card-3d bg-gradient-to-r from-forest-800 to-forest-700 text-white rounded-3xl p-8 sm:p-12 custom-shadow relative overflow-hidden">
           <div class="max-w-2xl z-10 relative space-y-4">
@@ -322,7 +415,7 @@
         </div>
         <div class="bg-emerald-50 border border-emerald-200 px-4 py-2.5 rounded-xl text-xs text-forest-900 shrink-0">
           <p class="font-extrabold flex items-center gap-1.5"><i class="fa-solid fa-truck-fast text-emerald-600"></i> Envíos a Domicilio</p>
-          <p class="text-gray-600 mt-0.5">Costo mínimo de envío: <span class="font-black text-forest-800">$1.500</span> (o retiro sin cargo)</p>
+          <p class="text-gray-600 mt-0.5">Costo mínimo de envío: <span class="font-black text-forest-800">$1.500</span> (o gratis con 100 pts)</p>
         </div>
       </div>
 
@@ -347,10 +440,10 @@
               <h3 class="text-lg font-bold text-navy-800">Acreditación y Datos ANSES</h3>
             </div>
             <div class="space-y-2 text-xs text-gray-700">
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI Argentino Vigente (original y copia)</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Constancia de CUIL emitida</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento / Matrimonio</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Clave de la Seguridad Social creada</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> DNI Argentino Vigente (original y copia)</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Constancia de CUIL emitida</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento / Matrimonio</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Clave de la Seguridad Social creada</label>
             </div>
           </div>
           <a href="https://servicioscorp.anses.gob.ar/clavelogon/logon.aspx?system=mianses" target="_blank" class="block w-full py-2.5 bg-forest-700 hover:bg-forest-600 text-white font-bold rounded-xl text-xs transition text-center shadow">
@@ -368,10 +461,10 @@
               <h3 class="text-lg font-bold text-navy-800">Afiliación PAMI & Medicamentos</h3>
             </div>
             <div class="space-y-2 text-xs text-gray-700">
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Credencial PAMI física o digital</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Receta médica electrónica vigente</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI y comprobante de cobro</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Formulario de Subsidio por Razones Sociales</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Credencial PAMI física o digital</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Receta médica electrónica vigente</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> DNI y comprobante de cobro</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Formulario de Subsidio por Razones Sociales</label>
             </div>
           </div>
           <a href="https://www.pami.org.ar/medicamentos" target="_blank" class="block w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition text-center shadow">
@@ -389,10 +482,10 @@
               <h3 class="text-lg font-bold text-navy-800">Renovación de DNI / Pasaporte</h3>
             </div>
             <div class="space-y-2 text-xs text-gray-700">
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI anterior o denuncia de robo/extravío</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Turno presencial asignado (Mi Argentina)</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Comprobante de pago de tasa del trámite</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento actualizada (si aplica)</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> DNI anterior o denuncia de robo/extravío</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Turno presencial asignado (Mi Argentina)</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Comprobante de pago de tasa del trámite</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Partida de Nacimiento actualizada (si aplica)</label>
             </div>
           </div>
           <a href="https://mi.argentina.gob.ar/" target="_blank" class="block w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl text-xs transition text-center shadow">
@@ -410,10 +503,10 @@
               <h3 class="text-lg font-bold text-navy-800">Herencias y Sucesiones</h3>
             </div>
             <div class="space-y-2 text-xs text-gray-700">
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partida de Defunción legalizada del causante</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Partidas acreditantes de vínculo heredero</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Títulos de propiedad de bienes inmuebles / rodados</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Patrocinio jurídico letrado asignado</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Partida de Defunción legalizada del causante</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Partidas acreditantes de vínculo heredero</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Títulos de propiedad de bienes inmuebles / rodados</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Patrocinio jurídico letrado asignado</label>
             </div>
           </div>
           <a href="https://www.argentina.gob.ar/justicia/derechofacil/leysimple/sucesion" target="_blank" class="block w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition text-center shadow">
@@ -431,10 +524,10 @@
               <h3 class="text-lg font-bold text-navy-800">Pago de Impuestos y Servicios</h3>
             </div>
             <div class="space-y-2 text-xs text-gray-700">
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Código de pago electrónico de la boleta</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Clave Fiscal / Cuenta bancaria asociada</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Adhesión a débito automático / Tarjeta de débito</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Comprobante del último periodo abonado</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Código de pago electrónico de la boleta</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Clave Fiscal / Cuenta bancaria asociada</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Adhesión a débito automático / Tarjeta de débito</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Comprobante del último periodo abonado</label>
             </div>
           </div>
           <a href="https://www.argentina.gob.ar/afip" target="_blank" class="block w-full py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl text-xs transition text-center shadow">
@@ -452,10 +545,10 @@
               <h3 class="text-lg font-bold text-navy-800">Jubilación y Pensiones</h3>
             </div>
             <div class="space-y-2 text-xs text-gray-700">
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Historia laboral acreditada (30 años de aportes)</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Formulario PS 6.18 de Solicitud de Prestaciones</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> Certificación de servicios expedida por empleador</label>
-              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" class="w-4 h-4 text-forest-700 rounded"> DNI del beneficiario y CBU para cobro</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Historia laboral acreditada (30 años de aportes)</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Formulario PS 6.18 de Solicitud de Prestaciones</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> Certificación de servicios expedida por empleador</label>
+              <label class="flex items-center gap-2.5 p-2 bg-sage-50 rounded-lg cursor-pointer"><input type="checkbox" onchange="rewardChecklist(this)" class="w-4 h-4 text-forest-700 rounded"> DNI del beneficiario y CBU para cobro</label>
             </div>
           </div>
           <a href="https://www.anses.gob.ar/jubilaciones-y-pensiones" target="_blank" class="block w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition text-center shadow">
@@ -528,7 +621,7 @@
       <!-- FORMULARIO PARA DEJAR RESEÑA -->
       <div class="bg-white p-6 rounded-2xl custom-shadow space-y-4 border-2 border-emerald-500/30">
         <h3 class="text-lg font-bold text-navy-800 flex items-center gap-2">
-          <i class="fa-solid fa-pen-to-square text-emerald-600"></i> Déjanos tu consulta o valoración
+          <i class="fa-solid fa-pen-to-square text-emerald-600"></i> Déjanos tu consulta o valoración (+25 pts)
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <input type="text" id="reviewAuthor" placeholder="Tu Nombre completo" class="p-3 border border-gray-300 rounded-xl text-xs focus:ring-2 focus:ring-forest-600 focus:outline-none">
@@ -555,6 +648,52 @@
       <i class="fa-solid fa-microphone text-xl animate-pulse"></i>
       <span class="text-xs font-bold hidden sm:inline">Asistente por Voz</span>
     </button>
+  </div>
+
+  <!-- MODAL DE PUNTOS VECINALES Y MEDALLAS (GAMIFICACIÓN) -->
+  <div id="pointsModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-5 shadow-2xl border-2 border-amber-500">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-xl font-black text-navy-800 flex items-center gap-2">
+          <i class="fa-solid fa-medal text-amber-500"></i> Puntos de Asistencia Vecinal
+        </h3>
+        <button onclick="closePointsModal()" class="text-gray-400 hover:text-navy-800 text-2xl font-bold">&times;</button>
+      </div>
+
+      <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white p-5 rounded-2xl text-center shadow">
+        <p class="text-xs uppercase font-bold tracking-wider opacity-90">Tu Saldo Actual</p>
+        <p class="text-4xl font-black mt-1"><span id="modalPointsDisplay">50</span> Puntos</p>
+        <p class="text-[11px] mt-1 font-medium">Nivel: <b>Vecino Destacado CENS 38</b></p>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <p class="font-bold text-navy-800">Tus Medallas Desbloqueadas:</p>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="p-2.5 bg-sage-50 rounded-xl border border-sage-200">
+            <i class="fa-solid fa-handshake-angle text-emerald-600 text-xl mb-1"></i>
+            <p class="font-bold text-[11px]">Bienvenida</p>
+          </div>
+          <div id="badgeReviewer" class="p-2.5 bg-gray-100 opacity-50 rounded-xl border border-gray-200">
+            <i class="fa-solid fa-star text-amber-500 text-xl mb-1"></i>
+            <p class="font-bold text-[11px]">Voz Activa</p>
+          </div>
+          <div id="badgeBuyer" class="p-2.5 bg-gray-100 opacity-50 rounded-xl border border-gray-200">
+            <i class="fa-solid fa-bag-shopping text-blue-600 text-xl mb-1"></i>
+            <p class="font-bold text-[11px]">Compra Segura</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200 text-xs space-y-2">
+        <p class="font-bold text-forest-900">🎁 Canjear Beneficio:</p>
+        <p class="text-gray-600">Usa <b>100 puntos</b> para obtener <b>Envío Gratis</b> en tu próxima compra.</p>
+        <button onclick="redeemFreeShipping()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl transition">
+          Canjear Envío Gratis (100 pts)
+        </button>
+      </div>
+
+      <button onclick="closePointsModal()" class="w-full py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-xs rounded-xl">Cerrar</button>
+    </div>
   </div>
 
   <!-- MODAL DE ASISTENTE POR VOZ ACTIVO -->
@@ -679,7 +818,7 @@
         <div class="grid grid-cols-2 gap-2">
           <label class="flex items-center gap-2 p-2.5 border border-emerald-300 bg-emerald-50/60 rounded-xl cursor-pointer font-bold text-forest-900">
             <input type="radio" name="deliveryType" value="envio" checked onchange="updateCheckoutTotals()" class="text-emerald-600">
-            <span>Envío a domicilio ($1.500)</span>
+            <span id="shippingRadioLabel">Envío a domicilio ($1.500)</span>
           </label>
           <label class="flex items-center gap-2 p-2.5 border border-gray-200 rounded-xl cursor-pointer font-bold text-navy-800">
             <input type="radio" name="deliveryType" value="retiro" onchange="updateCheckoutTotals()" class="text-emerald-600">
@@ -741,7 +880,7 @@
           <span id="checkoutSubtotal" class="font-bold text-navy-800">$0</span>
         </div>
         <div class="flex justify-between text-gray-600">
-          <span>Costo de envío (mínimo $1.500):</span>
+          <span>Costo de envío:</span>
           <span id="checkoutShipping" class="font-bold text-forest-700">$1.500</span>
         </div>
         <div class="flex justify-between text-base font-black text-navy-800 border-t border-sage-200 pt-2 mt-1">
@@ -756,7 +895,7 @@
           Cancelar
         </button>
         <button type="button" onclick="confirmFinalOrder()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-2">
-          <i class="fa-solid fa-circle-check"></i> Confirmar Compra
+          <i class="fa-solid fa-circle-check"></i> Confirmar Compra (+40 pts)
         </button>
       </div>
     </div>
@@ -826,7 +965,7 @@
   <!-- MODAL DE RECLAMO CON BOTÓN CANCELAR Y ENVIAR -->
   <div id="complaintModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-forest-600">
-      <h3 class="text-xl font-bold text-navy-800">Registro de Reclamo</h3>
+      <h3 class="text-xl font-bold text-navy-800">Registro de Reclamo (+20 pts)</h3>
       <input type="text" id="compTitle" placeholder="Motivo" class="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-forest-600 focus:outline-none">
       <textarea id="compDesc" placeholder="Detalle..." class="w-full p-3 border border-gray-300 rounded-xl text-sm h-24 focus:ring-2 focus:ring-forest-600 focus:outline-none"></textarea>
       
@@ -841,10 +980,25 @@
     </div>
   </div>
 
+  <!-- MODAL DE SALUD CON RECORDATORIO INTELIGENTE -->
   <div id="healthModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-lg rounded-2xl p-6 space-y-4 shadow-xl">
-      <h3 class="text-xl font-bold text-navy-800">Salud & Medicamentos</h3>
-      <button onclick="closeHealthModal()" class="w-full py-2 bg-gray-200 rounded-xl">Cerrar</button>
+    <div class="bg-white w-full max-w-lg rounded-3xl p-6 space-y-4 shadow-2xl border-2 border-emerald-600">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-xl font-black text-navy-800 flex items-center gap-2">
+          <i class="fa-solid fa-notes-medical text-emerald-600"></i> Gestión de Salud & Remedios
+        </h3>
+        <button onclick="closeHealthModal()" class="text-gray-400 hover:text-navy-800 text-xl font-bold">&times;</button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <p class="text-gray-600">Configurá un aviso rápido en pantalla para no olvidar tu medicación:</p>
+        <div class="flex gap-2">
+          <input type="text" id="medNameInput" placeholder="Nombre del remedio (ej: Enalapril 10mg)" class="flex-grow p-2.5 border border-gray-300 rounded-xl">
+          <button onclick="setMedReminder()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shrink-0">
+            Activar Aviso
+          </button>
+        </div>
+      </div>
+      <button onclick="closeHealthModal()" class="w-full py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-xs rounded-xl">Cerrar</button>
     </div>
   </div>
 
@@ -993,9 +1147,143 @@
       });
     }
 
+    // --- 1. SISTEMA DE FEEDBACK SENSORIAL (AUDIO SINTÉTICO + VIBRACIÓN) ---
+    let soundEnabled = true;
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playFeedback(type = 'click') {
+      if (navigator.vibrate) {
+        if (type === 'alert') navigator.vibrate([120, 60, 120]);
+        else if (type === 'success') navigator.vibrate([40, 30, 60]);
+        else navigator.vibrate(25);
+      }
+
+      if (!soundEnabled) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+      if (type === 'success') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.08);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      } else if (type === 'alert') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.setValueAtTime(349.23, now + 0.12);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      } else {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(750, now);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+        osc.start(now);
+        osc.stop(now + 0.06);
+      }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('soundToggleBtn');
+      btn.innerHTML = soundEnabled
+        ? '<i class="fa-solid fa-volume-high"></i>'
+        : '<i class="fa-solid fa-volume-xmark text-red-400"></i>';
+      showToast(soundEnabled ? 'Sonidos activados' : 'Sonidos silenciados', 'info');
+    }
+
+    // --- 2. SISTEMA DE NOTIFICACIONES TOAST MODERNAS ---
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const styles = {
+        success: { bg: 'bg-forest-800 border-emerald-400 text-white', icon: 'fa-circle-check text-emerald-400' },
+        info: { bg: 'bg-navy-800 border-sky-400 text-white', icon: 'fa-circle-info text-sky-400' },
+        warning: { bg: 'bg-amber-600 border-amber-200 text-white', icon: 'fa-triangle-exclamation text-amber-200' },
+        points: { bg: 'bg-amber-500 border-white text-navy-900 font-extrabold', icon: 'fa-medal text-white' }
+      };
+
+      const style = styles[type] || styles.success;
+      const toast = document.createElement('div');
+      toast.className = `toast-enter pointer-events-auto p-3.5 rounded-2xl shadow-2xl border-l-4 flex items-center gap-3 text-xs ${style.bg}`;
+      toast.innerHTML = `
+        <i class="fa-solid ${style.icon} text-lg shrink-0"></i>
+        <span class="leading-snug">${message}</span>
+      `;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3800);
+    }
+
+    // --- 3. ACCESIBILIDAD AVANZADA (ALTO CONTRASTE Y TAMAÑO DE LETRA) ---
+    function toggleHighContrast() {
+      playFeedback('click');
+      document.body.classList.toggle('high-contrast');
+      const isHC = document.body.classList.contains('high-contrast');
+      showToast(isHC ? 'Modo Alto Contraste Activado' : 'Modo Visual Estándar Restaurado', 'info');
+    }
+
+    function toggleLargeText() {
+      playFeedback('click');
+      document.documentElement.classList.toggle('large-text');
+      const isLarge = document.documentElement.classList.contains('large-text');
+      showToast(isLarge ? 'Tamaño de letra ampliado' : 'Tamaño de letra normal', 'info');
+    }
+
+    // --- 4. WIDGET DE CLIMA EN TIEMPO REAL (PALERMO, CABA) ---
+    async function loadPalermoWeather() {
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=-34.5889&longitude=-58.4305&current_weather=true');
+        const data = await res.json();
+        if (data && data.current_weather) {
+          const temp = Math.round(data.current_weather.temperature);
+          const code = data.current_weather.weathercode;
+          document.getElementById('weatherTemp').innerText = `${temp}°C`;
+
+          const iconBox = document.getElementById('weatherIconBox');
+          const adviceEl = document.getElementById('weatherAdvice');
+
+          if (code >= 51) {
+            iconBox.innerHTML = '<i class="fa-solid fa-cloud-showers-heavy"></i>';
+            iconBox.className = 'w-12 h-12 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center text-2xl shrink-0';
+            adviceEl.innerText = 'Probabilidad de lluvia: te recomendamos pedir envío a domicilio.';
+          } else if (temp >= 28) {
+            iconBox.innerHTML = '<i class="fa-solid fa-temperature-high"></i>';
+            iconBox.className = 'w-12 h-12 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center text-2xl shrink-0';
+            adviceEl.innerText = 'Día caluroso: recordá hidratarte bien antes de salir.';
+          } else {
+            iconBox.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            adviceEl.innerText = 'Clima agradable en Palermo ideal para realizar gestiones o pasear.';
+          }
+        }
+      } catch (e) {
+        document.getElementById('weatherTemp').innerText = '22°C';
+        document.getElementById('weatherAdvice').innerText = 'Despejado en Palermo, Buenos Aires.';
+      }
+    }
+
+    // --- 5. GAMIFICACIÓN (PUNTOS VECINALES Y CANJES) ---
     const state = {
       currentUser: null,
       isAdmin: false,
+      points: parseInt(localStorage.getItem('cens38_points')) || 50,
+      freeShippingUnlocked: false,
       cart: [],
       favorites: [],
       products: [
@@ -1040,7 +1328,7 @@
           edad: '51 años',
           ubicacion: 'Tribunales / CABA',
           trabajos: 'Sucesiones, amparos de salud, jubilaciones y reclamos',
-          photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+          photo: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=250',
           rating: 5
         },
         { 
@@ -1063,6 +1351,52 @@
       ]
     };
 
+    function addPoints(amount, reason) {
+      state.points += amount;
+      localStorage.setItem('cens38_points', state.points);
+      updatePointsUI();
+      showToast(`+${amount} Puntos Vecinales: ${reason}`, 'points');
+    }
+
+    function updatePointsUI() {
+      const badge = document.getElementById('userPointsBadge');
+      const modalDisplay = document.getElementById('modalPointsDisplay');
+      if (badge) badge.innerText = state.points;
+      if (modalDisplay) modalDisplay.innerText = state.points;
+    }
+
+    function openPointsModal() {
+      playFeedback('click');
+      updatePointsUI();
+      document.getElementById('pointsModal').classList.remove('hidden');
+    }
+    function closePointsModal() { document.getElementById('pointsModal').classList.add('hidden'); }
+
+    function redeemFreeShipping() {
+      if (state.freeShippingUnlocked) {
+        return showToast('¡Ya tenés el beneficio de Envío Gratis activo!', 'info');
+      }
+      if (state.points < 100) {
+        playFeedback('alert');
+        return showToast(`Te faltan ${100 - state.points} puntos para canjear el envío gratis.`, 'warning');
+      }
+      state.points -= 100;
+      state.freeShippingUnlocked = true;
+      localStorage.setItem('cens38_points', state.points);
+      updatePointsUI();
+      document.getElementById('shippingRadioLabel').innerText = 'Envío a domicilio ($0 - Canjeado)';
+      playFeedback('success');
+      showToast('¡Canje exitoso! Tu próximo envío a domicilio es GRATIS.', 'success');
+      closePointsModal();
+    }
+
+    function rewardChecklist(checkbox) {
+      playFeedback('click');
+      if (checkbox.checked) {
+        addPoints(5, 'Paso de trámite verificado');
+      }
+    }
+
     const searchableItems = [
       { text: 'Jubilación y Pensiones', type: 'tramite', action: () => showSection('tramites') },
       { text: 'Acreditación y Datos ANSES', type: 'tramite', action: () => showSection('tramites') },
@@ -1077,6 +1411,8 @@
 
     window.onload = () => {
       loadStoredUserSession();
+      loadPalermoWeather();
+      updatePointsUI();
       renderProducts(state.products);
       renderStaff();
       renderReviews();
@@ -1099,6 +1435,7 @@
 
     function handleLoginSubmit(event) {
       event.preventDefault();
+      playFeedback('success');
       const userData = {
         dni: document.getElementById('loginDni').value.trim(),
         nombre: document.getElementById('loginNombre').value.trim(),
@@ -1111,7 +1448,7 @@
       localStorage.setItem('cens38_user', JSON.stringify(userData));
       updateHeaderUserWidget();
       closeLoginModal();
-      alert(`¡Bienvenido/a ${userData.nombre}!`);
+      showToast(`¡Bienvenido/a ${userData.nombre}! Sesión iniciada.`, 'success');
     }
 
     function updateHeaderUserWidget() {
@@ -1135,6 +1472,7 @@
     }
 
     function checkAndOpenProfile() {
+      playFeedback('click');
       if (state.currentUser) {
         openProfileModal();
       } else {
@@ -1152,6 +1490,7 @@
           <p><span class="font-bold text-forest-800">DNI:</span> ${u.dni}</p>
           <p><span class="font-bold text-forest-800">Teléfono:</span> ${u.telefono}</p>
           <p><span class="font-bold text-forest-800">Dirección:</span> ${u.direccion}</p>
+          <p><span class="font-bold text-amber-700">Puntos Vecinales:</span> ${state.points} pts</p>
         </div>
         <div class="p-3 bg-red-50 rounded-xl space-y-1">
           <p class="font-bold text-red-800">Afecciones:</p>
@@ -1169,9 +1508,11 @@
       updateHeaderUserWidget();
       closeProfileModal();
       openLoginModal();
+      showToast('Sesión cerrada correctamente', 'info');
     }
 
     function showSection(sectionId) {
+      playFeedback('click');
       document.getElementById('sec-inicio').classList.add('hidden');
       document.getElementById('sec-productos').classList.add('hidden');
       document.getElementById('sec-tramites').classList.add('hidden');
@@ -1226,11 +1567,12 @@
     }
 
     function buyNow(id) {
-      addToCart(id);
+      addToCart(id, false);
       openCheckoutModal();
     }
 
     function filterProducts(cat) {
+      playFeedback('click');
       if (cat === 'todos') {
         renderProducts(state.products);
       } else {
@@ -1250,19 +1592,27 @@
       });
     }
 
-    function addToCart(id) {
+    function addToCart(id, notify = true) {
       const prod = state.products.find(p => p.id === id);
       if (prod) {
         state.cart.push(prod);
         updateBadges();
         renderCartItems();
+        playFeedback('success');
+        if (notify) showToast(`"${prod.name}" agregado al carrito`, 'success');
       }
     }
 
     function toggleFav(id) {
+      playFeedback('click');
       const idx = state.favorites.indexOf(id);
-      if (idx > -1) state.favorites.splice(idx, 1);
-      else state.favorites.push(id);
+      if (idx > -1) {
+        state.favorites.splice(idx, 1);
+        showToast('Quitado de favoritos', 'info');
+      } else {
+        state.favorites.push(id);
+        showToast('Guardado en favoritos ❤️', 'success');
+      }
       updateBadges();
       renderProducts(state.products);
       renderFavItems();
@@ -1295,6 +1645,7 @@
     }
 
     function removeFromCart(index) {
+      playFeedback('click');
       state.cart.splice(index, 1);
       updateBadges();
       renderCartItems();
@@ -1315,24 +1666,23 @@
       `).join('');
     }
 
-    function toggleCartModal() { renderCartItems(); document.getElementById('cartModal').classList.toggle('hidden'); }
-    function toggleFavoritesModal() { renderFavItems(); document.getElementById('favModal').classList.toggle('hidden'); }
+    function toggleCartModal() { playFeedback('click'); renderCartItems(); document.getElementById('cartModal').classList.toggle('hidden'); }
+    function toggleFavoritesModal() { playFeedback('click'); renderFavItems(); document.getElementById('favModal').classList.toggle('hidden'); }
 
     // --- CHECKOUT CON MINIMAPA, ENVÍO MÍNIMO $1500 Y MÉTODO DE PAGO ---
     let deliveryMap = null;
     let deliveryMarker = null;
     const MIN_SHIPPING_COST = 1500;
-    let selectedCoords = { lat: -34.5889, lng: -58.4305 }; // Palermo, CABA por defecto
+    let selectedCoords = { lat: -34.5889, lng: -58.4305 };
 
     function openCheckoutModal() {
       if (state.cart.length === 0) {
-        return alert('Tu carrito está vacío. Agrega al menos un producto para continuar.');
+        playFeedback('alert');
+        return showToast('Tu carrito está vacío. Agregá al menos un producto.', 'warning');
       }
       
-      // Ocultar carrito si está abierto
       document.getElementById('cartModal').classList.add('hidden');
       
-      // Precargar dirección si el usuario inició sesión
       if (state.currentUser && state.currentUser.direccion) {
         document.getElementById('checkoutAddressInput').value = state.currentUser.direccion;
       }
@@ -1340,7 +1690,6 @@
       document.getElementById('checkoutModal').classList.remove('hidden');
       updateCheckoutTotals();
 
-      // Inicializar o refrescar el minimapa
       setTimeout(() => {
         initDeliveryMap();
       }, 200);
@@ -1354,19 +1703,18 @@
       if (!deliveryMap) {
         deliveryMap = L.map('deliveryMap').setView([selectedCoords.lat, selectedCoords.lng], 14);
         
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; OpenStreetMap'
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 19,
+          attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom'
         }).addTo(deliveryMap);
 
         deliveryMarker = L.marker([selectedCoords.lat, selectedCoords.lng], { draggable: true }).addTo(deliveryMap);
 
-        // Evento al arrastrar marcador
         deliveryMarker.on('dragend', function(e) {
           const pos = deliveryMarker.getLatLng();
           updateSelectedLocation(pos.lat, pos.lng);
         });
 
-        // Evento al hacer clic en cualquier punto del mapa
         deliveryMap.on('click', function(e) {
           deliveryMarker.setLatLng(e.latlng);
           updateSelectedLocation(e.latlng.lat, e.latlng.lng);
@@ -1383,9 +1731,8 @@
 
     function searchAddressOnMap() {
       const addr = document.getElementById('checkoutAddressInput').value.trim();
-      if (!addr) return alert('Por favor escribe una dirección para ubicarla en el mapa.');
+      if (!addr) return showToast('Escribí una dirección para ubicarla en el mapa.', 'warning');
       
-      // Geocodificación gratuita mediante Nominatim (OpenStreetMap)
       fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr + ', Buenos Aires, Argentina')}`)
         .then(res => res.json())
         .then(data => {
@@ -1396,12 +1743,13 @@
             deliveryMarker.setLatLng([lat, lon]);
             updateSelectedLocation(lat, lon);
             document.getElementById('selectedCoordsText').innerText = `📍 Ubicado: ${addr}`;
+            showToast('Dirección ubicada en el minimapa', 'success');
           } else {
-            alert('No encontramos esa dirección exacta, pero podés marcar tu cuadra haciendo clic directo en el minimapa.');
+            showToast('No encontramos esa altura exacta, marcá tu cuadra haciendo clic en el mapa.', 'info');
           }
         })
         .catch(() => {
-          alert('Podés mover el marcador verde directamente sobre el minimapa para marcar tu ubicación.');
+          showToast('Mové el marcador directamente sobre el minimapa.', 'info');
         });
     }
 
@@ -1410,7 +1758,8 @@
       const addressSec = document.getElementById('deliveryAddressSection');
       
       let subtotal = state.cart.reduce((sum, item) => sum + item.price, 0);
-      let shipping = deliveryType === 'envio' ? MIN_SHIPPING_COST : 0;
+      let effectiveShipping = state.freeShippingUnlocked ? 0 : MIN_SHIPPING_COST;
+      let shipping = deliveryType === 'envio' ? effectiveShipping : 0;
       let total = subtotal + shipping;
 
       if (deliveryType === 'envio') {
@@ -1432,25 +1781,24 @@
       const address = document.getElementById('checkoutAddressInput').value.trim();
 
       if (deliveryType === 'envio' && !address) {
-        return alert('Por favor ingresa tu dirección o marca el punto de entrega en el minimapa.');
+        playFeedback('alert');
+        return showToast('Por favor ingresá tu dirección de entrega.', 'warning');
       }
 
       let subtotal = state.cart.reduce((sum, item) => sum + item.price, 0);
-      let shipping = deliveryType === 'envio' ? MIN_SHIPPING_COST : 0;
+      let effectiveShipping = state.freeShippingUnlocked ? 0 : MIN_SHIPPING_COST;
+      let shipping = deliveryType === 'envio' ? effectiveShipping : 0;
       let total = subtotal + shipping;
 
-      const entregaTexto = deliveryType === 'envio' 
-        ? `Envío a domicilio (${address}) - Costo envío: $${shipping.toLocaleString()}`
-        : 'Retiro en Sede CENS 38 ($0)';
+      playFeedback('success');
+      showToast(`¡Pedido confirmado por $${total.toLocaleString()} (${paymentMethod})!`, 'success');
+      
+      const buyerBadge = document.getElementById('badgeBuyer');
+      if (buyerBadge) buyerBadge.classList.remove('opacity-50', 'bg-gray-100');
+      addPoints(40, 'Compra realizada en tienda');
 
-      alert(
-        `✅ ¡Compra confirmada con éxito!\n\n` +
-        `• Entrega: ${entregaTexto}\n` +
-        `• Método de pago: ${paymentMethod}\n` +
-        `• Total final: $${total.toLocaleString()}\n\n` +
-        `Nuestro equipo preparará tu pedido de inmediato.`
-      );
-
+      state.freeShippingUnlocked = false;
+      document.getElementById('shippingRadioLabel').innerText = 'Envío a domicilio ($1.500)';
       state.cart = [];
       updateBadges();
       renderCartItems();
@@ -1520,9 +1868,10 @@
     let recognition = null;
 
     function startVoiceAssistant() {
+      playFeedback('click');
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        alert("Tu navegador no soporta el asistente por voz. Prueba usando Google Chrome.");
+        showToast("Tu navegador no soporta voz. Probá con Google Chrome.", 'warning');
         return;
       }
 
@@ -1539,6 +1888,7 @@
       recognition.onresult = (event) => {
         const speechToText = event.results[0][0].transcript.toLowerCase();
         transcriptEl.innerText = `Dijiste: "${speechToText}"`;
+        playFeedback('success');
         
         setTimeout(() => {
           modal.classList.add('hidden');
@@ -1546,7 +1896,7 @@
         }, 1000);
       };
 
-      recognition.onerror = (event) => {
+      recognition.onerror = () => {
         transcriptEl.innerText = "No se pudo reconocer la voz. Inténtalo de nuevo.";
         setTimeout(() => modal.classList.add('hidden'), 2000);
       };
@@ -1580,14 +1930,18 @@
       }
     }
 
-    function openHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); }
+    function openHelpModal() { playFeedback('alert'); document.getElementById('helpModal').classList.remove('hidden'); }
     function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); document.getElementById('emergencyStatus').classList.add('hidden'); }
     function triggerEmergencySignal() {
+      playFeedback('alert');
       document.getElementById('emergencyStatus').classList.remove('hidden');
-      setTimeout(() => alert('¡Alerta enviada a la central de ayuda y a tus contactos de emergencia!'), 1500);
+      setTimeout(() => {
+        showToast('🚨 ¡Alerta SOS enviada a la central y contactos de emergencia!', 'warning');
+      }, 1500);
     }
 
     function openComplaintModal() { 
+      playFeedback('click');
       document.getElementById('compTitle').value = '';
       document.getElementById('compDesc').value = '';
       document.getElementById('complaintModal').classList.remove('hidden'); 
@@ -1595,15 +1949,24 @@
     function closeComplaintModal() { document.getElementById('complaintModal').classList.add('hidden'); }
     function submitComplaint() { 
       const title = document.getElementById('compTitle').value.trim();
-      if(!title) return alert('Por favor ingrese el motivo del reclamo.');
-      alert('Reclamo registrado con éxito'); 
+      if(!title) return showToast('Por favor ingresá el motivo del reclamo.', 'warning');
+      playFeedback('success');
+      showToast('Reclamo comunitario registrado con éxito', 'success');
+      addPoints(20, 'Aporte comunitario registrado');
       closeComplaintModal(); 
     }
 
-    function openHealthModal() { document.getElementById('healthModal').classList.remove('hidden'); }
+    function openHealthModal() { playFeedback('click'); document.getElementById('healthModal').classList.remove('hidden'); }
     function closeHealthModal() { document.getElementById('healthModal').classList.add('hidden'); }
+    function setMedReminder() {
+      const med = document.getElementById('medNameInput').value.trim();
+      if (!med) return showToast('Escribí el nombre del medicamento.', 'warning');
+      playFeedback('success');
+      showToast(`💊 Recordatorio activado para: ${med}`, 'info');
+      closeHealthModal();
+    }
 
-    function openPensionModal() { document.getElementById('pensionModal').classList.remove('hidden'); }
+    function openPensionModal() { playFeedback('click'); document.getElementById('pensionModal').classList.remove('hidden'); }
     function closePensionModal() { document.getElementById('pensionModal').classList.add('hidden'); }
     
     function calculatePension() {
@@ -1613,10 +1976,10 @@
       const res = document.getElementById('pensionResult');
 
       if (edad <= 0 || anosAportes < 0) {
-        alert('Por favor ingresa una edad y años de aportes válidos.');
-        return;
+        return showToast('Por favor ingresá una edad y años de aportes válidos.', 'warning');
       }
 
+      playFeedback('success');
       const edadMinima = genero === 'femenino' ? 60 : 65;
       const aportesNecesarios = 30;
 
@@ -1643,7 +2006,11 @@
       }
     }
 
-    function openDniModal() { alert('Turno DNI solicitado'); }
+    function openDniModal() {
+      playFeedback('success');
+      showToast('🪪 Guía de Turno DNI iniciada. Redirigiendo a Trámites...', 'info');
+      showSection('tramites');
+    }
 
     // --- GESTIÓN DE PERSONAL AVANZADA (CON FOTO Y ESTRELLAS) ---
     function renderStaff() {
@@ -1689,6 +2056,7 @@
     }
 
     function contactStaff(name, phone) {
+      playFeedback('click');
       const cleanPhone = phone.replace(/[^0-9]/g, '');
       const confirmAction = confirm(`¿Deseas iniciar una llamada o contactar a ${name}?\nTeléfono: ${phone}`);
       if (confirmAction) {
@@ -1701,10 +2069,11 @@
         const pass = prompt('Acceso restringido a Administrador.\nIngrese la clave de administrador:');
         if (pass === 'admin123') {
           state.isAdmin = true;
-          alert('Autenticación correcta como Administrador.');
+          showToast('Autenticación correcta como Administrador', 'success');
           openAddStaffModal();
         } else if (pass !== null) {
-          alert('Clave incorrecta. Solo el administrador puede registrar personal.');
+          playFeedback('alert');
+          showToast('Clave incorrecta. Solo el administrador puede registrar personal.', 'warning');
         }
       } else {
         openAddStaffModal();
@@ -1739,7 +2108,7 @@
       const ubicacion = document.getElementById('staffUbicacion').value.trim();
       const trabajos = document.getElementById('staffTrabajos').value.trim();
 
-      if (!name) return alert('Por favor complete al menos el nombre.');
+      if (!name) return showToast('Por favor completá al menos el nombre.', 'warning');
       
       state.staff.push({ 
         name, 
@@ -1756,7 +2125,8 @@
       
       renderStaff();
       closeStaffModal();
-      alert(`Se ha registrado a ${name} exitosamente.`);
+      playFeedback('success');
+      showToast(`Se ha registrado a ${name} exitosamente.`, 'success');
     }
 
     // --- SECCIÓN DE RESEÑAS Y OPINIONES ---
@@ -1783,8 +2153,7 @@
       const text = document.getElementById('reviewText').value.trim();
 
       if (!author || !text) {
-        alert('Por favor complete su nombre y el comentario.');
-        return;
+        return showToast('Por favor completá tu nombre y el comentario.', 'warning');
       }
 
       state.reviews.unshift({
@@ -1797,7 +2166,13 @@
       renderReviews();
       document.getElementById('reviewAuthor').value = '';
       document.getElementById('reviewText').value = '';
-      alert('¡Muchas gracias! Tu opinión ha sido publicada.');
+      
+      const revBadge = document.getElementById('badgeReviewer');
+      if (revBadge) revBadge.classList.remove('opacity-50', 'bg-gray-100');
+      
+      playFeedback('success');
+      showToast('¡Muchas gracias! Tu opinión ha sido publicada.', 'success');
+      addPoints(25, 'Reseña publicada');
     }
 
     document.addEventListener("DOMContentLoaded", function() {
